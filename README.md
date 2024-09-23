@@ -1,1 +1,1 @@
-# graph-similarity
+# Documenting progress on the first paper
