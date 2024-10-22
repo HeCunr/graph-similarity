@@ -1,0 +1,8 @@
+networkx>=2.3
+numpy>=1.17.1
+scikit-learn>=0.21.3
+scipy>=1.3.1
+torch-cluster
+torch-spline-conv
+h5py
+ezdxf

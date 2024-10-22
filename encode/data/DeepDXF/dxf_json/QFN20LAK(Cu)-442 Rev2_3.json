@@ -1,0 +1,1892 @@
+[
+  {
+    "type": "LWPOLYLINE",
+    "features": {
+      "closed": false,
+      "points_x": 1.7658097206663115e-13,
+      "points_y": 0.9704145686926827,
+      "count": 2
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.034727989574938126,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "LWPOLYLINE",
+    "features": {
+      "closed": false,
+      "points_x": 0.4952521972349957,
+      "points_y": 0.47472721412484653,
+      "count": 2
+    }
+  },
+  {
+    "type": "LWPOLYLINE",
+    "features": {
+      "closed": false,
+      "points_x": 0.24298048264993732,
+      "points_y": 0.47472721412484653,
+      "count": 2
+    }
+  },
+  {
+    "type": "LWPOLYLINE",
+    "features": {
+      "closed": false,
+      "points_x": 0.7475239118199603,
+      "points_y": 0.47472721412482355,
+      "count": 2
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "LWPOLYLINE",
+    "features": {
+      "closed": false,
+      "points_x": 0.4952521972348798,
+      "points_y": -0.34693800385600787,
+      "count": 2
+    }
+  },
+  {
+    "type": "LWPOLYLINE",
+    "features": {
+      "closed": false,
+      "points_x": 0.24298048264986005,
+      "points_y": -0.34693800385600787,
+      "count": 2
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9999999999997241,
+      "start_point_y": -0.3458317345379145,
+      "end_point_x": 0.9997956264050076,
+      "end_point_y": -0.3458317345380063
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9999999999997241,
+      "start_point_y": -0.7274298893907518,
+      "end_point_x": 0.9997956264050076,
+      "end_point_y": -0.7274298893907978
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9999999999998014,
+      "start_point_y": -0.9999999999999541,
+      "end_point_x": 0.9997956264050076,
+      "end_point_y": -1.0
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9999999999998014,
+      "start_point_y": -0.9454859778781136,
+      "end_point_x": 0.9997956264050076,
+      "end_point_y": -0.9454859778781596
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9999999999997241,
+      "start_point_y": -0.890971955756319,
+      "end_point_x": 0.9997956264050076,
+      "end_point_y": -0.890971955756365
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9999999999997241,
+      "start_point_y": -0.5093738009034359,
+      "end_point_x": 0.9997956264050076,
+      "end_point_y": -0.5093738009034818
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9999999999997241,
+      "start_point_y": -0.5638878230252764,
+      "end_point_x": 0.9997956264050076,
+      "end_point_y": -0.5638878230253681
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9999999999997241,
+      "start_point_y": -0.618401845147071,
+      "end_point_x": 0.9997956264050076,
+      "end_point_y": -0.6184018451471627
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9999999999997241,
+      "start_point_y": -0.6729158672689113,
+      "end_point_x": 0.9997956264050076,
+      "end_point_y": -0.6729158672689572
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9999999999997241,
+      "start_point_y": -0.4548597787816413,
+      "end_point_x": 0.9997956264050076,
+      "end_point_y": -0.4548597787816413
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9999999999997241,
+      "start_point_y": -0.4003457566598009,
+      "end_point_x": 0.9997956264050076,
+      "end_point_y": -0.40034575665984673
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9999999999997241,
+      "start_point_y": -0.2913177124161199,
+      "end_point_x": 0.9997956264050076,
+      "end_point_y": -0.2913177124161659
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9999999999997241,
+      "start_point_y": -0.23680378885679443,
+      "end_point_x": 0.9997956264050076,
+      "end_point_y": -0.2368037888568404
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9999999999997241,
+      "start_point_y": -0.18228986529746893,
+      "end_point_x": 0.9997956264050076,
+      "end_point_y": -0.18228986529756075
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9999999999997241,
+      "start_point_y": -0.12777594173823525,
+      "end_point_x": 0.9997956264050076,
+      "end_point_y": -0.1277759417382811
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9999999999996468,
+      "start_point_y": 0.25160997016623576,
+      "end_point_x": 0.9997956264050849,
+      "end_point_y": 0.2516099701661898
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9999999999996468,
+      "start_point_y": 0.19709594804439523,
+      "end_point_x": 0.9997956264050849,
+      "end_point_y": 0.19709594804434927
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9999999999996468,
+      "start_point_y": 0.1425819259225547,
+      "end_point_x": 0.9997956264050849,
+      "end_point_y": 0.142581925922463
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9999999999996468,
+      "start_point_y": 0.08806790380076013,
+      "end_point_x": 0.9997956264050849,
+      "end_point_y": 0.08806790380066842
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9999999999996468,
+      "start_point_y": 0.03355388167896556,
+      "end_point_x": 0.9997956264050849,
+      "end_point_y": 0.033553881678873854
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9999999999996468,
+      "start_point_y": -0.0209601404428289,
+      "end_point_x": 0.9997956264050849,
+      "end_point_y": -0.02096014044296668
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9999999999996468,
+      "start_point_y": 0.3606380144099166,
+      "end_point_x": 0.9997956264050849,
+      "end_point_y": 0.36063801440987064
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9999999999996468,
+      "start_point_y": 0.4151520365317569,
+      "end_point_x": 0.9997956264050849,
+      "end_point_y": 0.4151520365316652
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9999999999996468,
+      "start_point_y": 0.3061239922880301,
+      "end_point_x": 0.9997956264050849,
+      "end_point_y": 0.30612399228798437
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9999999999996468,
+      "start_point_y": 0.4696660586535515,
+      "end_point_x": 0.9997956264050849,
+      "end_point_y": 0.46966605865350575
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9999999999996468,
+      "start_point_y": 0.5241800807753461,
+      "end_point_x": 0.9997956264050849,
+      "end_point_y": 0.5241800807753461
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9999999999997241,
+      "start_point_y": -0.07326201817895561,
+      "end_point_x": 0.9997956264050076,
+      "end_point_y": -0.07326201817900146
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9999999999996468,
+      "start_point_y": 0.8512642135063888,
+      "end_point_x": 0.9997956264050076,
+      "end_point_y": 0.8512642135063431
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9999999999996468,
+      "start_point_y": 0.7967501913845942,
+      "end_point_x": 0.9997956264050076,
+      "end_point_y": 0.7967501913845485
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9999999999996468,
+      "start_point_y": 0.5786941028971866,
+      "end_point_x": 0.9997956264050849,
+      "end_point_y": 0.5786941028971866
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9999999999996468,
+      "start_point_y": 0.6332081250190729,
+      "end_point_x": 0.9997956264050076,
+      "end_point_y": 0.6332081250190271
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9999999999996468,
+      "start_point_y": 0.6877221471409134,
+      "end_point_x": 0.9997956264050076,
+      "end_point_y": 0.6877221471408217
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9999999999996468,
+      "start_point_y": 0.7422361692627539,
+      "end_point_x": 0.9997956264050076,
+      "end_point_y": 0.742236169262708
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9999999999996468,
+      "start_point_y": 0.9057782356282293,
+      "end_point_x": 0.9997956264050076,
+      "end_point_y": 0.9057782356281834
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.028596598332977348,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.028596598332977348,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.028596598332977348,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9999999999996468,
+      "start_point_y": 0.9704145686926597,
+      "end_point_x": -0.9999999999997241,
+      "end_point_y": -0.9999999999999541
+    }
+  },
+  {
+    "type": "LWPOLYLINE",
+    "features": {
+      "closed": false,
+      "points_x": 0.9997956264050463,
+      "points_y": -0.01479271565367013,
+      "count": 2
+    }
+  },
+  {
+    "type": "LWPOLYLINE",
+    "features": {
+      "closed": false,
+      "points_x": 0.7475239118198995,
+      "points_y": -0.34693800385600787,
+      "count": 2
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9177087151818843,
+      "start_point_y": -0.9999999999999541,
+      "end_point_x": -0.917708715181763,
+      "end_point_y": 0.9704145686926597
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9999999999997241,
+      "start_point_y": -0.7819439115125922,
+      "end_point_x": 0.9997956264050076,
+      "end_point_y": -0.781943911512684
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "LWPOLYLINE",
+    "features": {
+      "closed": false,
+      "points_x": -0.9999999999996303,
+      "points_y": -0.014792715653647204,
+      "count": 2
+    }
+  },
+  {
+    "type": "LWPOLYLINE",
+    "features": {
+      "closed": false,
+      "points_x": -0.00010218679769480321,
+      "points_y": -0.9999999999999771,
+      "count": 2
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9999999999997241,
+      "start_point_y": -0.8364579336344786,
+      "end_point_x": 0.9997956264050076,
+      "end_point_y": -0.8364579336345246
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0,
+      "text_insert_point_y": 0,
+      "height": 0.023830498610814457,
+      "text_rotation": 0
+    }
+  }
+]

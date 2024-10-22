@@ -1,0 +1,2816 @@
+[
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -1.0,
+        1.0
+      ],
+      "height": 0.03176620685340588,
+      "rotation": 0,
+      "text": "NOTES :"
+    }
+  },
+  {
+    "type": "LWPOLYLINE",
+    "features": {
+      "closed": false,
+      "points": [
+        [
+          0.522718647859872,
+          -0.019315032126869913
+        ],
+        [
+          0.5227186478599994,
+          0.44729823329740714
+        ]
+      ],
+      "count": 2
+    }
+  },
+  {
+    "type": "LWPOLYLINE",
+    "features": {
+      "closed": false,
+      "points": [
+        [
+          0.5227186478599994,
+          0.44729823329740714
+        ],
+        [
+          0.5227186478599994,
+          0.8655153377510292
+        ]
+      ],
+      "count": 2
+    }
+  },
+  {
+    "type": "LWPOLYLINE",
+    "features": {
+      "closed": false,
+      "points": [
+        [
+          0.5227186478599994,
+          0.9139114987216843
+        ],
+        [
+          0.5227186478599994,
+          0.9753843073319894
+        ]
+      ],
+      "count": 2
+    }
+  },
+  {
+    "type": "LWPOLYLINE",
+    "features": {
+      "closed": false,
+      "points": [
+        [
+          0.2840779717899993,
+          -0.019315032126869913
+        ],
+        [
+          0.2840779717899993,
+          0.44729823329740714
+        ]
+      ],
+      "count": 2
+    }
+  },
+  {
+    "type": "LWPOLYLINE",
+    "features": {
+      "closed": false,
+      "points": [
+        [
+          0.2840779717899993,
+          0.44729823329740714
+        ],
+        [
+          0.2840779717899993,
+          0.9753843073319894
+        ]
+      ],
+      "count": 2
+    }
+  },
+  {
+    "type": "LWPOLYLINE",
+    "features": {
+      "closed": false,
+      "points": [
+        [
+          0.7613593239298722,
+          -0.019315032126869913
+        ],
+        [
+          0.7613593239299785,
+          0.44729823329740714
+        ]
+      ],
+      "count": 2
+    }
+  },
+  {
+    "type": "LWPOLYLINE",
+    "features": {
+      "closed": false,
+      "points": [
+        [
+          0.7613593239299785,
+          0.44729823329740714
+        ],
+        [
+          0.7613593239299785,
+          0.8655153377510292
+        ]
+      ],
+      "count": 2
+    }
+  },
+  {
+    "type": "LWPOLYLINE",
+    "features": {
+      "closed": false,
+      "points": [
+        [
+          0.7613593239299785,
+          0.9139114987216843
+        ],
+        [
+          0.7613593239299785,
+          0.9753843073319894
+        ]
+      ],
+      "count": 2
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.8712827668988156,
+        -0.15617375499268427
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "21"
+    }
+  },
+  {
+    "type": "LWPOLYLINE",
+    "features": {
+      "closed": false,
+      "points": [
+        [
+          0.522718647859872,
+          -0.6889244897171708
+        ],
+        [
+          0.522718647859872,
+          -0.0667737503670841
+        ]
+      ],
+      "count": 2
+    }
+  },
+  {
+    "type": "LWPOLYLINE",
+    "features": {
+      "closed": false,
+      "points": [
+        [
+          0.2840779717899993,
+          -0.6889244897171708
+        ],
+        [
+          0.2840779717899993,
+          -0.0667737503670841
+        ]
+      ],
+      "count": 2
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.7860905460045824,
+        -0.20668968840714874
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "VERTICAL BURR"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.8437352269925964,
+        -0.20784879354416175
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "0.025"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.7889947872722924,
+        -0.3114745796649112
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "LEAD TIP PLANARITY FROM DAM BAR"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.7880180332130842,
+        -0.9340210817973743
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "STRIP NUMBER TO BE ADDED ON STRIP"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.7889717540420065,
+        -0.8301701493373153
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "INTERNAL LEAD TIP DIMENSIONS GIVEN ARE GIVEN VALUES"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.7889582454682132,
+        -0.88116657820132
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "DIMENSION QUADRANT IS TYPICAL FOR QUADRANTS, EXCEPT AS SHOWN"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.7890053707702414,
+        -0.7794885083911226
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "PART TO BE FREE OF RUST, KINKS, BENDS, WRINKLES, OR SCRATCHES DEEPER THAN"
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446201851,
+        -0.32600306105378674
+      ],
+      "end_point": [
+        1.0,
+        -0.32600306105378674
+      ]
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446201851,
+        -0.6889244897171319
+      ],
+      "end_point": [
+        1.0,
+        -0.6889244897171708
+      ]
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446201851,
+        -0.9481540816195173
+      ],
+      "end_point": [
+        0.9999999999999787,
+        -0.9481540816195563
+      ]
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446201851,
+        -0.8963081632390292
+      ],
+      "end_point": [
+        0.9999999999999787,
+        -0.8963081632390292
+      ]
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446201851,
+        -0.8444622448585465
+      ],
+      "end_point": [
+        0.9999999999999787,
+        -0.8444622448585855
+      ]
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446201851,
+        -0.48154081619524025
+      ],
+      "end_point": [
+        1.0,
+        -0.48154081619524025
+      ]
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446201851,
+        -0.533386734575684
+      ],
+      "end_point": [
+        1.0,
+        -0.5333867345757228
+      ]
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446201851,
+        -0.5852326529561667
+      ],
+      "end_point": [
+        1.0,
+        -0.5852326529561667
+      ]
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446201851,
+        -0.6370785713366494
+      ],
+      "end_point": [
+        1.0,
+        -0.6370785713366494
+      ]
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446201851,
+        -0.429694897814752
+      ],
+      "end_point": [
+        1.0,
+        -0.429694897814752
+      ]
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446201851,
+        -0.37784897943423057
+      ],
+      "end_point": [
+        1.0,
+        -0.3778489794342694
+      ]
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446201851,
+        -0.27415714267330415
+      ],
+      "end_point": [
+        1.0,
+        -0.274157142673343
+      ]
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446201851,
+        -0.22231131803136395
+      ],
+      "end_point": [
+        1.0,
+        -0.22231131803136395
+      ]
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.7889665024328104,
+        -0.6225500899477403
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "LEAD TWIST"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.8712827668988156,
+        -0.5706578633963357
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "29"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.8712827668988156,
+        -0.7786555588868274
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "33"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.7889733856243749,
+        -0.674396008328223
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "FRAME TWIST"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.8712827668988156,
+        -0.6746315633012752
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "31"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.8712827668988156,
+        -0.7265278711009575
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "32"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.8712827668988156,
+        -0.6230673205876317
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "30"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.7880059300170326,
+        -0.4151664164258432
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "CAMBER"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.8712827668988156,
+        -0.3636978723379921
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "25"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.7880063407941245,
+        -0.5707041715672577
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "CROSS BOW"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.7889771405309716,
+        -0.46701233480632576
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "PAD TILT"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.8712827668988156,
+        -0.4677626593581944
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "27"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.8712827668988156,
+        -0.5192378555829995
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "28"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.8712827668988156,
+        -0.4131981118361715
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "26"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.7889770359003669,
+        -0.5202040443757481
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "PAD PLANARITY"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.7889817191271136,
+        -0.36176133940420274
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "PAD FLATNESS"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.8712827668988156,
+        -0.31204742719772594
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "24"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.8712827668988156,
+        -0.25961508909666053
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "23"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.8712827668988156,
+        -0.20776926445472033
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "22"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.7889774234969753,
+        -0.2596286612844285
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "HORIZONTAL BURR"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.859193189102371,
+        -0.6226161405880284
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "2.5%%d"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.3935393619261758,
+        -0.6738832249311868
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "-"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.3935393619261758,
+        -0.6220373065507041
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "-"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.6282175416116105,
+        -0.6220373065507041
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "-"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.6282175416116105,
+        -0.6738832249311868
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "-"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.6075040921488046,
+        -0.7789128924383865
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "0.008"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.8437352269925964,
+        -0.6744620589684778
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "0.635"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.3935393619261758,
+        -0.5701913881702605
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "-"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.3935393619261758,
+        -0.414653633028807
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "-"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.3935393619261758,
+        -0.46649955140932853
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "-"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.3935393619261758,
+        -0.5183454697897778
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "-"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.3935393619261758,
+        -0.36280771464836314
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "-"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.3935393619261758,
+        -0.2591158778873923
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "-"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.3935393619261758,
+        -0.31096179626788056
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "-"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.8358102342235294,
+        -0.46707838544658054
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "0.025"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.8737481462605217,
+        -0.5183454697897778
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "-"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.6282175416116105,
+        -0.5701913881702605
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "-"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.6282175416116105,
+        -0.46649955140932853
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "-"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.6282175416116105,
+        -0.414653633028807
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "-"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.5851619668137402,
+        -0.5189243038270632
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "%%P0.025"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.8437352269925964,
+        -0.5707702222075068
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "0.300"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.8437352269925964,
+        -0.3633865486856097
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "0.010"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.8737481462605217,
+        -0.31096179626788056
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "-"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.6282175416116105,
+        -0.36280771464836314
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "-"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.6282175416116105,
+        -0.2591158778873923
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "-"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.5851619668137402,
+        -0.311540630305127
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "%%P0.025"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.8466335948881965,
+        -0.25969471192464444
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "0.051"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.7880132531202314,
+        0.5136729142824037
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "CONNECTING BAR WIDTH"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.7889830830446662,
+        0.4604812047129814
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "HALF ETCHED DEPTH"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.7889724701117174,
+        0.1003524904093307
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "LOCK/ANCHOR HOLE"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.7889556331111103,
+        -0.15593682452346325
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "MAXIMUM RADIUS ON ALL CORNERS UNLESS OTHERWISE SPECIFIED"
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446201851,
+        -0.17046549338946815
+      ],
+      "end_point": [
+        1.0,
+        -0.17046549338946815
+      ]
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446201851,
+        -0.11861966874753349
+      ],
+      "end_point": [
+        1.0,
+        -0.11861966874753349
+      ]
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446201851,
+        0.2399145597755099
+      ],
+      "end_point": [
+        1.0,
+        0.2399145597755099
+      ]
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446201851,
+        0.18806864139506607
+      ],
+      "end_point": [
+        1.0,
+        0.18806864139506607
+      ]
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446201851,
+        0.13622272301453897
+      ],
+      "end_point": [
+        1.0,
+        0.13622272301453897
+      ]
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446201851,
+        0.08437680463409536
+      ],
+      "end_point": [
+        1.0,
+        0.08437680463409536
+      ]
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446201851,
+        0.03253088625361267
+      ],
+      "end_point": [
+        1.0,
+        0.03253088625357381
+      ]
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446201851,
+        -0.019315032126869913
+      ],
+      "end_point": [
+        1.0,
+        -0.019315032126869913
+      ]
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446201851,
+        0.44729823329740714
+      ],
+      "end_point": [
+        1.0,
+        0.44729823329740714
+      ]
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446201851,
+        0.2917604781559926
+      ],
+      "end_point": [
+        1.0,
+        0.2917604781559926
+      ]
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446201851,
+        0.44729823329740714
+      ],
+      "end_point": [
+        1.0,
+        0.44729823329740714
+      ]
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446201851,
+        0.3920025575070969
+      ],
+      "end_point": [
+        1.0,
+        0.3920025575070969
+      ]
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446201851,
+        0.33670688171682017
+      ],
+      "end_point": [
+        1.0,
+        0.33670688171682017
+      ]
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446201851,
+        0.499144151677851
+      ],
+      "end_point": [
+        1.0,
+        0.499144151677851
+      ]
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446201851,
+        -0.06677384410559328
+      ],
+      "end_point": [
+        1.0,
+        -0.06677384410559328
+      ]
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.8712827668988156,
+        -0.007647419838474834
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "18"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.8712827668988156,
+        -0.10494057682309721
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "20"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.8712827668988156,
+        -0.0576046429463698
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "19"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.7860868498035587,
+        -0.10409090614301952
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "TAPING POSITION TOL."
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.7889824811735264,
+        0.04542834045588928
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "MISALIGNMENT"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.7880099977835238,
+        -0.006332230615300305
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "COIL SET"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.8712827668988156,
+        0.04072451212261141
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "17"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.8712827668988156,
+        0.1481964671248115
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "15"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.8712827668988156,
+        0.09701017607322404
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "16"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.7880167407682127,
+        0.30628924076050645
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "STRIP LENGTH"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.7889973031491486,
+        0.20259740399958015
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "UNIT PITCH"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.7880037711626987,
+        0.25444332238002376
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "STRIP WIDTH"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.8712827668988156,
+        0.25165692389955585
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "13"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.8712827668988156,
+        0.2000927749244994
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "14"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.8712827668988156,
+        0.30406638109085193
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "12"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.8712827668988156,
+        0.35563053006594725
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "11"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.7880040577347882,
+        0.15055917955871645
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "CUMULATIVE PITCH"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.8611678605995258,
+        0.5142146038890776
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "8"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.8611678605995258,
+        0.5660605222695991
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "7"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.3935393619261758,
+        -0.20726995950690974
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "-"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.3935393619261758,
+        -0.15542404112642705
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "-"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.39849822817679104,
+        0.09941835063564541
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "-"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.39849822817679104,
+        -0.004273486125319859
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "-"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.39849822817679104,
+        0.04757243225516272
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "-"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.6282175416116105,
+        -0.20726995950690974
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "-"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.6282175416116105,
+        -0.15542404112642705
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "-"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.8437352269925964,
+        -0.15600287516371247
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "0.127"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.8727130820701743,
+        0.09941835063560656
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "-"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.6296619105467196,
+        0.09941835063564541
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "-"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.6296619105467196,
+        -0.004273486125319859
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "-"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.6296619105467196,
+        0.04757243225516272
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "-"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.8378416682799268,
+        -0.004852320162571866
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "0.508"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.8378416682799268,
+        0.046993598217910826
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "0.020"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.36031458723355425,
+        0.5136068636421489
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "0.130"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.362111516978215,
+        0.4617609452617053
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "0.046"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.5968421002443083,
+        0.5125023886411186
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "0.180"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.5969164041233768,
+        0.4617609452617053
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "0.076"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.8427251841080965,
+        0.5125023886411186
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "0.210"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.8378416682799268,
+        0.4617609452617053
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "0.106"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.7877452502351956,
+        0.8256271446529533
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "MATERIAL THICKNESS - C7025 1/2H"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.7889753860648405,
+        0.7739955606815807
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "PILOT HOLE DIAMETER"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.7880415655311582,
+        0.7176705494939044
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "EXTERNAL LEAD DIAMETER - BOTTOM"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.788983515934508,
+        0.5655188326628864
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "MIN. LEAD SPACE AFTER PLATE"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.7889792536519282,
+        0.6173647510433691
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "MIN. LEAD SPACE AFTER ETCH"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.7889764297547848,
+        0.6692106694238571
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "M TO M CLEARANCE AFTER ETCH"
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446201851,
+        0.8102196619607522
+      ],
+      "end_point": [
+        1.0,
+        0.8102196619607134
+      ]
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446201851,
+        0.8655153377510292
+      ],
+      "end_point": [
+        1.0,
+        0.8655153377510292
+      ]
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446201851,
+        0.7583737435802695
+      ],
+      "end_point": [
+        1.0,
+        0.7583737435802695
+      ]
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446201851,
+        0.5509900700583725
+      ],
+      "end_point": [
+        1.0,
+        0.5509900700583334
+      ]
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446201851,
+        0.6028359884388161
+      ],
+      "end_point": [
+        1.0,
+        0.6028359884388161
+      ]
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446201851,
+        0.6546819068193044
+      ],
+      "end_point": [
+        1.0,
+        0.6546819068193044
+      ]
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446201851,
+        0.7065278251997871
+      ],
+      "end_point": [
+        1.0,
+        0.7065278251997482
+      ]
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446201851,
+        0.9139114987216843
+      ],
+      "end_point": [
+        1.0,
+        0.9139114987216843
+      ]
+    }
+  },
+  {
+    "type": "LWPOLYLINE",
+    "features": {
+      "closed": false,
+      "points": [
+        [
+          -0.8917403446201851,
+          0.9753843073320283
+        ],
+        [
+          1.0,
+          0.9753843073319894
+        ]
+      ],
+      "count": 2
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.8611678605995258,
+        0.6721002660163882
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "5"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.8611678605995258,
+        0.6175357184943655
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "6"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.8611678605995258,
+        0.7216005055145733
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "4"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.8611678605995258,
+        0.773250950654834
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "3"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.8611678605995258,
+        0.8775292071363874
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "1"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.8611678605995258,
+        0.8256832887558658
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "2"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.3621416020888766,
+        0.6691446187836025
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "0.060"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.3621416020888766,
+        0.6172987004031587
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "0.060"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.3621416020888766,
+        0.5654527820226372
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "0.050"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.36056031613998996,
+        0.720990537164085
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "0.175"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.37157667520642246,
+        0.9287550611947439
+      ],
+      "height": 0.027051433692073645,
+      "rotation": 0,
+      "text": "MIN."
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.3600772548240283,
+        0.8246823739250171
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "0.144"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.8727130820701743,
+        0.5660316160599226
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "-"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.8727130820701743,
+        0.6697234528208877
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "-"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.8727130820701743,
+        0.6178775344404053
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "-"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.5992009922099264,
+        0.720990537164085
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "0.200"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.6296619105467196,
+        0.5660316160599226
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "-"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.6296619105467196,
+        0.6697234528208877
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "-"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.6296619105467196,
+        0.6178775344404053
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "-"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.8378416682799268,
+        0.720990537164085
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "0.225"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.5944881949101213,
+        0.9284949776967311
+      ],
+      "height": 0.027051433692073645,
+      "rotation": 0,
+      "text": "NOM."
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.5992009922099264,
+        0.8246823739250171
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "0.152"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.847653670712071,
+        0.9290151446927954
+      ],
+      "height": 0.027051433692073645,
+      "rotation": 0,
+      "text": "MAX."
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.8378416682799268,
+        0.8246823739250171
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "0.160"
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446201851,
+        0.9753843073320283
+      ],
+      "end_point": [
+        -0.8917403446201851,
+        0.44729823329740714
+      ]
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446201851,
+        0.44729823329740714
+      ],
+      "end_point": [
+        -0.8917403446201426,
+        -1.0
+      ]
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446202065,
+        -1.0
+      ],
+      "end_point": [
+        0.9999999999999787,
+        -1.0
+      ]
+    }
+  },
+  {
+    "type": "LWPOLYLINE",
+    "features": {
+      "closed": false,
+      "points": [
+        [
+          0.9999999999999787,
+          -1.0
+        ],
+        [
+          1.0,
+          0.44729823329740714
+        ]
+      ],
+      "count": 2
+    }
+  },
+  {
+    "type": "LWPOLYLINE",
+    "features": {
+      "closed": false,
+      "points": [
+        [
+          1.0,
+          0.44729823329740714
+        ],
+        [
+          1.0,
+          0.9753843073319894
+        ]
+      ],
+      "count": 2
+    }
+  },
+  {
+    "type": "LWPOLYLINE",
+    "features": {
+      "closed": false,
+      "points": [
+        [
+          0.7613593239298722,
+          -0.6889244897171708
+        ],
+        [
+          0.7613593239298722,
+          -0.0667737503670841
+        ]
+      ],
+      "count": 2
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8138955181562861,
+        -1.0
+      ],
+      "end_point": [
+        -0.8138955181562436,
+        0.44729823329740714
+      ]
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8138955181562436,
+        0.44729823329740714
+      ],
+      "end_point": [
+        -0.8138955181562436,
+        0.9753843073320283
+      ]
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446201851,
+        -0.6889244897171319
+      ],
+      "end_point": [
+        1.0,
+        -0.6889244897171708
+      ]
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446201851,
+        -0.7407704080976201
+      ],
+      "end_point": [
+        1.0,
+        -0.7407704080976201
+      ]
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.8611678605995258,
+        0.45667187113826313
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "9"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.8712827668988156,
+        0.40528741724265327
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "10"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.7885311375823443,
+        0.35343739164072696
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "PAD SIZE (X,Y) - BOTTOM"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.7885427615934768,
+        0.40935448406429686
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "PAD SIZE (X,Y) - TOP"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.3943247800821901,
+        0.41063422461298194
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "-"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.6298227909926397,
+        0.41063422461298194
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "-"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.8684633544470186,
+        0.41063422461298194
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "-"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.8712827668988156,
+        -0.8357847674854251
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "34"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.8712827668988156,
+        -0.8811910447650512
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "35"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.7877452502351956,
+        0.8763048955922699
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "GENERAL TOLERANCE "
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.5846507978716984,
+        0.8762388449520153
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "%%P0.050"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.8712827668988156,
+        -0.9362779556107907
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "36"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.8437352269925964,
+        -0.41523246706605343
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "0.050"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.8712827668988156,
+        -0.9881236865141774
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "37"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.7889717540420065,
+        -0.9858668127007277
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "ALL DIMENSIONS ARE IN MILLIMETERS"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.3214841832966626,
+        0.7737883182702314
+      ],
+      "height": 0.02180033803665113,
+      "rotation": 0,
+      "text": "1.475/0.875"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.5522644428647665,
+        0.7737883182702314
+      ],
+      "height": 0.02180033803665113,
+      "rotation": 0,
+      "text": "1.500/0.900"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.7830447024327853,
+        0.7737883182702314
+      ],
+      "height": 0.02180033803665113,
+      "rotation": 0,
+      "text": "1.525/0.925"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.34905010366741074,
+        0.30216808966559516
+      ],
+      "height": 0.02180033803665113,
+      "rotation": 0,
+      "text": "255.900"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.35792595558233886,
+        0.25202988733384113
+      ],
+      "height": 0.02180033803665113,
+      "rotation": 0,
+      "text": "69.950"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.35792595558233886,
+        0.20189168500200383
+      ],
+      "height": 0.02180033803665113,
+      "rotation": 0,
+      "text": "63.275"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.34764865336505024,
+        0.15175348267024424
+      ],
+      "height": 0.02180033803665113,
+      "rotation": 0,
+      "text": "189.850"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.8106106228035121,
+        0.3021680896655563
+      ],
+      "height": 0.02180033803665113,
+      "rotation": 0,
+      "text": "256.100"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.5891733652512297,
+        0.25202988733380227
+      ],
+      "height": 0.02180033803665113,
+      "rotation": 0,
+      "text": "70.000"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.5887062151504641,
+        0.20189168500196497
+      ],
+      "height": 0.02180033803665113,
+      "rotation": 0,
+      "text": "63.300"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.5798303632354933,
+        0.3021680896655563
+      ],
+      "height": 0.02180033803665113,
+      "rotation": 0,
+      "text": "256.000"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.5784289129331328,
+        0.1517534826702054
+      ],
+      "height": 0.02180033803665113,
+      "rotation": 0,
+      "text": "189.900"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.8199536248192059,
+        0.25202988733380227
+      ],
+      "height": 0.02180033803665113,
+      "rotation": 0,
+      "text": "70.050"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.8194864747184405,
+        0.20189168500196497
+      ],
+      "height": 0.02180033803665113,
+      "rotation": 0,
+      "text": "63.325"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.8092091725011517,
+        0.1517534826702054
+      ],
+      "height": 0.02180033803665113,
+      "rotation": 0,
+      "text": "189.950"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.29212875943640504,
+        -0.10699478685288666
+      ],
+      "height": 0.02180033803665113,
+      "rotation": 0,
+      "text": "32.000/31.400"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.5229090190045089,
+        -0.10699478685292552
+      ],
+      "height": 0.02180033803665113,
+      "rotation": 0,
+      "text": "32.300/31.700"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.7649483337543681,
+        -0.10699478685292552
+      ],
+      "height": 0.02180033803665113,
+      "rotation": 0,
+      "text": "32.600/32.000"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.7889733856243749,
+        -0.7252978697196653
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "TAPE MATERIAL NITTO TAPE PW3610A"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.394324780082169,
+        0.3553385488226717
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "-"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.6298227909926397,
+        0.3553385488226717
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "-"
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        0.8684633544469762,
+        0.3553385488226717
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "-"
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point": [
+        -0.8917403446201851,
+        -0.7926163264780639
+      ],
+      "end_point": [
+        0.9999999999999787,
+        -0.7926163264781028
+      ]
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "insert_point": [
+        -0.7880099977835238,
+        -0.05691025035360753
+      ],
+      "height": 0.022542861410061375,
+      "rotation": 0,
+      "text": "PLATING TO BE NiPd WITH Au:        Ni: 0.5~2.0 um, Pd: 0.02~0.15 um, Au: 0.003~0.015 um"
+    }
+  }
+]

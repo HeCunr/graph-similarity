@@ -1,0 +1,260 @@
+import os
+import json
+import ezdxf
+import numpy as np
+from collections import defaultdict
+from rtree import index
+import shapely.geometry as geometry
+
+ENTITY_TYPES = ['ARC', 'TEXT', 'MTEXT', 'LWPOLYLINE', 'INSERT',
+                'DIMENSION', 'LEADER', 'CIRCLE', 'HATCH', 'LINE']
+ENTITY_LIMIT = 512
+
+def safe_get_coords(point):
+    """安全地获取坐标，忽略Z值"""
+    if isinstance(point, (tuple, list)):
+        return point[:2]
+    return point.x, point.y
+
+def compute_entity_bounding_box(entity, doc):
+    """计算单个实体的外框坐标"""
+    entity_type = entity.dxftype()
+    points = []
+
+    try:
+        if entity_type == 'LINE':
+            points = [safe_get_coords(entity.dxf.start), safe_get_coords(entity.dxf.end)]
+        elif entity_type == 'CIRCLE':
+            center = safe_get_coords(entity.dxf.center)
+            radius = entity.dxf.radius
+            min_x, max_x = center[0] - radius, center[0] + radius
+            min_y, max_y = center[1] - radius, center[1] + radius
+            return min_x, min_y, max_x, max_y
+        elif entity_type == 'ARC':
+            center = safe_get_coords(entity.dxf.center)
+            radius = entity.dxf.radius
+            start_angle = entity.dxf.start_angle
+            end_angle = entity.dxf.end_angle
+            points = [
+                (center[0] + radius * np.cos(np.radians(angle)),
+                 center[1] + radius * np.sin(np.radians(angle)))
+                for angle in np.linspace(start_angle, end_angle, 100)
+            ]
+        elif entity_type in ['TEXT', 'MTEXT']:
+            insert_point = safe_get_coords(entity.dxf.insert)
+            height = getattr(entity.dxf, 'height', 0)
+            width = getattr(entity.dxf, 'width', 0)
+            return insert_point[0], insert_point[1], insert_point[0] + width, insert_point[1] + height
+        elif entity_type == 'LWPOLYLINE':
+            points = [safe_get_coords(p) for p in entity.get_points()]
+        elif entity_type == 'INSERT':
+            insert_point = safe_get_coords(entity.dxf.insert)
+            x_scale = getattr(entity.dxf, 'xscale', 1.0)
+            y_scale = getattr(entity.dxf, 'yscale', 1.0)
+            rotation = getattr(entity.dxf, 'rotation', 0.0)
+            block = doc.blocks.get(entity.dxf.name)
+            block_points = []
+            for block_entity in block:
+                bbox = compute_entity_bounding_box(block_entity, doc)
+                if bbox:
+                    block_points.extend([(bbox[0], bbox[1]), (bbox[2], bbox[3])])
+            if block_points:
+                min_x = min(p[0] for p in block_points)
+                max_x = max(p[0] for p in block_points)
+                min_y = min(p[1] for p in block_points)
+                max_y = max(p[1] for p in block_points)
+                center_x, center_y = (min_x + max_x) / 2, (min_y + max_y) / 2
+                transformed_points = []
+                for x, y in block_points:
+                    x, y = x - center_x, y - center_y
+                    x, y = x * x_scale, y * y_scale
+                    x_new = x * np.cos(np.radians(rotation)) - y * np.sin(np.radians(rotation))
+                    y_new = x * np.sin(np.radians(rotation)) + y * np.cos(np.radians(rotation))
+                    x_new, y_new = x_new + insert_point[0], y_new + insert_point[1]
+                    transformed_points.append((x_new, y_new))
+                return min(p[0] for p in transformed_points), min(p[1] for p in transformed_points), \
+                       max(p[0] for p in transformed_points), max(p[1] for p in transformed_points)
+        elif entity_type in ['DIMENSION', 'LEADER', 'HATCH']:
+            if entity_type == 'DIMENSION':
+                points = [safe_get_coords(entity.dxf.defpoint), safe_get_coords(entity.dxf.text_midpoint)]
+                if hasattr(entity.dxf, 'defpoint2'):
+                    points.append(safe_get_coords(entity.dxf.defpoint2))
+                if hasattr(entity.dxf, 'defpoint3'):
+                    points.append(safe_get_coords(entity.dxf.defpoint3))
+            elif entity_type == 'LEADER':
+                points = [safe_get_coords(v) for v in entity.vertices]
+            elif entity_type == 'HATCH':
+                for path in entity.paths:
+                    if path.PATH_TYPE == 'EdgePath':
+                        for edge in path.edges:
+                            if isinstance(edge, ezdxf.entities.Line):
+                                points.extend([safe_get_coords(edge.start), safe_get_coords(edge.end)])
+                            elif isinstance(edge, ezdxf.entities.Arc):
+                                center, radius = safe_get_coords(edge.center), edge.radius
+                                start_angle, end_angle = edge.start_angle, edge.end_angle
+                                points.extend([
+                                    (center[0] + radius * np.cos(np.radians(angle)),
+                                     center[1] + radius * np.sin(np.radians(angle)))
+                                    for angle in np.linspace(start_angle, end_angle, 20)
+                                ])
+
+        if points:
+            xs, ys = zip(*points)
+            return min(xs), min(ys), max(xs), max(ys)
+        else:
+            return None
+
+    except Exception as e:
+        print(f"Error processing entity {entity.dxf.handle} of type {entity_type}: {e}")
+        return None
+
+def check_overlap(bbox1, bbox2):
+    """检查两个边界框是否重叠"""
+    rect1 = geometry.box(*bbox1)
+    rect2 = geometry.box(*bbox2)
+    if rect1.overlaps(rect2):
+        return not (rect1.contains(rect2) or rect2.contains(rect1))
+    return False
+
+def process_dxf_file(file_path):
+    try:
+        doc = ezdxf.readfile(file_path)
+        msp = doc.modelspace()
+
+        # 计算实体总数
+        entity_count = sum(1 for _ in msp if _.dxftype() in ENTITY_TYPES)
+
+        # 如果实体数量超过限制，返回None
+        if entity_count > ENTITY_LIMIT:
+            print(f"Skipping {file_path}: Entity count ({entity_count}) exceeds limit ({ENTITY_LIMIT})")
+            return None
+
+        # 初始化数据结构
+        entities = []
+        total_counts = {etype: 0 for etype in ENTITY_TYPES}
+        overlapping_counts = {etype: {other_type: 0 for other_type in ENTITY_TYPES} for etype in ENTITY_TYPES}
+
+        # 创建R树索引
+        idx = index.Index()
+
+        # 第一遍遍历：收集实体信息并插入R树
+        for entity_id, entity in enumerate(msp):
+            entity_type = entity.dxftype()
+            if entity_type not in ENTITY_TYPES:
+                continue
+            bbox = compute_entity_bounding_box(entity, doc)
+            if bbox:
+                entities.append({
+                    'type': entity_type,
+                    'bbox': bbox,
+                    'id': entity_id
+                })
+                total_counts[entity_type] += 1
+                idx.insert(entity_id, bbox)
+
+        # 第二遍遍历：检查重叠
+        for entity in entities:
+            etype = entity['type']
+            bbox = entity['bbox']
+            entity_id = entity['id']
+
+            possible_matches = list(idx.intersection(bbox))
+            for match_id in possible_matches:
+                if match_id == entity_id:
+                    continue
+                other_entity = entities[match_id]
+                other_type = other_entity['type']
+
+                if other_entity['id'] < entity_id:
+                    continue
+
+                if check_overlap(bbox, other_entity['bbox']):
+                    overlapping_counts[etype][other_type] += 1
+                    overlapping_counts[other_type][etype] += 1
+
+        # 生成特征向量
+        feature_vectors = {}
+        for etype in ENTITY_TYPES:
+            vector = [total_counts[etype] - sum(overlapping_counts[etype].values())]  # SELF
+            for other_type in ENTITY_TYPES:
+                if other_type == etype:
+                    vector.append(0)  # 自身类型的重叠数量设为0
+                else:
+                    vector.append(overlapping_counts[etype][other_type])
+            feature_vectors[etype] = vector
+
+        # 归一化特征向量
+        normalized_vectors = normalize_feature_vectors(feature_vectors)
+
+        # 创建邻接表
+        adjacency_list = create_adjacency_list(entities)
+
+        return {
+            "src": os.path.basename(file_path),
+            "n_num": len(ENTITY_TYPES),
+            "succs": adjacency_list,
+            "features": normalized_vectors
+        }
+    except Exception as e:
+        print(f"Error processing {file_path}: {e}")
+        return None
+
+def normalize_feature_vectors(feature_vectors):
+    """对特征向量进行归一化"""
+    normalized_vectors = []
+    first_column = [feature_vectors[etype][0] for etype in ENTITY_TYPES]
+    col_sum = sum(first_column)
+
+    for etype in ENTITY_TYPES:
+        vector = feature_vectors[etype]
+        normalized_first = vector[0] / col_sum if col_sum != 0 else 0
+        other_values = vector[1:]
+        row_sum = sum(other_values)
+        if row_sum != 0:
+            normalized_others = [value / row_sum for value in other_values]
+        else:
+            normalized_others = [0] * len(other_values)
+        normalized_vectors.append([normalized_first] + normalized_others)
+
+    return normalized_vectors
+
+def create_adjacency_list(entities):
+    """创建邻接表"""
+    adjacency_list = [[] for _ in range(len(ENTITY_TYPES))]
+    for i, entity in enumerate(entities):
+        for j, other_entity in enumerate(entities):
+            if i != j and check_overlap(entity['bbox'], other_entity['bbox']):
+                type_index = ENTITY_TYPES.index(entity['type'])
+                other_type_index = ENTITY_TYPES.index(other_entity['type'])
+                if other_type_index not in adjacency_list[type_index]:
+                    adjacency_list[type_index].append(other_type_index)
+    return adjacency_list
+
+def process_directory(directory_path, output_file):
+    """处理指定目录下的所有DXF文件并输出结果"""
+    results = []
+    for filename in os.listdir(directory_path):
+        if filename.endswith('.dxf'):
+            file_path = os.path.join(directory_path, filename)
+            result = process_dxf_file(file_path)
+            if result is not None:
+                results.append(result)
+                print(f"Processed: {filename}")
+            else:
+                print(f"Skipped: {filename}")
+
+    # 将结果写入输出文件
+    if results:
+        with open(output_file, 'w') as f:
+            for result in results:
+                json.dump(result, f)
+                f.write('\n')
+        print(f"Results written to {output_file}")
+    else:
+        print("No valid results to write. Output file not created.")
+
+
+# 使用示例
+input_directory = r'C:\srtp\encode\data\CGMN'  # 替换为实际的DXF文件目录
+output_file = r'C:\srtp\encode\data\CFG\OpenSSL_11ACFG_min10_max10\acfgSSL_11\CGMN.txt'  # 输出文件名
+process_directory(input_directory, output_file)
