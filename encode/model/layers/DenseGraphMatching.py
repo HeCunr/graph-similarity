@@ -224,6 +224,16 @@ class HierarchicalGraphMatchNetwork(torch.nn.Module):
         :return:  (batch, len1, len2)
         """
         # (batch, len1, len2)
+
+        # Handle different batch sizes
+        if v1.size(0) != v2.size(0):
+            min_batch = min(v1.size(0), v2.size(0))
+            v1 = v1[:min_batch]
+            v2 = v2[:min_batch]
+
+        # Ensure dimensions match for bmm operation
+        assert v1.size(2) == v2.size(2), f"Feature dimensions must match. Got {v1.size(2)} and {v2.size(2)}"
+
         a = torch.bmm(v1, v2.permute(0, 2, 1))
 
         v1_norm = v1.norm(p=2, dim=2, keepdim=True)  # (batch, len1, 1)
@@ -246,12 +256,12 @@ class HierarchicalGraphMatchNetwork(torch.nn.Module):
 
     def forward_dense_gcn_layers(self, feat, adj):
         # TODO:
-        feat_in = feat
+        feat_in = feat.clone()
         for i in range(1, self.gcn_numbers + 1):
             feat_out = functional.relu(getattr(self, 'gc{}'.format(i))(x=feat_in, adj=adj, mask=None, add_loop=False),
-                                       inplace=True)
+                                       inplace=False)
             feat_out = functional.dropout(feat_out, p=self.dropout, training=self.training)
-            feat_in = feat_out
+            feat_in = feat_out.clone()
         return feat_out
 
 
@@ -260,7 +270,7 @@ class HierarchicalGraphMatchNetwork(torch.nn.Module):
         feat_in = feat
         for i in range(1, self.gcn_numbers + 1):
             feat_out = functional.relu(getattr(self, 'gc_cross{}'.format(i))(x=feat_in, adj=adj, mask=None, add_loop=False),
-                                       inplace=True)
+                                       inplace=False)
             feat_out = functional.dropout(feat_out, p=self.dropout, training=self.training)
             feat_in = feat_out
         return feat_out
@@ -625,11 +635,11 @@ class HierarchicalGraphMatchNetwork(torch.nn.Module):
         x = torch.cat([z1, z2], dim=1)
         x = functional.dropout(x, p=self.dropout, training=self.training)
         # x = self.predict_fc1(x)
-        x = functional.relu(self.predict_fc1(x))
+        x = functional.relu(self.predict_fc1(x), inplace=False)
         x = functional.dropout(x, p=self.dropout, training=self.training)
-        x = functional.relu(self.predict_fc2(x))
+        x = functional.relu(self.predict_fc2(x), inplace=False)
         x = functional.dropout(x, p=self.dropout, training=self.training)
-        x = functional.relu(self.predict_fc3(x))
+        x = functional.relu(self.predict_fc3(x), inplace=False)
         x = functional.dropout(x, p=self.dropout, training=self.training)
         x = self.predict_fc4(x)
         x = torch.sigmoid(x).squeeze(-1)
@@ -639,11 +649,11 @@ class HierarchicalGraphMatchNetwork(torch.nn.Module):
         x=z1
         x = functional.dropout(x, p=self.dropout, training=self.training)
 
-        x = functional.relu(self.predict_fc1(x))
+        x = functional.relu(self.predict_fc1(x), inplace=False)
         x = functional.dropout(x, p=self.dropout, training=self.training)
-        x = functional.relu(self.predict_fc2(x))
+        x = functional.relu(self.predict_fc2(x), inplace=False)
         x = functional.dropout(x, p=self.dropout, training=self.training)
-        x = functional.relu(self.predict_fc3(x))
+        x = functional.relu(self.predict_fc3(x), inplace=False)
         x = functional.dropout(x, p=self.dropout, training=self.training)
         x = self.predict_fc4(x)
         x = torch.sigmoid(x).squeeze(-1)

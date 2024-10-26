@@ -1,0 +1,1227 @@
+[
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.6853141971703032,
+      "start_point_y": 0.4982834614102778,
+      "end_point_x": -0.6853141971703032,
+      "end_point_y": -0.31590291647050706
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.8707354646306469,
+      "start_point_y": 0.09119027246993583,
+      "end_point_x": -0.49989292970998656,
+      "end_point_y": 0.09119027246993583
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": -0.32729641785833363,
+      "text_insert_point_y": -1.0,
+      "height": 0.021495107964817843,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": -0.5801198305873839,
+      "text_insert_point_y": -0.8685805660961136,
+      "height": 0.021495107964817843,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.6753261370026817,
+      "start_point_y": 0.4982834614102778,
+      "end_point_x": 0.6753261370026546,
+      "end_point_y": -0.31590291647050706
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.8607474044629848,
+      "start_point_y": 0.09119027246988543,
+      "end_point_x": 0.4899048695423107,
+      "end_point_y": 0.09119027246988543
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0.5797078501632213,
+      "text_insert_point_y": -0.4182704006037997,
+      "height": 0.005743761254579213,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "TEXT",
+    "features": {
+      "text_insert_point_x": 0.06477189561108387,
+      "text_insert_point_y": -0.5455805018660589,
+      "height": 0.020677540516485206,
+      "text_rotation": 0
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.9027945345223316,
+      "start_point_y": 0.6339077478251338,
+      "end_point_x": -0.9027945345223317,
+      "end_point_y": 0.6339077478251338
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.9027945345223589,
+      "start_point_y": -0.43024416463615045,
+      "end_point_x": -0.9027945345223317,
+      "end_point_y": -0.43024416463610005
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.8992120574712998,
+      "start_point_y": 0.3792713973433086,
+      "end_point_x": 0.8992120574712998,
+      "end_point_y": 0.5008887587674598
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.8017890221956745,
+      "start_point_y": -0.41728062868782356,
+      "end_point_x": 0.8017890221956745,
+      "end_point_y": -0.40787810488944176
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.7985694032607253,
+      "start_point_y": -0.41200156042252534,
+      "end_point_x": 0.8050086411306101,
+      "end_point_y": -0.41200156042252534
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.5488632518096617,
+      "start_point_y": -0.4188326768380497,
+      "end_point_x": 0.5488632518096617,
+      "end_point_y": -0.4051704440070081
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.5456436328747261,
+      "start_point_y": -0.41200156042252534,
+      "end_point_x": 0.5520828707445973,
+      "end_point_y": -0.41200156042252534
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.8992120574712998,
+      "start_point_y": 0.5008887587674598,
+      "end_point_x": 0.9171246064988887,
+      "end_point_y": 0.5008887587674598
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.8992120574712998,
+      "start_point_y": 0.3792713973433086,
+      "end_point_x": 0.9171246064988887,
+      "end_point_y": 0.3792713973433086
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.8992120574712998,
+      "start_point_y": 0.2804572911861891,
+      "end_point_x": 0.9171246064988887,
+      "end_point_y": 0.2804572911861891
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.8992120574712998,
+      "start_point_y": 0.15883992976203798,
+      "end_point_x": 0.9171246064988887,
+      "end_point_y": 0.15883992976203798
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.8992120574712998,
+      "start_point_y": 0.04482365342689487,
+      "end_point_x": 0.9171246064988887,
+      "end_point_y": 0.044823653426945276
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.8992120574712998,
+      "start_point_y": -0.07679370799720575,
+      "end_point_x": 0.9171246064988887,
+      "end_point_y": -0.07679370799720575
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.8992120574712998,
+      "start_point_y": 0.2804572911861891,
+      "end_point_x": 0.8992120574712998,
+      "end_point_y": 0.15883992976203798
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.8992120574712998,
+      "start_point_y": 0.044823653426945276,
+      "end_point_x": 0.8992120574712998,
+      "end_point_y": -0.07679370799725616
+    }
+  },
+  {
+    "type": "CIRCLE",
+    "features": {
+      "circle_center_x": 0.8017890221956745,
+      "circle_center_y": -0.41200156042252534,
+      "circle_radius": 0.0032242661947226806
+    }
+  },
+  {
+    "type": "CIRCLE",
+    "features": {
+      "circle_center_x": 0.5488632518096617,
+      "circle_center_y": -0.41200156042252534,
+      "circle_radius": 0.0032242661947226806
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.9171246064988887,
+      "start_point_y": 0.6163492412695109,
+      "end_point_x": 0.9171246064988887,
+      "end_point_y": 0.5008887587674598
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.9171246064988887,
+      "start_point_y": 0.3792713973433086,
+      "end_point_x": 0.9171246064988887,
+      "end_point_y": 0.2804572911861891
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.9171246064988887,
+      "start_point_y": 0.15883992976203798,
+      "end_point_x": 0.9171246064988887,
+      "end_point_y": 0.044823653426945276
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.9171246064988887,
+      "start_point_y": -0.07679370799720575,
+      "end_point_x": 0.9171246064989158,
+      "end_point_y": -0.4126856580805276
+    }
+  },
+  {
+    "type": "INSERT",
+    "features": {
+      "insert_insert_point_x": 0.6753261370026817,
+      "insert_insert_point_y": 0.09119027246988543,
+      "scale_x": 0.0300000685716668,
+      "scale_y": 0.0300000685716668,
+      "insert_rotation": 0
+    }
+  },
+  {
+    "type": "INSERT",
+    "features": {
+      "insert_insert_point_x": 0.22177935894497947,
+      "insert_insert_point_y": 0.09119027246988543,
+      "scale_x": -0.0300000685716668,
+      "scale_y": 0.0300000685715816,
+      "insert_rotation": 0
+    }
+  },
+  {
+    "type": "INSERT",
+    "features": {
+      "insert_insert_point_x": -0.6853141971703032,
+      "insert_insert_point_y": 0.09119027246988543,
+      "scale_x": -0.0300000685716668,
+      "scale_y": 0.0300000685715816,
+      "insert_rotation": 0
+    }
+  },
+  {
+    "type": "INSERT",
+    "features": {
+      "insert_insert_point_x": -0.23176741911264154,
+      "insert_insert_point_y": 0.09119027246988543,
+      "scale_x": 0.0300000685716668,
+      "scale_y": 0.0300000685716668,
+      "insert_rotation": 0
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.22177935894500656,
+      "start_point_y": 0.4982834614102778,
+      "end_point_x": 0.22177935894497947,
+      "end_point_y": -0.31590291647050706
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.03635809148466285,
+      "start_point_y": 0.09119027246988543,
+      "end_point_x": 0.40720062640535026,
+      "end_point_y": 0.09119027246988543
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.23176741911264154,
+      "start_point_y": 0.4982834614102778,
+      "end_point_x": -0.23176741911265508,
+      "end_point_y": -0.31590291647050706
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.04634615165232492,
+      "start_point_y": 0.09119027246988543,
+      "end_point_x": -0.4171886865729717,
+      "end_point_y": 0.09119027246988543
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9171246064988887,
+      "start_point_y": 0.6163492412695613,
+      "end_point_x": -0.9171246064988887,
+      "end_point_y": -0.4126856580805276
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9171246064988887,
+      "start_point_y": 0.6163492412695613,
+      "end_point_x": -0.9027945345223317,
+      "end_point_y": 0.6339077478251338
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9171246064988887,
+      "start_point_y": -0.4126856580805276,
+      "end_point_x": -0.9027945345223317,
+      "end_point_y": -0.43024416463610005
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.5588513119772831,
+      "start_point_y": -0.41728062868782356,
+      "end_point_x": -0.5588513119772831,
+      "end_point_y": -0.40787810488939136
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.562070930912246,
+      "start_point_y": -0.41200156042252534,
+      "end_point_x": -0.5556316930423476,
+      "end_point_y": -0.41200156042252534
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.811777082363323,
+      "start_point_y": -0.4188326768380497,
+      "end_point_x": -0.811777082363323,
+      "end_point_y": -0.4051704440069577
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.8149967012982858,
+      "start_point_y": -0.41200156042247493,
+      "end_point_x": -0.8085574634283874,
+      "end_point_y": -0.41200156042247493
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.8920254854319827,
+      "start_point_y": 0.604273376142578,
+      "end_point_x": -0.8920254854319827,
+      "end_point_y": 0.6179356089736627
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.8952451043669183,
+      "start_point_y": 0.6111044925581455,
+      "end_point_x": -0.8888058664970471,
+      "end_point_y": 0.6111044925581455
+    }
+  },
+  {
+    "type": "CIRCLE",
+    "features": {
+      "circle_center_x": -0.5588513119772831,
+      "circle_center_y": -0.41200156042252534,
+      "circle_radius": 0.0032242661947226806
+    }
+  },
+  {
+    "type": "CIRCLE",
+    "features": {
+      "circle_center_x": -0.8117770823632959,
+      "circle_center_y": -0.41200156042247493,
+      "circle_radius": 0.0032242661947226806
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.10530453391964878,
+      "start_point_y": -0.41728062868782356,
+      "end_point_x": -0.10530453391964878,
+      "end_point_y": -0.40787810488944176
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.10852415285458439,
+      "start_point_y": -0.41200156042252534,
+      "end_point_x": -0.10208491498468597,
+      "end_point_y": -0.41200156042252534
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.35823030430564784,
+      "start_point_y": -0.4188326768380497,
+      "end_point_x": -0.35823030430564784,
+      "end_point_y": -0.4051704440070081
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.3614499232405971,
+      "start_point_y": -0.41200156042252534,
+      "end_point_x": -0.35501068537071234,
+      "end_point_y": -0.41200156042252534
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.23176741911265508,
+      "start_point_y": 0.604273376142578,
+      "end_point_x": -0.23176741911265508,
+      "end_point_y": 0.6179356089736123
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.23498703804760424,
+      "start_point_y": 0.6111044925580951,
+      "end_point_x": -0.22854780017770593,
+      "end_point_y": 0.6111044925580951
+    }
+  },
+  {
+    "type": "CIRCLE",
+    "features": {
+      "circle_center_x": -0.10530453391964878,
+      "circle_center_y": -0.41200156042252534,
+      "circle_radius": 0.0032242661947226806
+    }
+  },
+  {
+    "type": "CIRCLE",
+    "features": {
+      "circle_center_x": -0.35823030430564784,
+      "circle_center_y": -0.41200156042252534,
+      "circle_radius": 0.0032242661947226806
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.3482422441380264,
+      "start_point_y": -0.41728062868782356,
+      "end_point_x": 0.3482422441380264,
+      "end_point_y": -0.40787810488944176
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.3450226252030908,
+      "start_point_y": -0.41200156042252534,
+      "end_point_x": 0.3514618630729349,
+      "end_point_y": -0.41200156042252534
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.09531647375198649,
+      "start_point_y": -0.4188326768380497,
+      "end_point_x": 0.09531647375198649,
+      "end_point_y": -0.4051704440070081
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.09209685481705088,
+      "start_point_y": -0.41200156042252534,
+      "end_point_x": 0.0985360926869221,
+      "end_point_y": -0.41200156042252534
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.01506807068335414,
+      "start_point_y": 0.604273376142578,
+      "end_point_x": 0.01506807068335414,
+      "end_point_y": 0.6179356089736123
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.011848451748391442,
+      "start_point_y": 0.6111044925580951,
+      "end_point_x": 0.01828768961828975,
+      "end_point_y": 0.6111044925580951
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.22177935894500656,
+      "start_point_y": 0.604273376142578,
+      "end_point_x": 0.22177935894500656,
+      "end_point_y": 0.6179356089736123
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.21855974001004386,
+      "start_point_y": 0.6111044925580951,
+      "end_point_x": 0.22499897787994216,
+      "end_point_y": 0.6111044925580951
+    }
+  },
+  {
+    "type": "CIRCLE",
+    "features": {
+      "circle_center_x": 0.3482422441380264,
+      "circle_center_y": -0.41200156042252534,
+      "circle_radius": 0.0032242661947226806
+    }
+  },
+  {
+    "type": "CIRCLE",
+    "features": {
+      "circle_center_x": 0.09531647375198649,
+      "circle_center_y": -0.41200156042252534,
+      "circle_radius": 0.0032242661947226806
+    }
+  },
+  {
+    "type": "DIMENSION",
+    "features": {
+      "defpoint_x": -0.9806152419928408,
+      "defpoint_y": -0.43024416463610005,
+      "text_midpoint_x": -0.9806152419928408,
+      "text_midpoint_y": 0.10183179159449529,
+      "dim_type": 160
+    }
+  },
+  {
+    "type": "DIMENSION",
+    "features": {
+      "defpoint_x": -0.9171246064988887,
+      "defpoint_y": 0.7022839485105137,
+      "text_midpoint_x": -1.0,
+      "text_midpoint_y": 0.7022839485105137,
+      "dim_type": 160
+    }
+  },
+  {
+    "type": "DIMENSION",
+    "features": {
+      "defpoint_x": -0.9171246064988887,
+      "defpoint_y": 0.919209389089112,
+      "text_midpoint_x": -0.8012194018346163,
+      "text_midpoint_y": 0.919209389089112,
+      "dim_type": 32
+    }
+  },
+  {
+    "type": "DIMENSION",
+    "features": {
+      "defpoint_x": 0.22177935894500656,
+      "defpoint_y": 0.7875670902356482,
+      "text_midpoint_x": -0.005141670789255426,
+      "text_midpoint_y": 0.7875670902356482,
+      "dim_type": 160
+    }
+  },
+  {
+    "type": "DIMENSION",
+    "features": {
+      "defpoint_x": -0.6853141971703032,
+      "defpoint_y": 0.919209389089112,
+      "text_midpoint_x": -0.004994030083831036,
+      "text_midpoint_y": 0.919209389089112,
+      "dim_type": 32
+    }
+  },
+  {
+    "type": "DIMENSION",
+    "features": {
+      "defpoint_x": 0.9171246064988887,
+      "defpoint_y": 1.0,
+      "text_midpoint_x": 0.0,
+      "text_midpoint_y": 1.0,
+      "dim_type": 32
+    }
+  },
+  {
+    "type": "DIMENSION",
+    "features": {
+      "defpoint_x": 0.9171246064988887,
+      "defpoint_y": 0.6859380904847827,
+      "text_midpoint_x": 1.0,
+      "text_midpoint_y": 0.6859380904847827,
+      "dim_type": 160
+    }
+  },
+  {
+    "type": "DIMENSION",
+    "features": {
+      "defpoint_x": 0.9171246064988887,
+      "defpoint_y": 0.919209389089112,
+      "text_midpoint_x": 0.7962253717507852,
+      "text_midpoint_y": 0.919209389089112,
+      "dim_type": 32
+    }
+  },
+  {
+    "type": "INSERT",
+    "features": {
+      "insert_insert_point_x": 0.6753261370026817,
+      "insert_insert_point_y": 0.09119027246988543,
+      "scale_x": 0.0300000685716668,
+      "scale_y": 0.0300000685716668,
+      "insert_rotation": 0
+    }
+  },
+  {
+    "type": "INSERT",
+    "features": {
+      "insert_insert_point_x": 0.22177935894500656,
+      "insert_insert_point_y": 0.09119027246988543,
+      "scale_x": 0.0300000685716668,
+      "scale_y": 0.0300000685716668,
+      "insert_rotation": 0
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.9027945345223589,
+      "start_point_y": 0.6339077478251338,
+      "end_point_x": 0.9171246064989158,
+      "end_point_y": 0.6163492412695109
+    }
+  },
+  {
+    "type": "CIRCLE",
+    "features": {
+      "circle_center_x": 0.22177935894500656,
+      "circle_center_y": 0.6111044925580951,
+      "circle_radius": 0.005373776991204468
+    }
+  },
+  {
+    "type": "CIRCLE",
+    "features": {
+      "circle_center_x": -0.23176741911264154,
+      "circle_center_y": 0.6111044925580951,
+      "circle_radius": 0.005373776991204468
+    }
+  },
+  {
+    "type": "CIRCLE",
+    "features": {
+      "circle_center_x": -0.8920254854319555,
+      "circle_center_y": 0.6111044925581455,
+      "circle_radius": 0.005373776991204468
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.9027945345223589,
+      "start_point_y": -0.43024416463615045,
+      "end_point_x": 0.9171246064989158,
+      "end_point_y": -0.4126856580805276
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.5491785133931608,
+      "start_point_y": 0.604273376142578,
+      "end_point_x": -0.5491785133931608,
+      "end_point_y": 0.6179356089736123
+    }
+  },
+  {
+    "type": "CIRCLE",
+    "features": {
+      "circle_center_x": -0.5491785133931337,
+      "circle_center_y": 0.6111044925580951,
+      "circle_radius": 0.005373776991204468
+    }
+  },
+  {
+    "type": "DIMENSION",
+    "features": {
+      "defpoint_x": -0.09563173533545855,
+      "defpoint_y": 0.733081115814896,
+      "text_midpoint_x": 0.02818662737162647,
+      "text_midpoint_y": 0.733081115814896,
+      "dim_type": 160
+    }
+  },
+  {
+    "type": "DIMENSION",
+    "features": {
+      "defpoint_x": 0.8114618207798241,
+      "defpoint_y": 0.8472072681476435,
+      "text_midpoint_x": 0.12666574811055442,
+      "text_midpoint_y": 0.8472072681476435,
+      "dim_type": 160
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.09563173533545855,
+      "start_point_y": 0.604273376142578,
+      "end_point_x": -0.09563173533545855,
+      "end_point_y": 0.6179356089736123
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.09885135427042124,
+      "start_point_y": 0.6111044925580951,
+      "end_point_x": -0.09241211640052294,
+      "end_point_y": 0.6111044925580951
+    }
+  },
+  {
+    "type": "CIRCLE",
+    "features": {
+      "circle_center_x": -0.09563173533545855,
+      "circle_center_y": 0.6111044925580951,
+      "circle_radius": 0.005373776991204468
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.8114618207798241,
+      "start_point_y": 0.604273376142578,
+      "end_point_x": 0.8114618207798241,
+      "end_point_y": 0.6179356089736123
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.8082422018448885,
+      "start_point_y": 0.6111044925580951,
+      "end_point_x": 0.8146814397147597,
+      "end_point_y": 0.6111044925580951
+    }
+  },
+  {
+    "type": "CIRCLE",
+    "features": {
+      "circle_center_x": 0.8114618207798241,
+      "circle_center_y": 0.6111044925580951,
+      "circle_radius": 0.005373776991204468
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.357915042722176,
+      "start_point_y": 0.604273376142578,
+      "end_point_x": 0.357915042722176,
+      "end_point_y": 0.6179356089736123
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.3546954237872404,
+      "start_point_y": 0.6111044925580951,
+      "end_point_x": 0.36113466165712516,
+      "end_point_y": 0.6111044925580951
+    }
+  },
+  {
+    "type": "CIRCLE",
+    "features": {
+      "circle_center_x": 0.357915042722176,
+      "circle_center_y": 0.6111044925580951,
+      "circle_radius": 0.005373776991204468
+    }
+  },
+  {
+    "type": "DIMENSION",
+    "features": {
+      "defpoint_x": -0.09563173533545855,
+      "defpoint_y": 0.733081115814896,
+      "text_midpoint_x": -0.38820974072340564,
+      "text_midpoint_y": 0.733081115814896,
+      "dim_type": 160
+    }
+  },
+  {
+    "type": "LEADER",
+    "features": {
+      "vertices_x": 0.6562382511149946,
+      "vertices_y": -0.49153812091098464,
+      "annotation_type": 3
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9135420966933682,
+      "start_point_y": 0.5822203692198673,
+      "end_point_x": 0.9135420966933683,
+      "end_point_y": 0.5822203692198673
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9135420966933954,
+      "start_point_y": -0.3907185221732623,
+      "end_point_x": 0.9135420966933954,
+      "end_point_y": -0.3907185221733127
+    }
+  },
+  {
+    "type": "DIMENSION",
+    "features": {
+      "defpoint_x": 0.9442785231473152,
+      "defpoint_y": 0.6339077478251338,
+      "text_midpoint_x": 0.9442785231473152,
+      "text_midpoint_y": 0.2944174021150898,
+      "dim_type": 160
+    }
+  },
+  {
+    "type": "DIMENSION",
+    "features": {
+      "defpoint_x": 0.950778263311088,
+      "defpoint_y": -0.43024416463615045,
+      "text_midpoint_x": 0.950778263311088,
+      "text_midpoint_y": -0.7180471317408702,
+      "dim_type": 32
+    }
+  },
+  {
+    "type": "DIMENSION",
+    "features": {
+      "defpoint_x": -0.9171246064988887,
+      "defpoint_y": 0.3452899836430494,
+      "text_midpoint_x": -0.7778957651045008,
+      "text_midpoint_y": 0.3452899836430494,
+      "dim_type": 160
+    }
+  },
+  {
+    "type": "DIMENSION",
+    "features": {
+      "defpoint_x": 0.9135420966933683,
+      "defpoint_y": 0.521397190455845,
+      "text_midpoint_x": 0.777895765104528,
+      "text_midpoint_y": 0.521397190455845,
+      "dim_type": 32
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.9135420966933683,
+      "start_point_y": 0.5822203692198673,
+      "end_point_x": 0.9135420966933954,
+      "end_point_y": -0.3907185221733127
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.9135420966933682,
+      "start_point_y": 0.5822203692198673,
+      "end_point_x": -0.9135420966933954,
+      "end_point_y": -0.3907185221732623
+    }
+  },
+  {
+    "type": "INSERT",
+    "features": {
+      "insert_insert_point_x": -0.23176741911265508,
+      "insert_insert_point_y": 0.09119027246988543,
+      "scale_x": 0.0300000685716668,
+      "scale_y": 0.0300000685716668,
+      "insert_rotation": 0
+    }
+  },
+  {
+    "type": "LWPOLYLINE",
+    "features": {
+      "closed": true,
+      "points_x": 0.8956295312885283,
+      "points_y": -0.39071852217348557,
+      "count": 4
+    }
+  },
+  {
+    "type": "LWPOLYLINE",
+    "features": {
+      "closed": true,
+      "points_x": 0.8956295312884874,
+      "points_y": 0.5822203692197376,
+      "count": 4
+    }
+  },
+  {
+    "type": "DIMENSION",
+    "features": {
+      "defpoint_x": 0.9171246064988887,
+      "defpoint_y": 0.7142583166205381,
+      "text_midpoint_x": 0.739893864570228,
+      "text_midpoint_y": 0.7142583166205381,
+      "dim_type": 160
+    }
+  },
+  {
+    "type": "DIMENSION",
+    "features": {
+      "defpoint_x": 0.46861484874097514,
+      "defpoint_y": 0.671986106657614,
+      "text_midpoint_x": 0.2409458322607776,
+      "text_midpoint_y": 0.671986106657614,
+      "dim_type": 160
+    }
+  },
+  {
+    "type": "CIRCLE",
+    "features": {
+      "circle_center_x": 0.01506807068332705,
+      "circle_center_y": 0.6111044925581455,
+      "circle_radius": 0.005373776991204468
+    }
+  },
+  {
+    "type": "DIMENSION",
+    "features": {
+      "defpoint_x": 0.01506807068335414,
+      "defpoint_y": 0.671986106657614,
+      "text_midpoint_x": -0.21170531834548345,
+      "text_midpoint_y": 0.671986106657614,
+      "dim_type": 160
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.6753261370026002,
+      "start_point_y": 0.604273376142578,
+      "end_point_x": 0.6753261370026002,
+      "end_point_y": 0.6179356089736123
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.6721065180676917,
+      "start_point_y": 0.6111044925580951,
+      "end_point_x": 0.6785457559375629,
+      "end_point_y": 0.6111044925580951
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.6853141971703575,
+      "start_point_y": 0.604273376142578,
+      "end_point_x": -0.6853141971703575,
+      "end_point_y": 0.6179356089736123
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.6885338161053203,
+      "start_point_y": 0.6111044925580951,
+      "end_point_x": -0.6820945782354354,
+      "end_point_y": 0.6111044925580951
+    }
+  },
+  {
+    "type": "LWPOLYLINE",
+    "features": {
+      "closed": false,
+      "points_x": -0.6856724471272957,
+      "points_y": 0.6133848063575,
+      "count": 5
+    }
+  },
+  {
+    "type": "LWPOLYLINE",
+    "features": {
+      "closed": false,
+      "points_x": 0.674967887045673,
+      "points_y": 0.6133848063574698,
+      "count": 5
+    }
+  },
+  {
+    "type": "DIMENSION",
+    "features": {
+      "defpoint_x": -0.6781491980307242,
+      "defpoint_y": 0.5015338307866974,
+      "text_midpoint_x": -0.7753545898110477,
+      "text_midpoint_y": 0.5015338307866974,
+      "dim_type": 160
+    }
+  },
+  {
+    "type": "DIMENSION",
+    "features": {
+      "defpoint_x": 0.6681611378630485,
+      "defpoint_y": 0.4236890837349341,
+      "text_midpoint_x": 0.765366529643372,
+      "text_midpoint_y": 0.4236890837349341,
+      "dim_type": 160
+    }
+  },
+  {
+    "type": "DIMENSION",
+    "features": {
+      "defpoint_x": -0.6045254292357143,
+      "defpoint_y": 0.6225060615549034,
+      "text_midpoint_x": -0.6045254292357143,
+      "text_midpoint_y": 0.315760816248442,
+      "dim_type": 160
+    }
+  },
+  {
+    "type": "DIMENSION",
+    "features": {
+      "defpoint_x": 0.606225676010512,
+      "defpoint_y": 0.6225060615549034,
+      "text_midpoint_x": 0.606225676010512,
+      "text_midpoint_y": 0.315760816248442,
+      "dim_type": 160
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.46861484874092074,
+      "start_point_y": 0.6042733761426284,
+      "end_point_x": 0.46861484874092074,
+      "end_point_y": 0.6179356089736627
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": 0.46539522980603953,
+      "start_point_y": 0.6111044925581455,
+      "end_point_x": 0.47183446767591075,
+      "end_point_y": 0.6111044925581455
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.4384787073743618,
+      "start_point_y": 0.6042733761426284,
+      "end_point_x": -0.4384787073743618,
+      "end_point_y": 0.6179356089736627
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.44169832630928374,
+      "start_point_y": 0.6111044925581455,
+      "end_point_x": -0.435259088439399,
+      "end_point_y": 0.6111044925581455
+    }
+  },
+  {
+    "type": "CIRCLE",
+    "features": {
+      "circle_center_x": 0.46861484874092074,
+      "circle_center_y": 0.6111044925581455,
+      "circle_radius": 0.005373776991204468
+    }
+  },
+  {
+    "type": "CIRCLE",
+    "features": {
+      "circle_center_x": -0.4384787073743618,
+      "circle_center_y": 0.6111044925581455,
+      "circle_radius": 0.005373776991204468
+    }
+  },
+  {
+    "type": "LINE",
+    "features": {
+      "start_point_x": -0.5523981323280964,
+      "start_point_y": 0.6111044925581455,
+      "end_point_x": -0.5459588944582117,
+      "end_point_y": 0.6111044925581455
+    }
+  },
+  {
+    "type": "LWPOLYLINE",
+    "features": {
+      "closed": false,
+      "points_x": 0.8782899586920662,
+      "points_y": 0.6124726847467954,
+      "count": 10
+    }
+  },
+  {
+    "type": "LWPOLYLINE",
+    "features": {
+      "closed": true,
+      "points_x": -0.8956295312885283,
+      "points_y": -0.3907185221719661,
+      "count": 4
+    }
+  },
+  {
+    "type": "LWPOLYLINE",
+    "features": {
+      "closed": true,
+      "points_x": -0.8956295312881005,
+      "points_y": 0.582220369221248,
+      "count": 4
+    }
+  },
+  {
+    "type": "MTEXT",
+    "features": {
+      "mtext_insert_point_x": 0.8848811765089113,
+      "mtext_insert_point_y": 0.591592746894543,
+      "char_height": 0.005970849675872917,
+      "width": 0.09681802378333233
+    }
+  },
+  {
+    "type": "MTEXT",
+    "features": {
+      "mtext_insert_point_x": 0.4313343984512361,
+      "mtext_insert_point_y": 0.591592746894543,
+      "char_height": 0.005970849675872917,
+      "width": 0.09681802378333233
+    }
+  },
+  {
+    "type": "MTEXT",
+    "features": {
+      "mtext_insert_point_x": -0.02221237960641187,
+      "mtext_insert_point_y": 0.591592746894543,
+      "char_height": 0.005970849675872917,
+      "width": 0.09681802378333233
+    }
+  },
+  {
+    "type": "MTEXT",
+    "features": {
+      "mtext_insert_point_x": -0.4757591576640735,
+      "mtext_insert_point_y": 0.5915927468945934,
+      "char_height": 0.005970849675872917,
+      "width": 0.09681802378333233
+    }
+  }
+]

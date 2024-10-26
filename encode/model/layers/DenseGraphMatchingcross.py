@@ -219,6 +219,16 @@ class HierarchicalGraphMatchNetworkcross(torch.nn.Module):
         :param v2: (batch, len2, dim)
         :return:  (batch, len1, len2)
         """
+        # (batch, len1, len2)
+
+        # Handle different batch sizes
+        if v1.size(0) != v2.size(0):
+            min_batch = min(v1.size(0), v2.size(0))
+            v1 = v1[:min_batch]
+            v2 = v2[:min_batch]
+
+        # Ensure dimensions match for bmm operation
+        assert v1.size(2) == v2.size(2), f"Feature dimensions must match. Got {v1.size(2)} and {v2.size(2)}"
 
         a = torch.bmm(v1, v2.permute(0, 2, 1))
 
@@ -242,12 +252,12 @@ class HierarchicalGraphMatchNetworkcross(torch.nn.Module):
 
     def forward_dense_gcn_layers(self, feat, adj):
         # TODO:
-        feat_in = feat
+        feat_in = feat.clone()
         for i in range(1, self.gcn_numbers + 1):
             feat_out = functional.relu(getattr(self, 'gc{}'.format(i))(x=feat_in, adj=adj, mask=None, add_loop=False),
-                                       inplace=True)
+                                       inplace=False)
             feat_out = functional.dropout(feat_out, p=self.dropout, training=self.training)
-            feat_in = feat_out
+            feat_in = feat_out.clone()
         return feat_out
 
 
@@ -256,7 +266,7 @@ class HierarchicalGraphMatchNetworkcross(torch.nn.Module):
         feat_in = feat
         for i in range(1, self.gcn_numbers + 1):
             feat_out = functional.relu(getattr(self, 'gc_cross{}'.format(i))(x=feat_in, adj=adj, mask=None, add_loop=False),
-                                       inplace=True)
+                                       inplace=False)
             feat_out = functional.dropout(feat_out, p=self.dropout, training=self.training)
             feat_in = feat_out
         return feat_out

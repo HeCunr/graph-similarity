@@ -1,50 +1,70 @@
+# !/user/bin/env python3
+# -*- coding: utf-8 -*-
+import os
 import numpy as np
 import torch
 from adj_row_col import get_normalized_feature_matrix
+import json
 
-def create_augmented_feature_matrices(feature_matrix, num_variants=6, dropout_prob=0.1):
-    # 提取除第一列外的特征矩阵
-    first_col = feature_matrix[:, 0].reshape(-1, 1)
-    temp = feature_matrix[:, 1:]
+# Directory paths
+dxf_dir = r'C:\Users\15653\dwg-cx\dataset\modified\valid_new'
+output_files = [os.path.join(dxf_dir, f'output_{i}.json') for i in range(1, 7)]  # Changed to .json
 
-    # 初始化列表存储变体特征矩阵和邻接表
-    augmented_features = []
-    adjacency_lists = []
+# Track files that have already been processed for each output file
+processed_files = [set() for _ in range(6)]  # A list of 6 sets
 
-    for _ in range(num_variants):
-        # 生成遮盖后的特征矩阵副本
-        temp_variant = temp.copy()
+# Function to generate adjacency list
+def feature_to_adj(feature_matrix):
+    adj_list = []
+    for i, row in enumerate(feature_matrix):
+        adj_list.append([j for j, val in enumerate(row) if val > 0])
+    return adj_list
 
-        # 使用dropout进行随机遮盖
-        mask = np.random.rand(*temp_variant.shape) >= dropout_prob
-        temp_variant = temp_variant * mask
+# Function to drop features
+def drop_features(x, drop_prob=0.1):
+    drop_mask = torch.rand(x.shape[1]) > drop_prob
+    x_dropped = x.clone()
+    x_dropped[:, ~drop_mask] = 0
+    return x_dropped
 
-        # 把遮盖后的特征矩阵大于0的元素视为有边，生成邻接表
-        adj_list = {}
-        for i in range(temp_variant.shape[0]):
-            adj_list[i] = [j for j in range(temp_variant.shape[1]) if temp_variant[i, j] > 0]
+# Process each file in directory
+for dxf_file in os.listdir(dxf_dir):
+    if dxf_file.endswith('.dxf'):
+        file_path = os.path.join(dxf_dir, dxf_file)
+        feature_matrix = np.array(get_normalized_feature_matrix(file_path))  # Convert to NumPy array
 
-        # 将变体特征矩阵与第一列拼接
-        augmented_feature = np.hstack((first_col, temp_variant))
+        src_name = dxf_file.replace(' ', '')
+        fname = os.path.splitext(src_name)[0]
 
-        # 将结果添加到列表中
-        augmented_features.append(augmented_feature)
-        adjacency_lists.append(adj_list)
+        # Skip the first column for TEMP matrix
+        temp = feature_matrix[:, 1:]
 
-    return augmented_features, adjacency_lists
+        # Generate six feature matrices and adjacency lists
+        for i in range(6):
+            if src_name not in processed_files[i]:  # Check if the file is already processed for this output
+                # Apply random feature dropping
+                temp_dropped = drop_features(torch.tensor(temp, dtype=torch.float32)).numpy()
 
-if __name__ == '__main__':
-    # 加载特征矩阵
-    dxf_file_path = r'C:\Users\15653\dwg-cx\dataset\modified\DFN6LCG(NiPdAu)（321）-517  Rev1_1.dxf'
-    feature_matrix = get_normalized_feature_matrix(dxf_file_path)
-    feature_matrix = np.array(feature_matrix)  # 转化为 numpy 数组
+                # Create the adjacency list
+                adj_list = feature_to_adj(temp_dropped)
 
-    # 生成增强的特征矩阵和邻接表
-    augmented_features, adjacency_lists = create_augmented_feature_matrices(feature_matrix)
+                # Append the first column and TEMP for the new feature matrix
+                f_matrix = np.hstack((feature_matrix[:, :1], temp_dropped))
 
-    # 输出结果
-    for i, (feature, adj_list) in enumerate(zip(augmented_features, adjacency_lists), 1):
-        print(f"f{i} (特征矩阵):")
-        print(feature)
-        print(f"adj{i} (邻接表):")
-        print(adj_list)
+                # Prepare the data dictionary
+                data = {
+                    "src": src_name,
+                    "n_num": len(feature_matrix),
+                    "succs": adj_list,
+                    "features": f_matrix.tolist(),
+                    "fname": fname
+                }
+
+                # Save to respective files
+                with open(output_files[i], 'a', encoding='utf-8') as f:
+                    json.dump(data, f, ensure_ascii=False)
+                    f.write('\n')
+
+                processed_files[i].add(src_name)  # Mark the file as processed for this output file
+
+print("Processing complete. Output files have been saved as JSON.")

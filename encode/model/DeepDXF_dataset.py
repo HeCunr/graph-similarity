@@ -20,7 +20,7 @@ class DXFDataset(Dataset):
 
         entity_type = torch.tensor(dxf_vec[:, 0], dtype=torch.long)
         entity_params = torch.tensor(dxf_vec[:, 1:], dtype=torch.float)
-        print(f"entity_type shape: {entity_type.shape}")
-        print(f"entity_params shape: {entity_params.shape}")
+        # print(f"entity_type shape: {entity_type.shape}")
+        # print(f"entity_params shape: {entity_params.shape}")
 
         return entity_type, entity_params

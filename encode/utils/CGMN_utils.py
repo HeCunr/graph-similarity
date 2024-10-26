@@ -91,7 +91,7 @@ class graph(object):
         self.succs[u].append(v)
         self.preds[v].append(u)
 
-#这里
+
 def generate_epoch_pair(graphs, classes, batch, output_id=False, load_id=None):
     epoch_data = []
     id_data = []
