@@ -41,14 +41,25 @@ def get_entity_points(entity):
         points.append(insert_point)
     elif entity_type == 'HATCH':
         for path in entity.paths:
-            if path.PATH_TYPE == 'EdgePath':
+            if hasattr(path, 'edges'):  # EdgePath类型
                 for edge in path.edges:
-                    if edge.EDGE_TYPE == 'LineEdge':
+                    if hasattr(edge, 'start') and hasattr(edge, 'end'):
                         points.append(edge.start)
                         points.append(edge.end)
-                    elif edge.EDGE_TYPE == 'ArcEdge':
-                        # 可根据需要添加更多处理
-                        pass
+                    elif hasattr(edge, 'center') and hasattr(edge, 'radius'):
+                        # 处理圆弧边界
+                        center = edge.center
+                        radius = edge.radius
+                        start_angle = getattr(edge, 'start_angle', 0)
+                        end_angle = getattr(edge, 'end_angle', 360)
+                        angles = np.linspace(start_angle, end_angle, 36)  # 每10度采样一个点
+                        points.extend([
+                            (center[0] + radius * np.cos(np.radians(angle)),
+                             center[1] + radius * np.sin(np.radians(angle)))
+                            for angle in angles
+                        ])
+            elif hasattr(path, 'vertices'):  # PolylinePath类型
+                points.extend(path.vertices)
     elif entity_type == 'DIMENSION':
         defpoint = entity.dxf.defpoint
         text_midpoint = entity.dxf.text_midpoint
@@ -658,7 +669,7 @@ class DXFSequence:
         vector[0] = ENTITY_TYPES.index('EOS')
         return vector
 
-    def to_vector(self, max_len=512):
+    def to_vector(self, max_len=4096):
         vectors = []
         for entity in self.entities:
             vector = entity.to_vector()
@@ -752,7 +763,7 @@ def process_dxf_files_for_deepdxf(input_dir, output_h5_dir):
 
 if __name__ == '__main__':
     # 示例用法
-    input_dir = r'/path/to/your/dxf_files'  # 修改为您的 DXF 文件目录
-    output_h5_dir = r'/path/to/your/output_h5_files'  # 修改为您希望保存 H5 文件的目录
+    input_dir = r'/mnt/share/DeepDXF_CGMN/encode/data/241101'  # 修改为您的 DXF 文件目录
+    output_h5_dir =  r'/mnt/share/DeepDXF_CGMN/encode/data/DeepDXF/dxf_vec_4096'   # 修改为您希望保存 H5 文件的目录
     process_dxf_files_for_deepdxf(input_dir, output_h5_dir)
 

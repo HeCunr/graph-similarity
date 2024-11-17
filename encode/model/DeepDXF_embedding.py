@@ -3,8 +3,8 @@ import torch
 import torch.nn as nn
 
 class PositionalEncodingLUT(nn.Module):
-    def __init__(self, d_model, dropout=0.1, max_len=512):
-        super(PositionalEncodingLUT, self).__init__()
+    def __init__(self, d_model, dropout=0.1, max_len=4096):
+        super().__init__()
         self.dropout = nn.Dropout(p=dropout)
         self.pos_embed = nn.Embedding(max_len, d_model)
         self._init_embeddings()
@@ -19,7 +19,7 @@ class PositionalEncodingLUT(nn.Module):
         return self.dropout(x)
 
 class DXFEmbedding(nn.Module):
-    def __init__(self, d_model=256, max_len=512):
+    def __init__(self, d_model=256, max_len=4096):
         super().__init__()
         self.d_model = d_model
         self.max_len = max_len
@@ -40,6 +40,7 @@ class DXFEmbedding(nn.Module):
 
         entity_embed = entity_type_embed + entity_params_embed
         entity_embed = self.pos_encoding(entity_embed)
-
+        #print(f"Embedding shape: {entity_embed.shape}")
+        # print(f"Embedding: {entity_embed}")
         return entity_embed
 

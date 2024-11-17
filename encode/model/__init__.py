@@ -1,2 +1,2 @@
-# !/user/bin/env python3
-# -*- coding: utf-8 -*-
+# model/__init__.py
+from .DeepDXF_dataset import DXFDataset, load_h5_files

@@ -35,7 +35,8 @@ def parse_dxf_structure(file_path):
     }
 
 # 示例使用
-file_path = r'C:\Users\15653\dwg-cx\dataset\modified\DFN6LCG(NiPdAu)（321）-517  Rev1_5.dxf'  # 请替换为您的DXF文件路径
+file_path =  r'C:\srtp\241101\DFN1006-2, 78W, 0.508 X 0.508 PAD SIZE LF(4)_1.dxf' # 请替换为您的DXF文件路径
+#file_path = r'C:\srtp\dwg\2018_Binary_DXF\8-040116-SOP1(ETCH) REV A.dxf'  # 请替换为您的DXF文件路径
 dxf_structure = parse_dxf_structure(file_path)
 
 # 输出解析结果
