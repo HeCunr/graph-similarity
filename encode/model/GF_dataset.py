@@ -163,22 +163,25 @@ class GFDataset:
         return processed
 
     def _process_single_graph(self, graph: GraphData) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
-        """Process a single graph to have consistent dimensions"""
         try:
-            # Prepare feature matrix
+            # 首先添加节点
+            for i in range(graph.node_num):
+                graph.adj.add_node(i)
+
+            # 准备特征矩阵
             feature_dim = self.args.graph_init_dim
             feature_matrix = np.zeros((self.max_nodes, feature_dim))
-            if len(graph.features.shape) == 1:  # 如果特征是一维的，reshape它
+            if len(graph.features.shape) == 1:
                 graph.features = graph.features.reshape(1, -1)
             feature_matrix[:graph.node_num, :] = graph.features
 
-            # Prepare adjacency matrix
-            adj_matrix = np.array(nx.to_numpy_matrix(graph.adj))
-            adj_matrix = adj_matrix + np.eye(adj_matrix.shape[0])  # Add self-loops
+            # 准备邻接矩阵
+            adj_matrix = nx.adjacency_matrix(graph.adj).toarray()
+            adj_matrix = adj_matrix + np.eye(adj_matrix.shape[0])
             adj_padded = np.zeros((self.max_nodes, self.max_nodes))
             adj_padded[:adj_matrix.shape[0], :adj_matrix.shape[1]] = adj_matrix
 
-            # Prepare mask
+            # 准备掩码
             mask = np.zeros(self.max_nodes)
             mask[:graph.node_num] = 1
 

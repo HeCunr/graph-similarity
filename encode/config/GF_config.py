@@ -3,7 +3,7 @@ import argparse
 parser = argparse.ArgumentParser(description="GF model for graph matching")
 
 # Data parameters
-parser.add_argument('--data_dir', type=str, default=r'/mnt/share/DeepDXF_CGMN/encode/cl_data/discreted_dataset/TRAIN',
+parser.add_argument('--data_dir', type=str, default=r'/home/vllm/encode/cl_data/discreted_dataset/TRAIN',
                     help='root directory for the graph dataset')
 parser.add_argument('--dataset', type=str, default="PROTEINS",
                     help='name of the dataset')
@@ -47,7 +47,7 @@ parser.add_argument('--n_folds', type=int, default=10,
                     help='number of folds for cross validation')
 parser.add_argument('--test_split', type=float, default=0.2,
                     help='proportion of data used for final testing')
-parser.add_argument('--patience', type=int, default=20,
+parser.add_argument('--patience', type=int, default=30,
                     help='patience for early stopping')
 parser.add_argument("--lr", type=float, default=0.0001,
                     help="Learning rate")
@@ -63,7 +63,7 @@ parser.add_argument("--global_agg", type=str, default='max_pool',
                     help="Aggregation function for global level")
 
 # System parameters
-parser.add_argument('--gpu_index', type=str, default='0',
+parser.add_argument('--gpu_index', type=str, default='1',
                     help="GPU index to use")
 parser.add_argument('--log_path', type=str, default='../logs/',
                     help='path for log files')

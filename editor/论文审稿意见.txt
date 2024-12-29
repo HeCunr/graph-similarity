@@ -1,0 +1,230 @@
+﻿蜜蜂编辑激活码：571D0-B261N-PA996-D18EE
+
+川穹、川乌、乌梅、马钱子（炙）、当归、川牛膝、元胡各15g
+混合后磨成粉，用高度数白酒2.5L炮制10天后，用大棉签涂抹脊椎部位。
+
+Neurocomputing
+IEEE Transactions on Medical Imaging
+Medical Image Analysis(CCF-C，中科院2区)
+International Journal of Pattern Recognition and Artificial Intelligence
+
+(1) " The image set is also preprocessed and enlarges using augmentation technoques to make it suitable to be
+used with convolutional neural network. There are many novel aspects of this work. " in Abstract, but the following aspects are not your contributions.
+(3) What is the novelty for this paper? Could you list them as the contributions in Section 1?
+
+This paper uses 1D-UNet to predict the early detection and type recognition of SPGF. However, several problems must be solved. ..
+The resubmitted version is improved and address serveral problems, but the following comments must be reviewed before accepted.
+(1) The manuscript must be proofed carefully with the help of an english speaker since there are grammatical lapses and typographic errors. For instance, firstly, Meanwhile,  Furthermore, and  Finally are used simulestouly in Abstract.
+(2) AsyncMMBF is the name of your framework? It is better to add named before it when it is used in the first time.
+(3) The empty rows in Table II should be removed.
+(4) Although the source code is published in Github repo, there is no illustration about running envirionment, evaluation steps and dataset download link. Then, these source code is unvalued for paper readers, you should give ennogh information for the further readers to evaluate and follow your work. This is necessary without any reasons about the privacy or secrecy of the used dataset. 
+
+(1) At the end of Section VI-A, it said "All simulations are conducted using the PyTorch framework on a computer equipped with an Intel Core i7-12700 CPU, 32GB of memory, and an NVIDIA GeForce RTX 3090 GPU."
+
+Section VI-D "Effects of different numbers of devices" and Fig 4 illustrate 5, 10 and 20 devices are used to compare the effects of different number of devices.  However, all exeperiments are conducted on a computer equipped with an Intel Core i7-12700 CPU, 32GB of memory, and an NVIDIA GeForce RTX 3090 GPU, described at the end of Section VI-A.  The i7-12700 CPU only have 12 cores, how to run AsyncMMBF on 20 devices? Meanwhile, the instructions at Github repo of source code also do not show how to run on different number of devices.
+(1) Hardware platform and softwares must be described in detail in Section VI-D.  The exeperiment should conduct on a CPU-GPU cluster consisting of multiple CPUs and GPUs, instead of a GPU workstation.
+(2) Devices used in Fig 4 must be illustrated in detail, such as  5 NV 3090 GPUs? 10 Intel  i7-12700 CPUs? 
+(3) The computing performance of 3090 GPU and i7-12700 CPU are different, the commution cost also different between CPU-CPU and CPU-GPU. The effect of different number devices should test on CPUs, GPUs, and CPU+GPUs, arising from the different commution cost of data trasfer between compute devices. Effect of data communition between compute devices also should be tested.
+(4) How to run the source code on different number of devices?  Related instructions should be updated into Github rep.
+
+There are several issues and concerns regarding the description of the experimental setup and the running instructions provided in the Github repo. 
+(1) Section VI-D, titled "Effects of different numbers of devices," and Fig 4 should provide a detailed description of the hardware platform and software used. Currently, the experiments are conducted on a computer equipped with an Intel Core i7-12700 CPU, 32GB of memory, and an NVIDIA GeForce RTX 3090 GPU, as stated in Section VI-A. However, the i7-12700 CPU only has 12 cores, it is unclear how the AsyncMMBF was run on 20 devices. To address this, the experiments should be conducted on a CPU-GPU cluster comprising multiple CPUs and GPUs, rather than a single GPU workstation.
+(2) Fig 4 should provide a detailed breakdown of the devices used. For example, it should specify whether 5 NV 3090 GPUs or 10 Intel i7-12700 CPUs were employed. This clarification will help ensure transparency and provide a clear understanding of the experimental setup.
+(3) The computing performance of the 3090 GPU and i7-12700 CPU differs, and the communication cost also varies between CPU-CPU and CPU-GPU setups. Therefore, the effects of different numbers of devices should be tested on CPUs, GPUs, and CPU+GPUs, taking into account the different communication costs associated with data transfer between compute devices. Additionally, the impact of data communication on compute devices should also be assessed.
+(4) The instructions for running the source code should be updated on the GitHub repository to include guidelines for executing the code on different numbers of devices. This update will enhance the usability and reproducibility of the research by enabling others to replicate the experiments on their own hardware setups.
+
+First, the hardware devices used in exepriment must be described in detail, liking 
+
+Exploiting the AFL of heterogeneous industry data is interesting, but several comments must be reviewed.
+(1) What does "heterogeneous industrial devices" mean? You should explain it with examples. More importantly, it may mean a device with different functions. Then, it is unsuitable for denoting them using the term "heterogeneous devices". The term "Industrial devices with different functions" may be more suitable.
+(2) The paper aims to solve the AFL of heterogeneous industry data, but the experiment uses the multimodal dataset UTD-MHAD for human action recognition. This experiment setup cannot be accepted. You must use the multimodal dataset for industry data to evaluate the proposed framework.
+(3)Titles of Table II and IV (Table III and V) are the same, but their content differs. Then, these titles must be improved to illustrate these tables' aims.
+(4) The source code must be provided or released on an open-source repository (e.g., github.com ) to be available before the review version of the manuscript is submitted.
+(5) The font size should be more significant for Fig 1.
+(6) The writing of this paper needs to be revised for scientific manuscripts. It needs to be written in better language and has numerous grammatical lapses and typographic errors. 
+
+(1) Does the proposed approach differentiate a ground fault from a short circuit? As they are similar in apparent symptoms.
+(2) This work employs the existing natural network 1D-UNet to predict and recognize the SPGF. Then, the novelty of this paper is low.
+
+(4) Why is RPi4 B the most cost-effective hardware platform compared to GTX 1060 and Jetson TX2? Because of low cost? Then, Rock 5A may be a suitable hardware for your system.
+(5) The paper should cite the references published in the submitted journal.
+For instance, "Therefore, we chose to deploy our proposed approach using RPi4B in our industrial prototype due to its satisfactory inference performance and low
+power consumption. "
+
+
+The manuscript has been polished carefully.
+The comments and critiques as noted by the editor and reviewers have been fully addressed in the revised manuscript. 
+The English writing was thoroughly revised by an English copyediting service. I suggest that the revised manuscript is suitable to be accepted.
+--------------------------------------
+(1) "concerning the Course Complexity in Engineering Education" should be removed from the title since it is too long.
+(2) The section of introduction is too long to follow, and should be shortened to one page.
+(3) Contributions are too weak and less. Three or more contributions are required for a paper index by SCI.
+(4) Contributions should be related to these challenges. That is,  contributions can solve these challenges.
+(5) The manuscript must be edited again with the official LateX templet provied by IJPRAI. The templet is available at https://www.worldscientific.com/page/ijprai/stylefiles-readme-2e
+(7) Fig 3 is not complete.
+(8) Algorithms should be formatted using the standard form in the Latex templet.
+(9) Table 1 is not necessary. The content is described with text.
+(10) I suggest that the manuscript is more suitable to be sumbitted to a journal related to biological medicine.
+
+(1) The title may be changed to "Representation learning-based random walk for influence maximization."
+(2) Abstract must be rewritten since it is hard to follow.
+(3) The first and second contributions should be combined into one.
+(4) Fig 1 and 2 should be redrawn to make them more beautiful and suitable for the pages.  Please redraw them using a tool such as MS Visio.
+(5) The starting values in Y-axis in Fig 8 are better to change from 30 to 45, 20 to 35, and 50 to 60.
+(6) The English writing of this paper must be polished before accepted. 
+
+(2) The manuscript can be shortened.
+(3) The introduced method and its results should be indicated in Section Abstract. Several senetences are necessary, such as 'Based on the literature published in recent years, we review existing KGE methods, including traditional approaches and proaches
+exploiting external information.'
+(6) The implimentation and exeperimental results must be illustrated in your manuscript.
+
+
+(3) The source code and benchmarks must be provided or released on an open-source repository (e.g., github.com ) to be available it before the manuscript is accepted.
+
+(1) The English writing of this paper still must be polished using the professional academic proofreading service (Language Editing service). The related certification statement must also be provided along with the revised manuscript.  Otherwise, the manuscript is not suitable for being accepted by IJPRAI.
+(2) The manuscript is too long, and must be shortened.
+(3) Fig 1 must be improved to make it more compact.
+(6) The calculation procedure of formats is unnecessaries. For instance, the format (22)~(25) should be removed.
+
+(1) What is your contributions to this manuscript? Please list them in Section 1.
+(2) The references are too old and inadequate.
+
+(1) Typos in the paper also ought to be revised. For instance, 
+(2) Figures and tables should be located in a suitable page. For example, Fig. 1 should be located in Page 2 rather than Page 4.
+(3) Algorithms 1 and 2 should be formatted using the standard form in the Latex templet.
+(4) In Table 3, its last column is labelled 'year', but its content shows the IDs of the corresponding references.
+(5) The related datasets and source code of GS-MOJOA should be published in an OSI-standard opensource repository (Github) before the manuscript is accepted.
+(6) The following newer references should be cited and compared in the manuscript.
+
+
+(8) The experimental results should be explained rather than only presents. For instance, the advantages of the proposed method should be explained in detail in Section 4.8.
+(2) The uppercase should be used correctly. For example, the first letter of words in the title requires uppercase. 
+(5) The section of Introduction should be shortened. Also, only one contribution is listed in the paper. It suggests that this work is poor originality.
+Meanwhile, Typos in the paper ought to be revised. 
+
+(2) The contributions should be modified again, aiming to list them more clearly.
+(3) The five challenges are listed in Section 2.2. Then, the contributions should be related to these challenges. That is, the contributions can solve these challenges.
+(4) For Figs 1-3, their elements should be drawn in a more compact form. For example, the top and bottom margins of the text box should be smaller.
+(5) According to Format 1 on Page 19 and Algorithm 1 on Page 29-30, I hard to convenient that the revised manuscript is edited with Latex.
+(6) For the description of the experimental results, you only list the results such as GAN is 0.3234,  and do not give the related explanations and comparison.
+
+
+Table 1 should be edited carefully. 
+
+CapsNet is an impressive topic to be researched in the area of DL. However, several problems must be solved before the manuscript is accepted. 
+(1) Section 1 is too long. It should be shortened.
+(2) computer resources --> compute resources
+(3) The location of conference references should be provided.
+(4) Could you publish your code to an OSI-standard opensource repository?
+
+() Since the manuscript discusses a new method of weight initialization, there is no obvious link to an OSI-standard opensource repository, limiting its utility as a pure engineering contribution to others. Could you publish your code to an an OSI-standard opensource repository?
+
+
+https://ptorch.com/news/40.html
+torch.utils.data.distributed.DistributedSampler将数据加载限制到数据集子集的采样器。DistributedSampler和torch.nn.parallel.DistributedDataParallel同时使用时尤其有效。在这中情况下，每个进程会传递一个DistributedSampler实例作为DataLoader采样器，并加载独占的原始数据集的子集。
+https://blog.csdn.net/yangwangnndd/article/details/95381346
+https://blog.csdn.net/u010557442/article/details/79431520
+
+Credit risk assessment is an impressive topic to be researched in the era of internet finance. However, there are several problems that must be solved before the manuscript is published.
+(1) Section of Introduction should be shortened. Meanwhile, key contributions of this paper should be listed in this Section.
+(2) Add an Algorithm/Flowchart to describe the proposed classifier LASSO-MCOC.
+(3) It is not necessary to describe formulas calculating the predictive performance evaluation measures in Section 4.2.2. 
+(4)  The language must be polished again. For instance,
+
+The writing of this paper must be polished and proofread carefully again. There are several programmer errors. For instance, 
+the generated results of designed GAN and other GAN models in CELEBA and CIFAR10 are compared and analyzed.
+reduce the training epoch number --> reduce the number of training epoches
+reduce training epoch times
+.....
+Otherwise, I suggest that your manusrcipt should be rejected!!!
+
+(1)  Could you list them as the contributions in Section 1.
+(2) Tables and Figures should be improved for finer and more saving space. First, Figs 3,4,5 are too blur and should be converted into the super-solution images. Second, the caption of Table 1, 2 and 3 should be lowercase except for the first letter and 'MSE', e.g., "Different Feature Selection Techniques Time and MSE" --> "Different feature selection techniques time and MSE."
+(4) The main experiment results should be briefly shown in the abstract.
+(5) The written of this paper must be polished before accepted. Meanwhile, Typos in the paper ought to be revised. For instance,  'Artificial Neural Network' should be lowercase in the abstract. "&" should be converted into "and" , "et al" --> "et al.", and so on in Section of Literature Review.
+(6) It is recommended to resubmit the revised paper to IJPRAI.
+
+(1) Section abstract should be rewritten.  For instance, two sentences use the word 'Therefore'.  Readers are hard to understand.  Thus, you must revise this part to discuss the utilized two strategies briefly.
+(2) The written of this paper must be polished and proofreaded with the help of a native english speaker before accepted. There are several programmer errors. For example, 
+[-] "In order to improve adversarial learning stability, the proposed GANs is designed through anti-noise learning and coalitional game." can be changed into "To improve adversarial learning stability, a novel GAN is designed based on the anti-noise learning and coalitional game."
+[-] "Compared with current GANs,... "-->"Compared with the existing GANs,... "
+[-] "data set"-->"dataset", "Training set"-->"Training dataset"
+(3) The experimental results is not your contributions. They should be removed from the contributions. Meanwhile, you should add another contribution.
+(4) The sentence "Through the analysis of GANs game theory and loss function, it is found that antinoise learning and coalitional game are related to the adversarial learning stability." should be removed.
+(5) Describe the steps of ANL-CG GANs in the form of Algorithm.
+(6) The mean and total times for the methods using anti-noise learning and coalitional game should be evaluated and shown in Tables 5 and 6.
+(7) Proposed GANs in Tables and Figures should be replaced with its name ANL-CG GAN.
+(8) Authors should give the reviewers' comments and corresponding answers at the same time when they review the manuscript. Due to the absence of point-by-point response to the reviewers' comments in the first revision, we do not know the situation about completion for the first revision.
+
+(5)  Meanwhile, Typos in the paper ought to be revised. For instance,  'Artificial Neural Network' should be lowercase in the abstract. "&" should be converted into "and" , "et al" --> "et al.", and so on in Section of Literature Review.
+(6) It is recommended to resubmit the revised paper to IJPRAI.
+
+
+(2) One of the main contributions may be the implementation of the proposed framework. Then, the course code should be released on the Internet.
+(3) Eqs. 35-41 are not necessary due to they are known for readers.
+(4) The manuscript should be shortened by reducing 10-14 pages. In particular, Section of Introduction, 
+
+(1)The paper falls below the standards for scientific manuscripts. It is written in a bad language, has numerous grammatical lapses and typographic errors. For instance, " The image set is also preprocessed and enlarges using augmentation technoques to make it suitable to be
+used with convolutional neural network. There are many novel aspects of this work. " in Abstract, but the following aspects are not your contributions.
+(3) Many descriptions are not nessecary for your paper, such as "Convolutional neural networks (CNN) are deep (The term deep usually refers to the use of large number of hidden layers in the neural network) artificial neural networks (NN) that are widely used to solve different image related problems such as classification, object recognition, and many more."
+(4) The contributions should be listed in Section of Introduction.
+(5) Your contributions should be discussed in detail in the paper. Nonetheless, there are introduction of existing literature.
+
+
+(1) Is it suitable to change the paper title into "An Improved Adaptive Genetic Algorithm ....."?
+(2) The sentence "Hence the proposed solution can be applied to practical problems with a certain advantage." is not required for the abstract.
+(3) The cite of references should be presented with the standard method. 
+
+(5)  The subsections 3.1.1, 3.1.2 and 3.1.3 are not required since these subsections are not meaningful.
+(6) Eq. (11) should be edited with text rather than inserted with a figure.
+(7)  The font size in Eq. (14) is too smaller than the other Eqs in the paper.
+(8) Section of "Algorithm Flow" and "Flowchart of algorithm" should be merged, and then is written in the form of Algorithm.
+(9)  The font size of captions in Fig. 3-6 are too smaller to read.
+
+
+(4) It is unnecessary to number every equation, which is numbered when it is used in the following context. Besides, many equations should be placed in a line instead of in an independent paragraph, e.g., Eqs (12), (13), (16).
+(5) The sizes of fonts in Tables are not uniform, e.g., the size of fonts in Table 4 is larger than that in other tables.
+
+(1) The first paragraph in Section of Introduction is redundant and should be removed.
+(2) The contributions should be listed in Section of Introduction.
+(3) The first paragraph in Section of Related work is redundant and should be reduced. Furthermore, the remaining part of this section also should be reduced.
+(6) Section of conclusion is too long. It should be reduced to about one page.
+(7) The sizes of fonts in Tables are too large. Please show your tables with the correct templet provided by the journal.
+(3) The source code must be published before the paper is accepted.
+(4) The biography of the author(s) must be written according to the rules of the submitted journal.
+
+(1) Animal vehicle collision detection is instersting problem in terms of the safety of both animals and humans. However, the title should be reveiwed, such as removing "(SMA-NN)" and making the first letter of key word in the title is capitalized.
+(2)  I sugget that your method of detecting animals should be compared with the state-of-the-art object detection methods (e.g, YOLOV3/YOLOV4).
+(3) "In the first set of experiments, we analyzed the performance of the proposed system by testing it on a benchmark
+dataset."  The benchmark dataset should be descriped in detail in order to make readers understand your evaluations.
+(4) Please edit your manuscript with the templet provided by the journal.
+
+
+(2) The contributions should be listed in Section of Introduction.
+(1) Facial emotion recognition is a classific research topic, and it has been explored by a few researchers in the past years. Thus,  it is not true that  "In the recent past, very few authors have developed models for compound facial emotion recognition."  Authors should read additional papers, e.g., 
+(2) Some typo errors are found, e.g.,
+Abstract: SVM (support vector machine) -> SVM (Support Vector Machine)
+between Compound facial expressions. -> between compound facial expressions.
+(3) Fig 3 should be improved since multiple contiguous and identical boxes can be described using one box and the number of it. 
+(4) Could you compare the performance of your model with other models of facial emotion recognition, which are described in the references [1][2][3]?
+
+
+(1) Since the proposed Ocean cannot be described in the form of an algorithmic description easily,  the course code and benchmarks must be released on an open-source repository (e.g., Github.com ) to available it. Meanwhile, the authors should provide instructions for running and evaluating the source code of Ocean.
+(1) The manuscript is too long. It is better to short the manuscript into approximately 29-32 pages. In particular, Section 3 must be shorted. It is better to describe Section 3 in about 11 pages.
+(2) The 1st-2nd and the last paragraphs in Section 6 should be removed.
+(3) The section 3 must be reconstructed. There are Sections 3.1.1, 3.2.1, 3.3.1, 3.4.1 and 3.5.1, but there are not Sections 3.1.2, 3.2.2, 3.3.2, 3.4.2 and 3.5.2.
+(4) The manuscript must be polished again.
+
+() The comparative experiment is not sufficient, and the authors did not compare it with the latest method.
+(7) The typos should be carefully checked.
+
+(1) The contribution is limited since it is only a new application of DBN in the Fault Diagnosis of Shearer Rocker Transmission System.
+
+The idea sounds very interesting. In general, the paper is well-written and -organized. To further improve the paper standard, I have some minor comments, which are as follows: 
+(1)  The typos should be carefully checked. For instance,  
+(2)  The sentences are too long to understand, such as 'To overcome some of these limitations [7-11] utilizes the sparsity of 3D data and compute a series of hierarchical representations but due to the complex data structure some of these networks are not easy to implement.'. Thus, your manuscripts must be rewritten before accepted.
+(3) Table 3 is too wide to display, you should reshape it carefully.
+(4) The lasted references should be cites, such as 
+
+
+纵然是坟前落叶扫得净，心中的伤痕难扫平。

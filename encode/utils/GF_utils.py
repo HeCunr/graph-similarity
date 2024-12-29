@@ -9,7 +9,6 @@ from datetime import datetime
 from sklearn.model_selection import KFold
 from pathlib import Path
 from model.GF_dataset import GraphData
-from tqdm import tqdm
 class Graph:
     """Graph data structure with basic operations"""
     def __init__(self, node_num: int, name: str = None):
@@ -128,7 +127,7 @@ def generate_pairs_from_batch(
 
     return pairs
 
-
+from tqdm import tqdm
 
 def prepare_batch_data(pairs: List[Tuple[GraphData, GraphData]], device: torch.device) -> Tuple[torch.Tensor, ...]:
     try:
@@ -164,21 +163,28 @@ def cross_validation_split(
         n_folds: int,
         test_size: float,
         random_state: int = 42
-) -> Tuple[List[Tuple[List[int], List[int]]], List[int]]:
+) -> Tuple[List[Tuple[List[int], List[int]]], List[int], List[int]]:
     """
     Split graphs for cross validation and final testing
-    
+
     Args:
         graphs: List of all graphs
         n_folds: Number of folds for cross validation
         test_size: Proportion of data for final testing
         random_state: Random seed
-        
+
     Returns:
-        Tuple of (cv_splits, test_indices)
+        Tuple of (cv_splits, train_val_indices, test_indices):
+            cv_splits: List of (train_idx, val_idx) tuples for each fold
+            train_val_indices: Indices for complete training set (80%)
+            test_indices: Indices for held-out test set (20%)
     """
+    # Set random seed for reproducibility
+    np.random.seed(random_state)
+
     num_graphs = len(graphs)
     indices = list(range(num_graphs))
+    np.random.shuffle(indices)
 
     # Split into train+val and test
     test_size_abs = int(num_graphs * test_size)
@@ -187,9 +193,16 @@ def cross_validation_split(
 
     # Create cross-validation splits
     kf = KFold(n_splits=n_folds, shuffle=True, random_state=random_state)
-    cv_splits = list(kf.split(train_val_indices))
+    cv_splits = list(kf.split(range(len(train_val_indices))))
 
-    return cv_splits, test_indices
+    # Convert split indices to actual data indices
+    cv_splits_mapped = []
+    for train_idx, val_idx in cv_splits:
+        train_mapped = [train_val_indices[i] for i in train_idx]
+        val_mapped = [train_val_indices[i] for i in val_idx]
+        cv_splits_mapped.append((train_mapped, val_mapped))
+
+    return cv_splits_mapped, train_val_indices, test_indices
 
 def save_model(
         model: torch.nn.Module,

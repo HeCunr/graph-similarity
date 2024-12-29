@@ -58,32 +58,64 @@ def extract_circle_features(entity):
         'radius': entity.dxf.radius
     }
 
-def extract_dimension_text_value(text):
-    """提取标注文本中的数字值"""
-    if text is None or text == "":
-        return None
-    # 使用正则表达式匹配数字（包括小数点和负号）
-    numbers = re.findall(r'-?\d*\.?\d+', text)
-    if numbers:
-        # 转换为浮点数并返回第一个匹配的数字
-        try:
-            return float(numbers[0])
-        except ValueError:
-            return None
-    return None
-def extract_dimension_features(entity):
-    # 获取标注文本内容
-    dim_text = entity.dxf.text if entity.dxf.text else entity.get_measurement()
-    # 提取数字值
-    text_value = extract_dimension_text_value(str(dim_text))
+def parse_text(text):
+    # Match format: "0.203%%P0.008"
+    match1 = re.search(r'(\d+\.\d+)?%%[Pp]?(\d+\.\d+)?', text)
+    if match1:
+        text_0 = match1.group(1) if match1.group(1) else "0"
+        text_1 = match1.group(2) if match1.group(2) else "0"
+        return float(text_0), float(text_1)
+
+    # Match format: "0.100±0.030"
+    match2 = re.search(r'(\d+\.\d+)±(\d+\.\d+)', text)
+    if match2:
+        text_0 = match2.group(1)
+        text_1 = match2.group(2)
+        return float(text_0), float(text_1)
+
+    # Match format: just a number
+    match3 = re.match(r'^(\d+\.\d+)$', text)
+    if match3:
+        text_0 = match3.group(1)
+        text_1 = "0"
+        return float(text_0), int(text_1)
+
+    return 0, 0
+
+def extract_line_dim(dim, doc):
+    block = doc.blocks.get(dim.dxf.geometry)
+    if block is not None:
+        for entity in block:
+            if entity.dxftype() in ['TEXT', 'MTEXT']:
+                text = entity.dxf.text
+                value_0 = extract_numbers(text)
+                return value_0
+
+def extract_numbers(text):
+    pattern = r'\\A1;(\d+\.\d+)'
+    match = re.search(pattern, text)
+    if match:
+        number = match.group(1) if match.group(1) else "0"
+        return float(number)
+    else:
+        return 0
+
+def extract_dimension_features(entity, doc):
+    dim_text = entity.dxf.text
+    value_0, value_1 = parse_text(dim_text)
+
+    if value_0 == 0:
+        value_0 = extract_line_dim(entity, doc)
 
     return {
         'defpoint': entity.dxf.defpoint,
         'text_midpoint': entity.dxf.text_midpoint,
         'dim_type': entity.dimtype,
-        'text': dim_text,  # 原始文本
-        'value': text_value,  # 提取的数字值
+        'text': dim_text,
+        'value': value_0,
+        'tolerance': value_1
     }
+
 def extract_arc_features(entity):
     return {
         'center': entity.dxf.center,
@@ -151,7 +183,10 @@ def process_dxf_file(file_path):
         entity_type = entity.dxftype()
         if entity_type not in entities:
             entities[entity_type] = []
-        entities[entity_type].append(extract_entity_features(entity))
+        if entity_type == 'DIMENSION':
+            entities[entity_type].append(extract_dimension_features(entity, doc))
+        else:
+            entities[entity_type].append(extract_entity_features(entity))
 
     return entities
 
@@ -174,6 +209,4 @@ if __name__ == "__main__":
         if 'DIMENSION' in extracted_features:
             print("\nDIMENSION 特征:")
             for feature in extracted_features['DIMENSION']:
-                print(f"文本内容: {feature['text']}")
-                print(f"提取的数值: {feature['value']}")
-                print("---")
+                print(feature)
