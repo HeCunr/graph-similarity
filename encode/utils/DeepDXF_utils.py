@@ -3,11 +3,12 @@ import torch
 # 定义实体类型索引
 ENTITY_TYPES = [
     'LINE', 'CIRCLE', 'ARC', 'LWPOLYLINE', 'TEXT',
-    'MTEXT', 'HATCH', 'DIMENSION', 'LEADER', 'INSERT', 'EOS'
+    'MTEXT', 'HATCH', 'DIMENSION', 'LEADER', 'INSERT',
+    'SPLINE', 'SOLID','EOS'
 ]
 
 # 获取EOS的索引
-EOS_IDX = ENTITY_TYPES.index('EOS')  # 应该是10，因为EOS在列表的最后
+EOS_IDX = ENTITY_TYPES.index('EOS')  # 应该是12，因为EOS在列表的最后
 
 def _get_padding_mask(commands, seq_dim=0, extended=False):
     """
@@ -64,3 +65,5 @@ HATCH_IDX = ENTITY_TYPES.index('HATCH')
 DIMENSION_IDX = ENTITY_TYPES.index('DIMENSION')
 LEADER_IDX = ENTITY_TYPES.index('LEADER')
 INSERT_IDX = ENTITY_TYPES.index('INSERT')
+SPLINE_IDX = ENTITY_TYPES.index('SPLINE')
+SOLID_IDX = ENTITY_TYPES.index('SOLID')

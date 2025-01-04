@@ -70,6 +70,15 @@ def get_entity_points(entity):
     elif entity_type == 'INSERT':
         insert_point = entity.dxf.insert
         points.append(insert_point)
+    elif entity_type == 'SPLINE':
+        # SPLINE 实体：获取控制点
+        control_points = entity.control_points
+        points.extend([(point[0], point[1]) for point in control_points])
+    elif entity_type == 'SOLID':
+        # SOLID 实体：获取顶点
+        points.append((entity.dxf.vtx0.x, entity.dxf.vtx0.y))
+        points.append((entity.dxf.vtx1.x, entity.dxf.vtx1.y))
+        points.append((entity.dxf.vtx2.x, entity.dxf.vtx2.y))
 
     return points
 
@@ -258,6 +267,35 @@ def process_dxf_file(input_dxf_path, output_dir):
             features['scale'] = scale  # 缩放比例不进行处理
             features['rotation'] = rotation
 
+        elif entity_type == 'SPLINE':
+            # SPLINE 特征
+            control_points = [(point[0], point[1]) for point in entity.control_points]
+            normalized_control_points = [
+                [
+                    normalize_coordinate(p[0], min_x, max_x),
+                    normalize_coordinate(p[1], min_y, max_y)
+                ] for p in control_points
+            ]
+            knots = entity.knots
+            avg_knots = sum(knots) / len(knots) if knots else 0  # 取knots的平均值
+            features['control_points'] = normalized_control_points
+            features['avg_knots'] = avg_knots
+
+        elif entity_type == 'SOLID':
+            # SOLID 特征
+            points = [
+                (entity.dxf.vtx0.x, entity.dxf.vtx0.y),
+                (entity.dxf.vtx1.x, entity.dxf.vtx1.y),
+                (entity.dxf.vtx2.x, entity.dxf.vtx2.y)
+            ]
+            normalized_points = [
+                [
+                    normalize_coordinate(p[0], min_x, max_x),
+                    normalize_coordinate(p[1], min_y, max_y)
+                ] for p in points
+            ]
+            features['points'] = normalized_points
+
         else:
             # 其他实体类型可根据需要添加
             continue
@@ -382,6 +420,33 @@ def process_entity(entity):
         new_features['scale_y'] = scale[1]
         new_features['insert_rotation'] = features.get('rotation', 0)
 
+    elif entity_type == 'SPLINE':
+        # SPLINE 特征
+        control_points = features.get('control_points', [])
+        if control_points:
+            x_sum = sum(p[0] for p in control_points)
+            y_sum = sum(p[1] for p in control_points)
+            avg_x = x_sum / len(control_points)
+            avg_y = y_sum / len(control_points)
+        else:
+            avg_x = avg_y = 0
+        new_features['control_points_x'] = avg_x
+        new_features['control_points_y'] = avg_y
+        new_features['avg_knots'] = features.get('avg_knots', 0)
+
+    elif entity_type == 'SOLID':
+        # SOLID 特征
+        points = features.get('points', [])
+        if points:
+            x_sum = sum(p[0] for p in points)
+            y_sum = sum(p[1] for p in points)
+            avg_x = x_sum / len(points)
+            avg_y = y_sum / len(points)
+        else:
+            avg_x = avg_y = 0
+        new_features['solid_points_x'] = avg_x
+        new_features['solid_points_y'] = avg_y
+
     else:
         # 其他未定义的实体类型，保持原样或根据需要处理
         new_features = features
@@ -436,6 +501,10 @@ class DXFEntity:
             return Leader.from_dict(features)
         elif entity_type == 'INSERT':
             return Insert.from_dict(features)
+        elif entity_type == 'SPLINE':  # 添加对SPLINE的处理
+            return Spline.from_dict(features)
+        elif entity_type == 'SOLID':  # 添加对SOLID的处理
+            return Solid.from_dict(features)
         elif entity_type == 'EOS':
             return DXFEntity('EOS', {})
         else:
@@ -649,6 +718,49 @@ class Insert(DXFEntity):
             self.features[key] = self.quantize(self.features[key])
         self.features['insert_rotation'] = self.quantize(self.features['insert_rotation'], is_angle=True)
 
+
+class Spline(DXFEntity):
+    def __init__(self, control_points_x, control_points_y, avg_knots):
+        features = {
+            'control_points_x': control_points_x,
+            'control_points_y': control_points_y,
+            'avg_knots': avg_knots
+        }
+        super().__init__('SPLINE', features)
+
+    @staticmethod
+    def from_dict(features):
+        return Spline(
+            features.get('control_points_x', 0),
+            features.get('control_points_y', 0),
+            features.get('avg_knots', 0)
+        )
+
+    def normalize(self):
+        for key in ['control_points_x', 'control_points_y']:
+            self.features[key] = self.quantize(self.features[key])
+        self.features['avg_knots'] = self.quantize(self.features['avg_knots'])
+
+
+class Solid(DXFEntity):
+    def __init__(self, solid_points_x, solid_points_y):
+        features = {
+            'solid_points_x': solid_points_x,
+            'solid_points_y': solid_points_y
+        }
+        super().__init__('SOLID', features)
+
+    @staticmethod
+    def from_dict(features):
+        return Solid(
+            features.get('solid_points_x', 0),
+            features.get('solid_points_y', 0)
+        )
+
+    def normalize(self):
+        for key in ['solid_points_x', 'solid_points_y']:
+            self.features[key] = self.quantize(self.features[key])
+
 class DXFSequence:
     def __init__(self, entities):
         self.entities = entities
@@ -681,7 +793,8 @@ class DXFSequence:
         vectors += [eos_vec] * (max_len - seq_len)
         return np.array(vectors, dtype=np.int16)
 
-ENTITY_TYPES = ['LINE', 'CIRCLE', 'ARC', 'LWPOLYLINE', 'TEXT', 'MTEXT', 'HATCH', 'DIMENSION', 'LEADER', 'INSERT', 'EOS']
+ENTITY_TYPES = ['LINE', 'CIRCLE', 'ARC', 'LWPOLYLINE', 'TEXT',
+                'MTEXT', 'HATCH', 'DIMENSION', 'LEADER', 'INSERT', 'SPLINE', 'SOLID', 'EOS']
 
 FEATURE_NAMES = [
     'solid_fill', 'associative', 'boundary_paths',
@@ -693,7 +806,9 @@ FEATURE_NAMES = [
     'circle_center_x', 'circle_center_y', 'circle_radius',
     'defpoint_x', 'defpoint_y', 'text_midpoint_x', 'text_midpoint_y',
     'vertices_x', 'vertices_y',
-    'insert_insert_point_x', 'insert_insert_point_y', 'scale_x', 'scale_y', 'insert_rotation'
+    'insert_insert_point_x', 'insert_insert_point_y', 'scale_x', 'scale_y',
+    'insert_rotation', 'control_points_x', 'control_points_y', 'avg_knots',
+    'solid_points_x', 'solid_points_y'
 ]
 
 def load_dxf(file_path):
@@ -763,7 +878,7 @@ def process_dxf_files_for_deepdxf(input_dir, output_h5_dir):
 
 if __name__ == '__main__':
     # 示例用法
-    input_dir = r'/mnt/share/DeepDXF_CGMN/encode/data/241101'  # 修改为您的 DXF 文件目录
-    output_h5_dir =  r'/mnt/share/DeepDXF_CGMN/encode/data/DeepDXF/dxf_vec_4096'   # 修改为您希望保存 H5 文件的目录
+    input_dir = r'/home/vllm/encode/data/DeepDXF/TEST'  # 修改为您的 DXF 文件目录
+    output_h5_dir =  r'/home/vllm/encode/data/DeepDXF/TEST_4096'   # 修改为您希望保存 H5 文件的目录
     process_dxf_files_for_deepdxf(input_dir, output_h5_dir)
 

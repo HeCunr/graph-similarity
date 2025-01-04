@@ -1,7 +1,7 @@
 class DXFConfig:
     def __init__(self, args):
         # 默认数据目录
-        self.data_dir = args.data_dir or r'/mnt/share/DeepDXF_CGMN/encode/data/DeepDXF/dxf_vec_4096'
+        self.data_dir = args.data_dir or r'/home/vllm/encode/data/DeepDXF/TRAIN_4096'
 
         # 模型参数
         self.d_model = 256

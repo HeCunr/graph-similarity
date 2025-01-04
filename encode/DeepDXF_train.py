@@ -9,7 +9,6 @@ from model.DeepDXF_dataset import load_h5_files
 from config.DeepDXF_config import DXFConfig
 import os
 import argparse
-import torch.cuda.amp as amp
 from tqdm import tqdm
 import numpy as np
 from sklearn.model_selection import KFold
@@ -37,7 +36,7 @@ class DXFTrainer:
     def __init__(self, cfg):
         self.cfg = cfg
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.scaler = amp.GradScaler()
+
         self.early_stopping = EarlyStopping(patience=cfg.patience)
 
         # 先初始化模型和损失函数
@@ -92,11 +91,10 @@ class DXFTrainer:
                 entity_type = entity_type.to(self.device)
                 entity_params = entity_params.to(self.device)
 
-                # 使用混合精度训练
-                with amp.autocast():
-                    outputs = self.model(entity_type, entity_params)
-                    losses = self.contrastive_loss(outputs)
-                    loss = losses["loss_contrastive"]
+                # 移除 amp.autocast()，直接进行前向传播
+                outputs = self.model(entity_type, entity_params)
+                losses = self.contrastive_loss(outputs)
+                loss = losses["loss_contrastive"]
 
                 # 记录每个batch的损失
                 if self.cfg.use_wandb:
@@ -112,14 +110,12 @@ class DXFTrainer:
 
                 # 反向传播
                 self.optimizer.zero_grad()
-                self.scaler.scale(loss).backward()
+                loss.backward()  # 直接调用 backward()
 
                 # 添加梯度裁剪
-                self.scaler.unscale_(self.optimizer)
                 torch.nn.utils.clip_grad_norm_(self.model.parameters(), self.cfg.clip_grad_norm)
 
-                self.scaler.step(self.optimizer)
-                self.scaler.update()
+                self.optimizer.step()  # 直接调用 step()
 
                 total_loss += loss.item()
                 num_batches += 1
@@ -146,6 +142,7 @@ class DXFTrainer:
                     entity_type = entity_type.to(self.device)
                     entity_params = entity_params.to(self.device)
 
+                    # 直接进行前向传播
                     outputs = self.model(entity_type, entity_params)
                     losses = self.contrastive_loss(outputs)
                     loss = losses["loss_contrastive"]
@@ -271,6 +268,7 @@ class DXFTrainer:
                     entity_type = entity_type.to(self.device)
                     entity_params = entity_params.to(self.device)
 
+                    # 直接进行前向传播
                     outputs = self.model(entity_type, entity_params)
                     losses = self.contrastive_loss(outputs)
                     loss = losses["loss_contrastive"]
@@ -285,7 +283,6 @@ class DXFTrainer:
 
         avg_test_loss = total_loss / max(num_batches, 1) if num_batches > 0 else float('inf')
         print(f"Test Loss: {avg_test_loss:.4f}")
-
 
         # 记录测试结果
         if self.cfg.use_wandb:
@@ -396,7 +393,7 @@ if __name__ == '__main__':
     parser.add_argument('--batch_size', type=int, default=5, help='Batch size for training')
     parser.add_argument('--learning_rate', type=float, default=0.0001, help='Learning rate')
     parser.add_argument('--temperature', type=float, default=0.07, help='Temperature for contrastive loss')
-    parser.add_argument('--epochs', type=int, default=100, help='Number of epochs to train')
+    parser.add_argument('--epochs', type=int, default=50, help='Number of epochs to train')
     parser.add_argument('--loss_type', type=str, default='infonce', choices=['simclr', 'infonce'], help='Type of contrastive loss to use')
     # 添加wandb相关参数
     parser.add_argument('--wandb_project', type=str, default="DeepDXF", help='Wandb project name')

@@ -24,9 +24,9 @@ class DXFEmbedding(nn.Module):
         self.d_model = d_model
         self.max_len = max_len
 
-        self.entity_embed = nn.Embedding(11, d_model)  # 11 entity types including EOS
+        self.entity_embed = nn.Embedding(13, d_model)  # 13 entity types including EOS
         self.param_embed1 = nn.Embedding(257, 64)  # 256 parameter values + 1 for padding (-1)
-        self.param_embed2 = nn.Linear(64 * 38, d_model)  # 38 parameters per entity
+        self.param_embed2 = nn.Linear(64 * 43, d_model)  # 43 parameters per entity
         self.pos_encoding = PositionalEncodingLUT(d_model, max_len=max_len)
 
     def forward(self, entity_type, entity_params):

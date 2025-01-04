@@ -83,17 +83,20 @@ class SimDeepDXF:
         return final_representation
 
     def calculate_similarity(self, representation1, representation2, method='cosine'):
-        """计算两个特征向量之间的相似度"""
+        """计算两个特征向量之间的相似度，结果规范到[0, 1]"""
         if method == 'cosine':
             # 标准化向量并计算余弦相似度
             representation1_norm = F.normalize(representation1, p=2, dim=1)
             representation2_norm = F.normalize(representation2, p=2, dim=1)
             similarity = F.cosine_similarity(representation1_norm, representation2_norm)
+            # 余弦相似度范围为[-1, 1]，规范到[0, 1]
+            similarity = (similarity + 1) / 2
             return similarity.item()
 
         elif method == 'euclidean':
             # 计算欧氏距离并转换为相似度分数
             distance = torch.cdist(representation1, representation2, p=2)
+            # 将距离转换为相似度，范围为[0, 1]
             similarity = 1 / (1 + distance)
             return similarity.item()
 
@@ -115,42 +118,13 @@ class SimDeepDXF:
             print(f"Error comparing files: {e}")
             return None
 
-    def batch_compare(self, h5_list, method='cosine'):
-        """批量比较多个h5文件之间的相似度"""
-        n_files = len(h5_list)
-        similarity_matrix = torch.zeros((n_files, n_files))
-
-        try:
-            # 首先计算所有文件的特征向量
-            representations = []
-            for h5_path in h5_list:
-                representation = self.load_single_h5(h5_path)
-                representations.append(representation)
-
-            # 计算相似度矩阵
-            for i in range(n_files):
-                for j in range(i, n_files):
-                    sim = self.calculate_similarity(
-                        representations[i],
-                        representations[j],
-                        method
-                    )
-                    similarity_matrix[i,j] = sim
-                    similarity_matrix[j,i] = sim
-
-            return similarity_matrix
-
-        except Exception as e:
-            print(f"Error in batch comparison: {e}")
-            return None
-
 def main():
     parser = argparse.ArgumentParser(description='Calculate similarity between DXF files')
-    parser.add_argument('--model_path', type=str, required=True,
+    parser.add_argument('--model_path', type=str, default=r"/home/vllm/encode/checkpoints/best_model.pth",
                         help='Path to the trained model checkpoint')
-    parser.add_argument('--file1', type=str,required=True,
+    parser.add_argument('--file1', type=str, default=r"/home/vllm/encode/data/DeepDXF/TEST_4096/QFN19LA(Cu) -502 Rev1_2.h5",
                         help='Path to first h5 file')
-    parser.add_argument('--file2', type=str, required=True,
+    parser.add_argument('--file2', type=str, default=r"/home/vllm/encode/data/DeepDXF/TEST_4096/QFN19LB(Cu) -503 Rev1_2.h5",
                         help='Path to second h5 file')
     parser.add_argument('--method', type=str, default='cosine',
                         choices=['cosine', 'euclidean'],
@@ -165,8 +139,7 @@ def main():
     similarity = sim_dxf.compare_h5_files(args.file1, args.file2, args.method)
 
     if similarity is not None:
-        print(f"Similarity score ({args.method}): {similarity:.4f}")
-        print(f"Files are {similarity*100:.2f}% similar")
+        print(f"Similarity score: {similarity:.4f}")
 
 if __name__ == "__main__":
     main()

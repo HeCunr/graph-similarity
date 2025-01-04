@@ -1,167 +1,80 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import torch
-import numpy as np
 import json
-import argparse
-from model.layers.DenseGraphMatching import HierarchicalGraphMatchNetwork
-from config.GF_config import get_args
-from utils.GF_utils import graph
+import numpy as np
+from model.layers.DenseGraphMatching import GraphMatchNetwork
+from config.GF_config import gf_args
+from utils.GF_utils import get_device, Graph, prepare_batch_data
 
-def load_graph_from_json(file_path):
-    """
-    从给定的文件读取图的信息并解析为节点特征和邻接矩阵
-    :param file_path: 文件路径
-    :return: 图对象
-    """
-    try:
-        with open(file_path, 'r') as f:
-            lines = f.readlines()
-            # 只读取第一行
-            if lines:
-                graph_data = json.loads(lines[0].strip())
-            else:
-                raise ValueError("Empty file")
-    except json.JSONDecodeError as e:
-        print(f"JSON parsing error: {e}")
-        raise
-    except Exception as e:
-        print(f"Error reading file: {e}")
-        raise
+class GraphSimilarityCalculator:
+    def __init__(self, model_path):
+        self.device = get_device(gf_args)
+        self.model = GraphMatchNetwork(
+            node_init_dims=gf_args.graph_init_dim,
+            args=gf_args
+        ).to(self.device)
 
-    # 创建图对象，使用src作为图的名称
-    current_graph = graph(node_num=graph_data['n_num'], name=graph_data.get('src', ''))
+        checkpoint = torch.load(model_path, map_location=self.device)
+        self.model.load_state_dict(checkpoint['model_state_dict'])
+        self.model.eval()
 
-    # 设置节点特征
-    for u in range(graph_data['n_num']):
-        current_graph.features[u] = np.array(graph_data['features'][u])
-        # 添加边
-        for v in graph_data['succs'][u]:
-            current_graph.add_edge(u, v)
+        self.max_nodes = gf_args.graph_size_max
 
-    return current_graph
+    def load_graph(self, file_path):
+        with open(file_path) as f:
+            g_info = json.loads(f.readline().strip())
 
-def prepare_graph_data(graph_obj):
-    """
-    将图对象转换为模型所需的格式
-    :param graph_obj: 图对象
-    :return: 特征矩阵和邻接矩阵
-    """
-    # 准备特征矩阵
-    features = np.array([feat for feat in graph_obj.features])
-    features = np.expand_dims(features, axis=0)  # 添加batch维度
+        graph = Graph(g_info['n_num'])
+        graph.features = np.array(g_info['features'])
 
-    # 准备邻接矩阵
-    n = len(graph_obj.features)
-    adj_matrix = np.zeros((n, n))
-    for u in range(n):
-        for v in graph_obj.succs[u]:
-            adj_matrix[u][v] = 1
-    adj_matrix = np.expand_dims(adj_matrix, axis=0)  # 添加batch维度
+        # Add edges
+        for i in range(g_info['n_num']):
+            for j in g_info['succs'][i]:
+                graph.add_edge(i, j)
 
-    return features, adj_matrix
+        # Process graph
+        feature_matrix = np.zeros((self.max_nodes, gf_args.graph_init_dim))
+        if len(graph.features.shape) == 1:
+            graph.features = graph.features.reshape(1, -1)
+        feature_matrix[:g_info['n_num'], :] = graph.features
 
-def normalize_similarity(similarity):
-    """
-    将相似性分数归一化到[0,1]范围
-    :param similarity: 原始相似性分数
-    :return: 归一化后的相似性分数
-    """
-    # 使用min-max归一化
-    return (similarity + 1) / 2
+        adj_matrix = graph.get_adjacency_matrix()
+        adj_matrix = adj_matrix + np.eye(adj_matrix.shape[0])
+        adj_padded = np.zeros((self.max_nodes, self.max_nodes))
+        adj_padded[:adj_matrix.shape[0], :adj_matrix.shape[1]] = adj_matrix
 
-def compute_graph_similarity(graph1_path, graph2_path, model_path, device='cuda'):
-    """
-    计算两个图的相似度
-    :param graph1_path: 第一个图的文件路径
-    :param graph2_path: 第二个图的文件路径
-    :param model_path: 模型文件路径
-    :param device: 计算设备
-    :return: 相似度得分 (范围[0,1])
-    """
-    # 加载图
-    try:
-        graph1 = load_graph_from_json(graph1_path)
-        graph2 = load_graph_from_json(graph2_path)
-    except Exception as e:
-        print(f"Error loading graphs: {e}")
-        return 0.0  # 错误情况下返回最小相似度
+        return feature_matrix, adj_padded
 
-    # 准备数据
-    features1, adj1 = prepare_graph_data(graph1)
-    features2, adj2 = prepare_graph_data(graph2)
+    def compute_similarity(self, graph1_path, graph2_path):
+        feat1, adj1 = self.load_graph(graph1_path)
+        feat2, adj2 = self.load_graph(graph2_path)
 
-    # 转换为tensor并移动到设备
-    features1 = torch.FloatTensor(features1).to(device)
-    adj1 = torch.FloatTensor(adj1).to(device)
-    features2 = torch.FloatTensor(features2).to(device)
-    adj2 = torch.FloatTensor(adj2).to(device)
+        feat1 = torch.FloatTensor(feat1).unsqueeze(0).to(self.device)
+        adj1 = torch.FloatTensor(adj1).unsqueeze(0).to(self.device)
+        feat2 = torch.FloatTensor(feat2).unsqueeze(0).to(self.device)
+        adj2 = torch.FloatTensor(adj2).unsqueeze(0).to(self.device)
 
-    # 检查CUDA是否可用
-    if device == 'cuda' and not torch.cuda.is_available():
-        print("CUDA is not available, using CPU instead.")
-        device = 'cpu'
-
-    # 初始化模型
-    node_init_dims = features1.shape[-1]  # 获取节点特征维度
-    args = get_args()  # 获取配置参数
-    model = HierarchicalGraphMatchNetwork(
-        node_init_dims=node_init_dims,
-        arguments=args,
-        device=device
-    ).to(device)
-
-    try:
-        # 加载模型权重
-        model.load_state_dict(torch.load(model_path, map_location=device))
-        model.eval()
-
-        # 计算图的嵌入
         with torch.no_grad():
-            # 通过模型获取图的表示
-            feature_p = model(batch_x_p=features1, batch_adj_p=adj1)
-            feature_h = model(batch_x_p=features2, batch_adj_p=adj2)
+            z1 = self.model(feat1, adj1)
+            z2 = self.model(feat2, adj2)
 
-            # 计算余弦相似度
-            agg_p = torch.mean(feature_p, dim=1)  # 平均池化得到图级别的表示
-            agg_h = torch.mean(feature_h, dim=1)
+            z1_matched, z2_matched = self.model.matching_layer(z1, z2)
 
-            # 计算余弦相似度
-            similarity = torch.nn.functional.cosine_similarity(agg_p, agg_h, dim=1)
-            # 将相似度限制在[-1, 1]范围内
-            similarity = torch.clamp(similarity, min=-1, max=1)
-            # 归一化到[0, 1]范围
-            normalized_similarity = normalize_similarity(similarity)
+            z1_norm = torch.norm(z1_matched, p=2, dim=-1)
+            z2_norm = torch.norm(z2_matched, p=2, dim=-1)
+            sim = torch.sum(z1_matched * z2_matched) / (torch.sum(z1_norm * z2_norm) + 1e-8)
 
-    except Exception as e:
-        print(f"Error during computation: {e}")
-        return 0.0  # 错误情况下返回最小相似度
+            sim = (sim + 1) / 2
 
-    return normalized_similarity.item()
+        return sim.item()
 
-def main():
-    # 使用 get_args() 获取所有配置参数
-    args = get_args()
+if __name__ == "__main__":
+    model_path = r"/home/vllm/encode/pretrained/GF/bacth_size_128/checkpoints/final_model.pt"
+    calculator = GraphSimilarityCalculator(model_path)
 
-    # 检查CUDA是否可用
-    if args.device == 'cuda' and not torch.cuda.is_available():
-        print("CUDA is not available, using CPU instead.")
-        args.device = 'cpu'
+    # Example graph paths
+    graph1_path = r"/home/vllm/encode/cl_data/discreted_dataset/TEST/QFN28LK(Cu)-90-450 Rev1_3.json"
+    graph2_path = r"/home/vllm/encode/cl_data/discreted_dataset/TEST/QFN28LK(Cu)-90-450 Rev1_4.json"
 
-    try:
-        # 计算相似度
-        similarity = compute_graph_similarity(
-            args.graph1,
-            args.graph2,
-            args.model,
-            args.device
-        )
-        print(f"\nSimilarity score between the graphs: {similarity:.4f}")
-    except Exception as e:
-        print(f"Error in computation: {e}")
-        return 1
+    similarity = calculator.compute_similarity(graph1_path, graph2_path)
+    print(f"graph1_path and graph2_path : Graph similarity: {graph1_path} and {graph2_path} : {similarity:.4f}")
 
-    return 0
-
-if __name__ == '__main__':
-    main()
