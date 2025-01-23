@@ -1,27 +1,27 @@
+# model/layers/DenseGraphMatching.py
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from typing import List, Tuple, Optional
+import torch.nn.functional as F  # 添加此行
 
+# 如果要对 'gcn'/'graphsage'/'gin' 也改成稀疏版本，需要改成:
+# from torch_geometric.nn import GCNConv, SAGEConv, GINConv
+# 并且完全重写 forward 中对 adj -> edge_index 的处理
+# 这里先保留你原有的 DenseXXXConv
 from torch_geometric.nn.dense.dense_gcn_conv import DenseGCNConv
 from torch_geometric.nn.dense.dense_gin_conv import DenseGINConv
 from torch_geometric.nn.dense.dense_sage_conv import DenseSAGEConv
+
 from model.layers.DenseGGNN import DenseGGNN
+
 import numpy as np
 
-import torch.nn.functional as functional
 class GraphMatchNetwork(nn.Module):
     """
     Graph Matching Network with contrastive learning for graph similarity computation
     """
     def __init__(self, node_init_dims: int, args):
-        """
-        Initialize the Graph Matching Network.
-        
-        Args:
-            node_init_dims (int): Initial dimension of node features
-            args: Configuration arguments from GF_config
-        """
         super(GraphMatchNetwork, self).__init__()
         self.args = args
         self.node_init_dims = node_init_dims
@@ -33,7 +33,7 @@ class GraphMatchNetwork(nn.Module):
         self.num_layers = len(self.filters)
         self.last_filter = self.filters[-1]
 
-        # Initialize GNN layers
+        # Initialize GNN layers (见下)
         self.gnn_layers = self._build_gnn_layers()
 
         # Initialize projection layers for contrastive learning with double precision
@@ -68,10 +68,10 @@ class GraphMatchNetwork(nn.Module):
         """Build GNN layers based on configuration"""
         layers = nn.ModuleList()
 
-        # Configure layer parameters
+        # 根据层数解析 in/out channels
         gcn_params = []
         for i in range(self.num_layers):
-            in_channels = self.node_init_dims if i == 0 else self.filters[i-1]
+            in_channels = self.node_init_dims if i == 0 else self.filters[i - 1]
             out_channels = self.filters[i]
             gcn_params.append(dict(
                 in_channels=in_channels,
@@ -81,15 +81,17 @@ class GraphMatchNetwork(nn.Module):
 
         gin_params = []
         for i in range(self.num_layers):
-            in_channels = self.node_init_dims if i == 0 else self.filters[i-1]
+            in_channels = self.node_init_dims if i == 0 else self.filters[i - 1]
             out_channels = self.filters[i]
+            # DenseGINConv 需要传一个 MLP (nn=...)
             gin_mlp = nn.Sequential(
                 nn.Linear(in_channels, out_channels).double(),
                 nn.ReLU()
             )
             gin_params.append(dict(nn=gin_mlp))
 
-        # Select layer type based on configuration
+        # 如果是 ggnn，用我们修好的 DenseGGNN
+        # 否则仍然使用 PyG 中的 DenseGCNConv / DenseSAGEConv / DenseGINConv
         layer_types = {
             'gcn': (DenseGCNConv, gcn_params),
             'graphsage': (DenseSAGEConv, gcn_params),
@@ -99,7 +101,7 @@ class GraphMatchNetwork(nn.Module):
 
         layer_class, params = layer_types[self.args.conv.lower()]
 
-        # Build layers and convert to double
+        # Build layers
         for i in range(self.num_layers):
             layer = layer_class(**params[i])
             layer = layer.double()
@@ -107,28 +109,15 @@ class GraphMatchNetwork(nn.Module):
 
         return layers
 
-    def gnn_forward(
-            self,
-            x: torch.Tensor,
-            adj: torch.Tensor,
-            mask: Optional[torch.Tensor] = None
-    ) -> torch.Tensor:
-        """
-        Forward pass through GNN layers
-        
-        Args:
-            x: Node features [batch_size, num_nodes, in_channels]
-            adj: Adjacency matrix [batch_size, num_nodes, num_nodes]
-            mask: Node mask [batch_size, num_nodes]
-            
-        Returns:
-            torch.Tensor: Updated node features
-        """
+    def gnn_forward(self, x, adj, mask=None):
         for layer in self.gnn_layers:
-            x = layer(x, adj, mask, add_loop=False)
+            x = layer(x, adj, add_loop=False)
+            if mask is not None:
+                x = x * mask.unsqueeze(-1)  # 屏蔽无效节点
             x = F.relu(x)
             x = F.dropout(x, p=self.dropout, training=self.training)
         return x
+
 
     def drop_features(
             self,
@@ -157,29 +146,32 @@ class GraphMatchNetwork(nn.Module):
         adj = adj * mask.float()
         return adj
 
-    def forward(self, batch_x_p: torch.Tensor, batch_adj_p: torch.Tensor) -> torch.Tensor:
+    def forward(self, x: torch.Tensor, adj: torch.Tensor, mask: Optional[torch.Tensor] = None) -> torch.Tensor:
         """
-        Single forward pass for one graph
-
-        Args:
-            batch_x_p: Node features [batch_size, num_nodes, in_channels]
-            batch_adj_p: Adjacency matrix [batch_size, num_nodes, num_nodes]
-
-        Returns:
-            torch.Tensor: Graph embeddings
+        如果是 'ggnn'，会走 DenseGGNN，自带 adj->edge_index 转换；
+        如果是 'gcn'/'graphsage'/'gin'，则使用 DenseGCNConv... 需要依赖 dense adjacency。
+        全零矩阵时，这些 dense layers 不会报错，只是做一次(0)加和 + 线性变换。
         """
-        # Convert inputs to double precision
-        batch_x_p = batch_x_p.double()
-        batch_adj_p = batch_adj_p.double()
+        x = x.double()
+        adj = adj.double()
 
-        # GNN forward pass
+        # 走 GNN forward
         for layer in self.gnn_layers:
-            batch_x_p = layer(batch_x_p, batch_adj_p, mask=None, add_loop=False)
-            batch_x_p = F.relu(batch_x_p)
-            batch_x_p = F.dropout(batch_x_p, p=self.dropout, training=self.training)
+            if isinstance(layer, DenseGGNN):
+                # DenseGGNN 内部自动转换稠密邻接为稀疏
+                out = layer(x, adj, mask=mask)
+            else:
+                # 原有 DenseGCNConv / DenseSAGEConv / DenseGINConv 走 dense 邻接
+                # 这里演示可以手动加 self-loop 或不加，看 add_loop 参数
+                # Dense 版通常自带 add_loop
+                out = layer(x, adj, mask=mask, add_loop=False)
 
-        # Convert back to float before returning
-        return batch_x_p.float()
+            out = F.relu(out)
+            out = F.dropout(out, p=self.dropout, training=self.training)
+            x = out
+
+        return x.float()
+
 
     def drop_feature(self, x: torch.Tensor, drop_prob: float) -> torch.Tensor:
         """
@@ -305,9 +297,8 @@ class GraphMatchNetwork(nn.Module):
         return sum(ret) / len(ret)
 
     def sim(self, z1: torch.Tensor, z2: torch.Tensor):
-
-        z1 = functional.normalize(z1)
-        z2 = functional.normalize(z2)
+        z1 = F.normalize(z1)  # 将 functional 替换为 F
+        z2 = F.normalize(z2)
         return torch.mm(z1, z2.t())
 
     def semi_loss(self, z1: torch.Tensor, z2: torch.Tensor):

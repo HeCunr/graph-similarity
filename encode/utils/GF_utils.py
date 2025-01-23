@@ -1,3 +1,5 @@
+# utils/GF_utils.py
+
 import os
 import time
 import random
@@ -6,9 +8,10 @@ import numpy as np
 from typing import List, Tuple, Dict, Optional, Any
 import torch
 from datetime import datetime
-from sklearn.model_selection import KFold
 from pathlib import Path
 from model.GF_dataset import GraphData
+
+
 class Graph:
     """Graph data structure with basic operations"""
     def __init__(self, node_num: int, name: str = None):
@@ -31,14 +34,15 @@ class Graph:
             adj[u][v] = adj[v][u] = 1
         return adj
 
+
 def setup_logger(args, model_name: str) -> Tuple[str, logging.Logger]:
     """
     Setup logging configuration
-    
+
     Args:
         args: Configuration arguments
         model_name: Name of the model for logging
-        
+
     Returns:
         Tuple of log directory path and logger object
     """
@@ -74,6 +78,7 @@ def setup_logger(args, model_name: str) -> Tuple[str, logging.Logger]:
 
     return str(log_dir), logger
 
+
 def generate_batches(
         graphs: List[Graph],
         batch_size: int,
@@ -81,12 +86,12 @@ def generate_batches(
 ) -> List[List[Graph]]:
     """
     Generate batches of graphs for training
-    
+
     Args:
         graphs: List of all graphs
         batch_size: Size of each batch
         shuffle: Whether to shuffle graphs before batching
-        
+
     Returns:
         List of batches, where each batch is a list of graphs
     """
@@ -104,15 +109,16 @@ def generate_batches(
 
     return batches
 
+
 def generate_pairs_from_batch(
         batch: List[Graph]
 ) -> List[Tuple[Graph, Graph]]:
     """
     Generate random pairs from a batch of graphs
-    
+
     Args:
         batch: List of graphs in the batch
-        
+
     Returns:
         List of graph pairs
     """
@@ -127,82 +133,45 @@ def generate_pairs_from_batch(
 
     return pairs
 
+
 from tqdm import tqdm
 
-def prepare_batch_data(pairs: List[Tuple[GraphData, GraphData]], device: torch.device) -> Tuple[torch.Tensor, ...]:
-    try:
-        features1, adj1, features2, adj2 = [], [], [], []
-
-        for i, (g1, g2) in enumerate(pairs):
-            if g1.matrices is None or g2.matrices is None:
-                raise ValueError(f"Graph at index {i} has not been preprocessed")
-
-            feat1, adj_mat1, _ = g1.matrices
-            feat2, adj_mat2, _ = g2.matrices
-
-            # Convert to double precision
-            features1.append(torch.tensor(feat1, dtype=torch.float64))
-            adj1.append(torch.tensor(adj_mat1, dtype=torch.float64))
-            features2.append(torch.tensor(feat2, dtype=torch.float64))
-            adj2.append(torch.tensor(adj_mat2, dtype=torch.float64))
-
-        # Stack tensors
-        features1 = torch.stack(features1).to(device)
-        adj1 = torch.stack(adj1).to(device)
-        features2 = torch.stack(features2).to(device)
-        adj2 = torch.stack(adj2).to(device)
-
-        return features1, adj1, features2, adj2
-
-    except Exception as e:
-        print(f"Error in prepare_batch_data: {str(e)}")
-        raise
-
-def cross_validation_split(
-        graphs: List[Graph],
-        n_folds: int,
-        test_size: float,
-        random_state: int = 42
-) -> Tuple[List[Tuple[List[int], List[int]]], List[int], List[int]]:
+def prepare_batch_data(pairs: List[Tuple[GraphData, GraphData]], device: torch.device
+                       ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor,
+                                  torch.Tensor, torch.Tensor]:
     """
-    Split graphs for cross validation and final testing
-
-    Args:
-        graphs: List of all graphs
-        n_folds: Number of folds for cross validation
-        test_size: Proportion of data for final testing
-        random_state: Random seed
-
-    Returns:
-        Tuple of (cv_splits, train_val_indices, test_indices):
-            cv_splits: List of (train_idx, val_idx) tuples for each fold
-            train_val_indices: Indices for complete training set (80%)
-            test_indices: Indices for held-out test set (20%)
+    修改后：除了返回 features1, adj1, features2, adj2，
+    还返回 mask1, mask2，形状均为 [batch_size, num_nodes].
     """
-    # Set random seed for reproducibility
-    np.random.seed(random_state)
+    features1, adj1, masks1 = [], [], []
+    features2, adj2, masks2 = [], [], []
 
-    num_graphs = len(graphs)
-    indices = list(range(num_graphs))
-    np.random.shuffle(indices)
+    for i, (g1, g2) in enumerate(pairs):
+        if g1.matrices is None or g2.matrices is None:
+            raise ValueError(f"Graph at index {i} has not been preprocessed")
 
-    # Split into train+val and test
-    test_size_abs = int(num_graphs * test_size)
-    train_val_indices = indices[:-test_size_abs]
-    test_indices = indices[-test_size_abs:]
+        feat1, adj_mat1, mask1 = g1.matrices
+        feat2, adj_mat2, mask2 = g2.matrices
 
-    # Create cross-validation splits
-    kf = KFold(n_splits=n_folds, shuffle=True, random_state=random_state)
-    cv_splits = list(kf.split(range(len(train_val_indices))))
+        # Convert to double precision
+        features1.append(torch.tensor(feat1, dtype=torch.float64))
+        adj1.append(torch.tensor(adj_mat1, dtype=torch.float64))
+        masks1.append(torch.tensor(mask1, dtype=torch.float64))
 
-    # Convert split indices to actual data indices
-    cv_splits_mapped = []
-    for train_idx, val_idx in cv_splits:
-        train_mapped = [train_val_indices[i] for i in train_idx]
-        val_mapped = [train_val_indices[i] for i in val_idx]
-        cv_splits_mapped.append((train_mapped, val_mapped))
+        features2.append(torch.tensor(feat2, dtype=torch.float64))
+        adj2.append(torch.tensor(adj_mat2, dtype=torch.float64))
+        masks2.append(torch.tensor(mask2, dtype=torch.float64))
 
-    return cv_splits_mapped, train_val_indices, test_indices
+    # 堆叠成 batch 维度
+    features1 = torch.stack(features1).to(device)  # [B, N, F]
+    adj1 = torch.stack(adj1).to(device)            # [B, N, N]
+    masks1 = torch.stack(masks1).to(device)        # [B, N]
+
+    features2 = torch.stack(features2).to(device)
+    adj2 = torch.stack(adj2).to(device)
+    masks2 = torch.stack(masks2).to(device)
+
+    return features1, adj1, masks1, features2, adj2, masks2
 
 def save_model(
         model: torch.nn.Module,
@@ -220,6 +189,7 @@ def save_model(
         'loss': loss,
     }, path)
 
+
 def load_model(
         model: torch.nn.Module,
         optimizer: Optional[torch.optim.Optimizer],
@@ -232,6 +202,7 @@ def load_model(
         optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
     return checkpoint['epoch'], checkpoint['loss']
 
+
 def get_device(args) -> torch.device:
     """Get appropriate device based on configuration"""
     if torch.cuda.is_available() and int(args.gpu_index) >= 0:  # 转换为整数
@@ -240,6 +211,7 @@ def get_device(args) -> torch.device:
     else:
         device = torch.device('cpu')
     return device
+
 
 def set_seed(seed: int):
     """Set random seeds for reproducibility"""

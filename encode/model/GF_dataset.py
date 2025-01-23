@@ -1,31 +1,36 @@
+#model/GF_dataset.py
+
 import copy
 import json
 import os
-from typing import List, Tuple, Dict
+from typing import List, Tuple
 import numpy as np
 import networkx as nx
-from sklearn.model_selection import KFold
 import torch
 from torch.utils.data import Dataset
 import random
 
 class GraphData:
-    """Class to store a single graph's data"""
     def __init__(self, node_num: int, name: str = None):
         self.node_num = node_num
         self.name = name
-        self.features = np.zeros((node_num, 0))  # Will be set later
+        self.features = np.zeros((node_num, 0))
         self.adj = nx.Graph()
-        self.matrices = None  # Will store (feature_matrix, adj_matrix, mask)
+
+        # 让networkx里真的存在 [0..node_num-1] 这些节点
+        self.adj.add_nodes_from(range(node_num))
+
+        self.matrices = None
 
     def add_edge(self, u: int, v: int):
         self.adj.add_edge(u, v)
+
 
 class GFDataset:
     def __init__(self, data_dir: str, args):
         """
         Initialize GF dataset
-        
+
         Args:
             data_dir: Directory containing the graph data
             args: Arguments from GF_config
@@ -33,218 +38,129 @@ class GFDataset:
         self.args = args
         self.data_dir = data_dir
 
-        # First load raw graphs without processing
+        # 1. 读取所有图
         self.graphs = self.load_raw_graphs()
         self.num_graphs = len(self.graphs)
 
-        # Calculate max nodes
+        # 2. 求所有图中最大节点数
         self.max_nodes = self._get_max_nodes()
 
-        # Now process all graphs with known max_nodes
+        # 3. 处理图（补齐特征矩阵、邻接矩阵、mask 等）
         self.graphs = self.process_loaded_graphs()
 
-        # Split into test and train
-        self.test_size = int(self.num_graphs * args.test_split)
-        self.train_size = self.num_graphs - self.test_size
-
-        # Random shuffle for splitting
+        # 4. 按照 7:1.5:1.5 拆分数据
+        # 先随机打乱索引
+        indices = np.arange(self.num_graphs)
         np.random.seed(args.seed)
-        self.graph_indices = np.random.permutation(self.num_graphs)
+        np.random.shuffle(indices)
 
-        # Split indices
-        self.test_indices = self.graph_indices[:self.test_size]
-        self.train_indices = self.graph_indices[self.test_size:]
+        train_end = int(self.num_graphs * args.train_split)  # 0.7
+        val_end = int(self.num_graphs * (args.train_split + args.val_split))  # 0.7 + 0.15 = 0.85
 
-        # Initialize cross validation
-        self.kf = KFold(n_splits=args.n_folds, shuffle=True, random_state=args.seed)
+        self.train_indices = indices[:train_end]
+        self.val_indices = indices[train_end:val_end]
+        self.test_indices = indices[val_end:]
+
+        # 也可直接存储相应的图对象以便后续获取
+        self.train_graphs = [self.graphs[i] for i in self.train_indices]
+        self.val_graphs = [self.graphs[i] for i in self.val_indices]
+        self.test_graphs = [self.graphs[i] for i in self.test_indices]
 
     def load_raw_graphs(self) -> List[GraphData]:
         """Load graphs without processing"""
         graphs = []
-        print(f"Loading graphs from {self.data_dir}")
-
         for file in os.listdir(self.data_dir):
             if not file.endswith('.json'):
                 continue
-
             with open(os.path.join(self.data_dir, file)) as f:
                 for line in f:
                     g_info = json.loads(line.strip())
-                    graph = GraphData(node_num=g_info['n_num'], name=g_info['src'])
+                    n_num = g_info['n_num']
 
-                    # Set node features
+                    graph = GraphData(node_num=n_num, name=g_info['src'])
+                    # 检查特征是否存在
+                    if 'features' not in g_info:
+                        print(f"Skipping graph {g_info['src']} (missing features)")
+                        continue
                     graph.features = np.array(g_info['features'])
-
-                    # Add edges
-                    for u in range(g_info['n_num']):
+                    # 添加边，并检查是否有边
+                    has_edges = False
+                    for u in range(n_num):
+                        if u >= len(g_info['succs']):
+                            continue
                         for v in g_info['succs'][u]:
                             graph.add_edge(u, v)
+                            has_edges = True
 
                     graphs.append(graph)
-
-        print(f"Loaded {len(graphs)} raw graphs")
         return graphs
 
     def process_loaded_graphs(self) -> List[GraphData]:
         """Process all loaded graphs"""
         processed_graphs = []
-        print("Processing graphs...")
-
         for i, graph in enumerate(self.graphs):
-            try:
-                feature_matrix, adj_matrix, mask = self._process_single_graph(graph)
-                graph_copy = copy.deepcopy(graph)
-                graph_copy.matrices = (feature_matrix, adj_matrix, mask)
-                processed_graphs.append(graph_copy)
-
-                if (i + 1) % 100 == 0:
-                    print(f"Processed {i+1}/{len(self.graphs)} graphs")
-
-            except Exception as e:
-                print(f"Error processing graph {graph.name}: {str(e)}")
-                print(f"Graph info: nodes={graph.node_num}, features shape={graph.features.shape}")
-                raise
-
-        print("Graph processing completed")
+            feature_matrix, adj_matrix, mask = self._process_single_graph(graph)
+            graph_copy = copy.deepcopy(graph)
+            graph_copy.matrices = (feature_matrix, adj_matrix, mask)
+            processed_graphs.append(graph_copy)
         return processed_graphs
-
-    def read_graphs(self) -> List[GraphData]:
-        """Read all graphs from the data directory"""
-        graphs = []
-        print(f"Reading graphs from {self.data_dir}")  # 添加调试信息
-
-        for file in os.listdir(self.data_dir):
-            if not file.endswith('.json'):
-                continue
-
-            with open(os.path.join(self.data_dir, file)) as f:
-                for line in f:
-                    g_info = json.loads(line.strip())
-                    graph = GraphData(node_num=g_info['n_num'], name=g_info['fname'])
-
-                    # Set node features
-                    graph.features = np.array(g_info['features'])
-
-                    # Add edges
-                    for u in range(g_info['n_num']):
-                        for v in g_info['succs'][u]:
-                            graph.add_edge(u, v)
-
-                    # Process the graph immediately
-                    feature_matrix, adj_matrix, mask = self._process_single_graph(graph)
-                    graph.matrices = (feature_matrix, adj_matrix, mask)
-                    graphs.append(graph)
-
-        print(f"Loaded {len(graphs)} graphs")  # 添加调试信息
-        return graphs
 
     def _get_max_nodes(self) -> int:
         """Get maximum number of nodes across all graphs"""
         return max(g.node_num for g in self.graphs)
 
-    def preprocess_graphs(self) -> List[GraphData]:
-        """Preprocess all graphs to have consistent dimensions"""
-        processed = []
-        print("Starting graph preprocessing...")  # 添加调试信息
-
-        for i, g in enumerate(self.graphs):
-            if g.matrices is None:  # 如果还没有处理过
-                feature_matrix, adj_matrix, mask = self._process_single_graph(g)
-                g_copy = copy.deepcopy(g)
-                g_copy.matrices = (feature_matrix, adj_matrix, mask)
-                processed.append(g_copy)
-            else:
-                processed.append(copy.deepcopy(g))
-
-            if (i + 1) % 100 == 0:  # 添加进度信息
-                print(f"Processed {i+1}/{len(self.graphs)} graphs")
-
-        print("Graph preprocessing completed")
-        return processed
-
     def _process_single_graph(self, graph: GraphData) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
-        try:
-            # 首先添加节点
-            for i in range(graph.node_num):
-                graph.adj.add_node(i)
+        """
+        对单个图进行处理：对特征矩阵和邻接矩阵按最大节点数量进行对齐，并生成掩码。
+        """
 
-            # 准备特征矩阵
-            feature_dim = self.args.graph_init_dim
-            feature_matrix = np.zeros((self.max_nodes, feature_dim))
-            if len(graph.features.shape) == 1:
-                graph.features = graph.features.reshape(1, -1)
-            feature_matrix[:graph.node_num, :] = graph.features
+        # 1) 从 networkx.Graph 构建邻接矩阵
+        adj = nx.adjacency_matrix(graph.adj).toarray()
 
-            # 准备邻接矩阵
-            adj_matrix = nx.adjacency_matrix(graph.adj).toarray()
-            adj_matrix = adj_matrix + np.eye(adj_matrix.shape[0])
-            adj_padded = np.zeros((self.max_nodes, self.max_nodes))
-            adj_padded[:adj_matrix.shape[0], :adj_matrix.shape[1]] = adj_matrix
+        # 2) 加 self-loop
+        np.fill_diagonal(adj, 1)
 
-            # 准备掩码
-            mask = np.zeros(self.max_nodes)
-            mask[:graph.node_num] = 1
+        actual_n = adj.shape[0]  # 实际节点数
+        max_n = self.args.graph_size_max  # 允许的最大节点数
+        feature_dim = self.args.graph_init_dim  # 每个节点的特征维度
 
-            return feature_matrix, adj_padded, mask
-        except Exception as e:
-            print(f"Error processing graph {graph.name}: {str(e)}")
-            print(f"Graph info: nodes={graph.node_num}, features shape={graph.features.shape}")
-            raise
+        # 如果实际节点数大于 max_n，需要截断 (也可选择抛异常)
+        if actual_n > max_n:
+            print(f"[Warning] Graph {graph.name} has {actual_n} nodes, exceed max {max_n}, slicing to {max_n}")
+            # 截断邻接矩阵
+            adj = adj[:max_n, :max_n]
+            actual_n = max_n
+            # 如果特征也比 max_n 大，需同步截断
+            if graph.features.shape[0] > max_n:
+                graph.features = graph.features[:max_n, :]
 
-    def get_train_fold(self, fold_idx: int) -> Tuple[List[int], List[int]]:
-        """Get train and validation indices for a specific fold"""
-        fold_splits = list(self.kf.split(self.train_indices))
-        train_idx, val_idx = fold_splits[fold_idx]
-        return self.train_indices[train_idx], self.train_indices[val_idx]
+        # 3) 构建补零后的邻接矩阵（多余部分填 0）
+        adj_padded = np.zeros((max_n, max_n), dtype=np.float32)
+        adj_padded[:actual_n, :actual_n] = adj[:actual_n, :actual_n]
 
-    def get_test_data(self) -> List[GraphData]:
-        """Get test set graphs"""
-        return [self.processed_graphs[i] for i in self.test_indices]
+        # 4) 构建特征矩阵。用 -1 表示“没有该参数”，其余位置填入原有特征
+        feature_matrix = np.full((max_n, feature_dim), -1, dtype=np.float32)
+        if len(graph.features.shape) == 1:
+            # 如果原始是一维，需要 reshape
+            graph.features = graph.features.reshape(1, -1)
 
-    def generate_batch(self, indices: List[int], batch_size: int = None) -> List[Tuple[GraphData, GraphData]]:
-        """Generate batches of graph pairs"""
-        if batch_size is None:
-            batch_size = self.args.batch_size
+        # 同样地，如果原始特征行数 < actual_n，这里会自动把足够的行数拷贝；如果超出，也要截断
+        feature_matrix[:actual_n, :] = graph.features[:actual_n, :]
 
-        # Shuffle indices
-        indices = indices.copy()
-        random.shuffle(indices)
+        # 5) 掩码：前 actual_n 个位置为 1，其余为 0
+        mask = np.zeros((max_n,), dtype=np.float32)
+        mask[:actual_n] = 1.0
 
-        # Generate pairs
-        pairs = []
-        for i in range(0, len(indices), batch_size):
-            batch_indices = indices[i:i + batch_size]
-            if len(batch_indices) < batch_size:
-                continue
+        return feature_matrix, adj_padded, mask
 
-            # Randomly pair graphs in the batch
-            batch_indices = batch_indices.copy()
-            random.shuffle(batch_indices)
 
-            for j in range(0, batch_size, 2):
-                idx1, idx2 = batch_indices[j], batch_indices[j+1]
-                pairs.append((self.processed_graphs[idx1], self.processed_graphs[idx2]))
 
-        return pairs
+    # 以下根据需要封装一些简单的 get 函数
+    def get_train_data(self):
+        return self.train_graphs
 
-    def get_batch_tensors(self, pairs: List[Tuple[GraphData, GraphData]]) -> Tuple[torch.Tensor, ...]:
-        """Convert a batch of graph pairs to tensors"""
-        feat1_list, adj1_list = [], []
-        feat2_list, adj2_list = [], []
+    def get_val_data(self):
+        return self.val_graphs
 
-        for g1, g2 in pairs:
-            feat1, adj1, _ = g1.matrices
-            feat2, adj2, _ = g2.matrices
-
-            feat1_list.append(feat1)
-            adj1_list.append(adj1)
-            feat2_list.append(feat2)
-            adj2_list.append(adj2)
-
-        # Convert to tensors
-        feat1_tensor = torch.FloatTensor(np.stack(feat1_list))
-        adj1_tensor = torch.FloatTensor(np.stack(adj1_list))
-        feat2_tensor = torch.FloatTensor(np.stack(feat2_list))
-        adj2_tensor = torch.FloatTensor(np.stack(adj2_list))
-
-        return feat1_tensor, adj1_tensor, feat2_tensor, adj2_tensor
+    def get_test_data(self):
+        return self.test_graphs

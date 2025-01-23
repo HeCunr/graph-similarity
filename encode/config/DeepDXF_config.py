@@ -1,3 +1,4 @@
+# config/DeepDXF_config.py
 class DXFConfig:
     def __init__(self, args):
         # 默认数据目录
@@ -5,49 +6,41 @@ class DXFConfig:
 
         # 模型参数
         self.d_model = 256
-        self.num_layers = 4
+        self.num_layers = 6
         self.dim_z = 256
         self.nhead = 8
         self.dim_feedforward = 512
         self.dropout = 0.2
-        self.latent_dropout = 0.2
-        self.latent_dropout = 0.1
+        self.latent_dropout = 0.3
 
         # 训练参数
-        self.batch_size = args.batch_size
-        self.learning_rate = args.learning_rate
-        self.temperature = max(0.07, args.temperature)  # 确保温度参数不会太小
-        self.epochs = args.epochs
-        self.cl_loss_type = args.loss_type
+        self.batch_size = 32
+        self.initial_lr = 1e-5  # 初始学习率
+        self.max_lr = 1e-4       # 最大学习率
+        self.final_lr = 1e-5     # 最终学习率
+        self.warmup_epochs = 10  # 学习率预热阶段轮数（占总训练轮数的10%）
+        self.epochs = 100        # 总训练轮数
+        self.temperature = 0.07  # InfoNCE损失的温度参数
+        self.gpu_id = getattr(args, 'gpu_id', 1)  # 默认使用 GPU1
 
-        # 添加梯度裁剪
+        # 数据集划分比例
+        self.train_ratio = 0.70
+        self.val_ratio = 0.15
+        self.test_ratio = 0.15
+
+        # 梯度裁剪与早停
         self.clip_grad_norm = 1.0
-        # 早停参数
-        self.patience = 7  # 早停耐心值
-        self.delta = 0.001  # 最小改善阈值
-
-        # 交叉验证参数
-        self.n_folds = 10  # K折交叉验证的折数
-        self.test_size = 0.2  # 测试集比例
+        self.patience = 20       # 早停耐心值
+        self.delta = 0.001       # 早停最小改善阈值
 
         # 损失权重
-        self.loss_weights = {
-            'loss_cl_weight': 1.0,
-        }
+        self.loss_weights = {'loss_cl_weight': 1.0}
 
-        # 数据增强参数
-        self.use_data_augment = True
-        self.max_total_len = 4096
+        # 正则化
+        self.weight_decay = 1e-4
 
-        # 其他参数
-        self.save_frequency = 1
-        self.warmup_steps = 1000
-
-        # 优化器参数
-        self.weight_decay = 1e-4  # 添加权重衰减
-
-        # 添加wandb配置
-        self.wandb_project = "DeepDXF"  # wandb项目名称
-        self.wandb_entity = "102201525-fuzhou-university"    # 你的wandb用户名
-        self.wandb_name = "DeepDXF"          # 本次运行的名称
-        self.use_wandb = True           # 是否使用wandb
+        # wandb配置
+        self.wandb_project = args.wandb_project or "DeepDXF"
+        self.wandb_entity = args.wandb_entity or "102201525-fuzhou-university"
+        self.wandb_name = args.wandb_name or "DeepDXF_training"
+        self.use_wandb = True

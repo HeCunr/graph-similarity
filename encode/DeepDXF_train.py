@@ -1,61 +1,89 @@
+#DeepDXF_train.py
 import torch
-from torch.utils.data import DataLoader, ConcatDataset, random_split, SubsetRandomSampler
-from model.DeepDXF_dataset import DXFDataset
+from torch.utils.data import DataLoader, random_split
+import os
+import argparse
+import numpy as np
+import traceback
+from tqdm import tqdm
+import wandb
+
+# ====== 数据增强函数 ======
+# 如果你的数据增强函数在 deepdxf_augment.py 中，请保证可以正常导入
+from utils.deepdxf_augment import  augment_sample
+
+from model.DeepDXF_dataset import load_h5_files
 from model.transformer_encoder import DXFTransformer
 from model.DeepDXF_loss import DXFContrastiveLoss
 from utils.DeepDXF_early_stopping import EarlyStopping
-import h5py
-from model.DeepDXF_dataset import load_h5_files
 from config.DeepDXF_config import DXFConfig
-import os
-import argparse
-from tqdm import tqdm
-import numpy as np
-from sklearn.model_selection import KFold
 
-import wandb
-from torch.utils.data import DataLoader, ConcatDataset, random_split, SubsetRandomSampler
+def double_augment_batch(entity_type_t, entity_params_t, device):
+    entity_type_np = entity_type_t.cpu().numpy().astype(np.int32)    # (N, 4096)
+    entity_params_np = entity_params_t.cpu().numpy().astype(np.int32)  # (N, 4096, 43)
 
-def load_h5_files(directory):
-    datasets = []
-    for filename in os.listdir(directory):
-        if filename.endswith('.h5'):
-            file_path = os.path.join(directory, filename)
-            try:
-                dataset = DXFDataset(file_path)
-                datasets.append(dataset)
-            except KeyError as e:
-                print(f"Error loading {filename}: {e}")
-                continue
-    if not datasets:
-        raise ValueError("No valid datasets found in the specified directory.")
-    return ConcatDataset(datasets)
+    N = entity_type_np.shape[0]
+    aug_types_list = []
+    aug_params_list = []
 
+    for i in range(N):
+        combined_arr = np.zeros((4096, 44), dtype=np.int32)
+        combined_arr[:, 0] = entity_type_np[i, :]  # 实体类型列
+        combined_arr[:, 1:] = entity_params_np[i, :, :43]  # 参数列填充到1~43
+
+        # 数据增强并验证输出形状
+        aug1_44 = augment_sample(combined_arr)
+        aug2_44 = augment_sample(combined_arr)
+        assert aug1_44.shape == (4096, 44), "Augmented sample shape mismatch"
+
+        # 拆分时严格限制列范围
+        aug1_type = aug1_44[:, 0].astype(np.int32)
+        aug1_param = aug1_44[:, 1:].astype(np.int32)  # 使用 1: 取剩余所有列
+        aug2_type = aug2_44[:, 0].astype(np.int32)
+        aug2_param = aug2_44[:, 1:].astype(np.int32)
+
+        aug_types_list.append(aug1_type)
+        aug_types_list.append(aug2_type)
+        aug_params_list.append(aug1_param)
+        aug_params_list.append(aug2_param)
+
+    # 堆叠并转换为 Tensor
+    aug_types_np = np.stack(aug_types_list, axis=0)   # (2N, 4096)
+    aug_params_np = np.stack(aug_params_list, axis=0) # (2N, 4096, 43)
+
+    aug_types_t = torch.from_numpy(aug_types_np).long().to(device)
+    aug_params_t = torch.from_numpy(aug_params_np).long().to(device)
+
+    return aug_types_t, aug_params_t
 
 class DXFTrainer:
     def __init__(self, cfg):
         self.cfg = cfg
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+        # ----- 设备选择 -----
+        if torch.cuda.is_available():
+            if hasattr(cfg, 'gpu_id'):
+                self.device = torch.device(f"cuda:{cfg.gpu_id}")
+            else:
+                self.device = torch.device("cuda:1")
+        else:
+            self.device = torch.device("cpu")
+            print("Warning: CUDA is not available, using CPU instead")
+
+        os.makedirs('checkpoints', exist_ok=True)
         self.early_stopping = EarlyStopping(patience=cfg.patience)
-
-        # 先初始化模型和损失函数
         self.init_model()
 
-        # 然后初始化wandb
         if self.cfg.use_wandb:
             wandb.init(
                 project=self.cfg.wandb_project,
                 entity=self.cfg.wandb_entity,
                 name=self.cfg.wandb_name,
-                config=vars(cfg),
-                settings=wandb.Settings(start_method="fork")
+                config=vars(cfg)
             )
-            # 记录模型架构
             wandb.watch(self.model)
 
     def init_model(self):
-        """初始化或重置模型"""
         self.model = DXFTransformer(
             d_model=self.cfg.d_model,
             num_layers=self.cfg.num_layers,
@@ -75,54 +103,126 @@ class DXFTrainer:
 
         self.optimizer = torch.optim.Adam(
             self.model.parameters(),
-            lr=self.cfg.learning_rate,
-            weight_decay=self.cfg.weight_decay  # 添加权重衰减
+            lr=self.cfg.initial_lr,
+            weight_decay=self.cfg.weight_decay
         )
 
+        import math
+
+        warmup_epochs = self.cfg.warmup_epochs
+        total_epochs  = self.cfg.epochs
+
+        def lr_lambda(current_epoch):
+            if current_epoch < warmup_epochs:
+                # 线性预热
+                ratio = float(current_epoch) / float(warmup_epochs)
+                factor = 1.0 + (self.cfg.max_lr / self.cfg.initial_lr - 1.0)*ratio
+                return factor
+            else:
+                # 余弦退火
+                progress = (current_epoch - warmup_epochs) / float(total_epochs - warmup_epochs)
+                cos_out  = 0.5*(1.0 + math.cos(math.pi * progress))
+                start_scale = self.cfg.max_lr / self.cfg.initial_lr
+                end_scale   = self.cfg.final_lr / self.cfg.initial_lr
+                factor = end_scale + (start_scale - end_scale)*cos_out
+                return factor
+
+        self.scheduler = torch.optim.lr_scheduler.LambdaLR(
+            self.optimizer,
+            lr_lambda=lr_lambda
+        )
+
+    def train(self, train_loader, val_loader, test_loader):
+        best_val_loss = float('inf')
+
+        for epoch in range(self.cfg.epochs):
+            # 1) 训练
+            train_loss = self.train_epoch(train_loader, epoch)
+            # 2) 验证
+            val_loss = self.validate(val_loader)
+            # 3) 学习率更新
+            current_lr = self.scheduler.get_last_lr()[0]
+            self.scheduler.step()
+
+            print(f"Epoch {epoch+1}/{self.cfg.epochs}")
+            print(f"  Training Loss:   {train_loss:.4f}")
+            print(f"  Validation Loss: {val_loss:.4f}")
+            print(f"  Learning Rate:   {current_lr:.6f}")
+
+            if self.cfg.use_wandb:
+                wandb.log({
+                    "train_loss": train_loss,
+                    "val_loss": val_loss,
+                    "learning_rate": current_lr,
+                    "epoch": epoch
+                })
+
+            # 保存best
+            if val_loss < best_val_loss:
+                best_val_loss = val_loss
+                torch.save({
+                    'epoch': epoch,
+                    'model_state_dict': self.model.state_dict(),
+                    'optimizer_state_dict': self.optimizer.state_dict(),
+                    'loss': best_val_loss,
+                }, 'checkpoints/best_model.pth')
+
+                if self.cfg.use_wandb:
+                    wandb.save('checkpoints/best_model.pth')
+
+            # Early stopping
+            self.early_stopping(val_loss, self.model, self.optimizer, epoch)
+            if self.early_stopping.early_stop:
+                print("Early stopping triggered")
+                break
+
+        # 4) 测试
+        test_loss = self.test(test_loader)
+        print(f"\nFinal Test Loss: {test_loss:.4f}")
+
+        if self.cfg.use_wandb:
+            wandb.log({"test_loss": test_loss})
+            wandb.finish()
+
+        return test_loss
+
     def train_epoch(self, dataloader, epoch):
+        """
+        训练阶段: 对每条样本做两次增强 =>(2N,...)。
+        """
         self.model.train()
-        total_loss = 0
+        total_loss = 0.0
         num_batches = 0
 
         pbar = tqdm(dataloader, desc=f'Epoch {epoch+1}/{self.cfg.epochs}')
         for batch_idx, (entity_type, entity_params) in enumerate(pbar):
             try:
-                # 将数据移到设备上
                 entity_type = entity_type.to(self.device)
                 entity_params = entity_params.to(self.device)
 
-                # 移除 amp.autocast()，直接进行前向传播
-                outputs = self.model(entity_type, entity_params)
+                # 两次增广 => (2N,...)
+                cat_type, cat_params = double_augment_batch(entity_type, entity_params, self.device)
+
+                outputs = self.model(cat_type, cat_params)
                 losses = self.contrastive_loss(outputs)
                 loss = losses["loss_contrastive"]
 
-                # 记录每个batch的损失
-                if self.cfg.use_wandb:
-                    wandb.log({
-                        "batch_loss": loss.item(),
-                        "batch": batch_idx + epoch * len(dataloader)
-                    })
-
-                # 检查损失值是否是有限的
                 if not torch.isfinite(loss):
-                    print(f"Warning: Non-finite loss detected: {loss.item()}")
+                    print(f"Warning: Non-finite loss: {loss.item()}")
                     continue
 
-                # 反向传播
                 self.optimizer.zero_grad()
-                loss.backward()  # 直接调用 backward()
-
-                # 添加梯度裁剪
+                loss.backward()
                 torch.nn.utils.clip_grad_norm_(self.model.parameters(), self.cfg.clip_grad_norm)
-
-                self.optimizer.step()  # 直接调用 step()
+                self.optimizer.step()
 
                 total_loss += loss.item()
                 num_batches += 1
-                # 更新进度条显示
+
                 pbar.set_postfix({
                     'loss': loss.item(),
-                    'avg_loss': total_loss / num_batches
+                    'avg_loss': total_loss / num_batches,
+                    'lr': self.scheduler.get_last_lr()[0]
                 })
 
             except Exception as e:
@@ -132,18 +232,22 @@ class DXFTrainer:
         return total_loss / max(num_batches, 1) if num_batches > 0 else float('inf')
 
     def validate(self, val_loader):
+        """
+        验证阶段 同样两次增广 => (2N,...).
+        """
         self.model.eval()
-        total_loss = 0
+        total_loss = 0.0
         num_batches = 0
 
         with torch.no_grad():
-            for entity_type, entity_params in val_loader:
+            for batch_idx, (entity_type, entity_params) in enumerate(val_loader):
                 try:
                     entity_type = entity_type.to(self.device)
                     entity_params = entity_params.to(self.device)
 
-                    # 直接进行前向传播
-                    outputs = self.model(entity_type, entity_params)
+                    cat_type, cat_params = double_augment_batch(entity_type, entity_params, self.device)
+
+                    outputs = self.model(cat_type, cat_params)
                     losses = self.contrastive_loss(outputs)
                     loss = losses["loss_contrastive"]
 
@@ -152,124 +256,32 @@ class DXFTrainer:
                         num_batches += 1
 
                 except Exception as e:
-                    print(f"Error in validation: {str(e)}")
+                    print(f"Error in validation batch {batch_idx}: {str(e)}")
                     continue
 
         return total_loss / max(num_batches, 1) if num_batches > 0 else float('inf')
 
-    def train_fold(self, train_loader, val_loader, fold_idx):
-        print(f"Training Fold {fold_idx + 1}")
-
-        # 重新初始化模型，确保每个fold从头开始训练
-        self.init_model()
-
-        best_val_loss = float('inf')
-        fold_dir = os.path.join('checkpoints', f'fold_{fold_idx+1}')
-        os.makedirs(fold_dir, exist_ok=True)
-
-
-        # 记录每个fold的指标
-        fold_metrics = []
-        for epoch in range(self.cfg.epochs):
-            try:
-                train_loss = self.train_epoch(train_loader, epoch)
-                val_loss = self.validate(val_loader)
-
-                print(f"Epoch {epoch+1}/{self.cfg.epochs}")
-                print(f"Training Loss: {train_loss:.4f}")
-                print(f"Validation Loss: {val_loss:.4f}")
-
-                # 记录到wandb
-                if self.cfg.use_wandb:
-                    wandb.log({
-                        f"fold_{fold_idx+1}/train_loss": train_loss,
-                        f"fold_{fold_idx+1}/val_loss": val_loss,
-                        "epoch": epoch
-                    })
-
-                    # 可以添加更多的指标
-                    learning_rate = self.optimizer.param_groups[0]['lr']
-                    wandb.log({
-                        f"fold_{fold_idx+1}/learning_rate": learning_rate,
-                        "epoch": epoch
-                    })
-
-                # 保存最佳模型
-                if val_loss < best_val_loss:
-                    best_val_loss = val_loss
-                    checkpoint_path = os.path.join(fold_dir, 'best_model.pth')
-                    torch.save({
-                        'epoch': epoch,
-                        'model_state_dict': self.model.state_dict(),
-                        'optimizer_state_dict': self.optimizer.state_dict(),
-                        'loss': best_val_loss,
-                    }, checkpoint_path)
-
-                    # 上传最佳模型到wandb
-                    if self.cfg.use_wandb:
-                        wandb.save(checkpoint_path)
-
-                # 记录fold指标
-                fold_metrics.append({
-                    'epoch': epoch,
-                    'train_loss': train_loss,
-                    'val_loss': val_loss
-                })
-
-                # Early stopping
-                self.early_stopping(val_loss, self.model, self.optimizer, epoch)
-                if self.early_stopping.early_stop:
-                    print("Early stopping triggered")
-                    break
-
-            except Exception as e:
-                print(f"Error in epoch {epoch}: {str(e)}")
-                continue
-
-        # 在fold结束时记录汇总指标
-        if self.cfg.use_wandb:
-            wandb.log({
-                f"fold_{fold_idx+1}/best_val_loss": best_val_loss,
-                f"fold_{fold_idx+1}/total_epochs": epoch + 1
-            })
-
-        return best_val_loss
-
     def test(self, test_loader):
-        # 测试过程中的指标记录
-        test_metrics = {}
-        # 加载最佳模型
-        best_val_loss = float('inf')
-        best_fold = 0
-
-        # 找到表现最好的fold
-        for fold in range(self.cfg.n_folds):
-            fold_path = os.path.join('checkpoints', f'fold_{fold+1}', 'best_model.pth')
-            if os.path.exists(fold_path):
-                checkpoint = torch.load(fold_path)
-                if checkpoint['loss'] < best_val_loss:
-                    best_val_loss = checkpoint['loss']
-                    best_fold = fold + 1
-
-        # 加载最佳fold的模型
-        best_model_path = os.path.join('checkpoints', f'fold_{best_fold}', 'best_model.pth')
-        print(f"Loading best model from fold {best_fold}")
-        checkpoint = torch.load(best_model_path)
+        """
+        测试阶段 同样两次增广 => (2N,...).
+        加载best_model, 计算loss
+        """
+        checkpoint = torch.load('checkpoints/best_model.pth', map_location=self.device)
         self.model.load_state_dict(checkpoint['model_state_dict'])
 
-        # 测试
         self.model.eval()
-        total_loss = 0
+        total_loss = 0.0
         num_batches = 0
 
         with torch.no_grad():
-            for entity_type, entity_params in test_loader:
+            for batch_idx, (entity_type, entity_params) in enumerate(test_loader):
                 try:
                     entity_type = entity_type.to(self.device)
                     entity_params = entity_params.to(self.device)
 
-                    # 直接进行前向传播
-                    outputs = self.model(entity_type, entity_params)
+                    cat_type, cat_params = double_augment_batch(entity_type, entity_params, self.device)
+
+                    outputs = self.model(cat_type, cat_params)
                     losses = self.contrastive_loss(outputs)
                     loss = losses["loss_contrastive"]
 
@@ -278,48 +290,47 @@ class DXFTrainer:
                         num_batches += 1
 
                 except Exception as e:
-                    print(f"Error in testing: {str(e)}")
+                    print(f"Error in test batch {batch_idx}: {str(e)}")
                     continue
 
         avg_test_loss = total_loss / max(num_batches, 1) if num_batches > 0 else float('inf')
         print(f"Test Loss: {avg_test_loss:.4f}")
-
-        # 记录测试结果
-        if self.cfg.use_wandb:
-            wandb.log({
-                "test_loss": avg_test_loss,
-                "final_model_performance": avg_test_loss
-            })
         return avg_test_loss
+
 
 def main(args):
     cfg = DXFConfig(args)
 
     try:
-        # wandb初始化配置
-        if cfg.use_wandb:
-            wandb.init(
-                project=cfg.wandb_project,
-                entity=cfg.wandb_entity,
-                name=cfg.wandb_name,
-                config=vars(cfg)
-            )
-        # 加载数据
         data_dir = args.data_dir if args.data_dir else cfg.data_dir
         combined_dataset = load_h5_files(data_dir)
 
-        # 划分测试集和训练集
-        dataset_size = len(combined_dataset)
-        test_size = int(0.2 * dataset_size)
-        train_size = dataset_size - test_size
+        total_size = len(combined_dataset)
+        train_size = int(cfg.train_ratio * total_size)
+        val_size = int(cfg.val_ratio * total_size)
+        test_size = total_size - train_size - val_size
 
-        train_dataset, test_dataset = random_split(
+        train_dataset, val_dataset, test_dataset = random_split(
             combined_dataset,
-            [train_size, test_size],
+            [train_size, val_size, test_size],
             generator=torch.Generator().manual_seed(42)
         )
 
-        # 创建测试集数据加载器
+        train_loader = DataLoader(
+            train_dataset,
+            batch_size=cfg.batch_size,
+            shuffle=True,
+            num_workers=4,
+            pin_memory=True,
+            drop_last=True
+        )
+        val_loader = DataLoader(
+            val_dataset,
+            batch_size=cfg.batch_size,
+            shuffle=False,
+            num_workers=4,
+            pin_memory=True
+        )
         test_loader = DataLoader(
             test_dataset,
             batch_size=cfg.batch_size,
@@ -328,77 +339,28 @@ def main(args):
             pin_memory=True
         )
 
-        # K折交叉验证
-        k_folds = 10
-        kfold = KFold(n_splits=k_folds, shuffle=True, random_state=42)
-
-        # 将数据集索引转换为列表以进行K折划分
-        train_indices = list(range(train_size))
-
-        fold_val_losses = []
-        for fold, (train_ids, val_ids) in enumerate(kfold.split(train_indices)):
-            print(f'\nFOLD {fold+1}/{k_folds}')
-
-            # 创建数据加载器
-            train_sampler = SubsetRandomSampler(train_ids)
-            val_sampler = SubsetRandomSampler(val_ids)
-
-            train_loader = DataLoader(
-                train_dataset,
-                batch_size=cfg.batch_size,
-                sampler=train_sampler,
-                num_workers=4,
-                pin_memory=True,
-                drop_last=True
-            )
-
-            val_loader = DataLoader(
-                train_dataset,
-                batch_size=cfg.batch_size,
-                sampler=val_sampler,
-                num_workers=4,
-                pin_memory=True
-            )
-
-            # 创建新的训练器实例
-            trainer = DXFTrainer(cfg)
-
-            # 训练当前折
-            val_loss = trainer.train_fold(train_loader, val_loader, fold)
-            fold_val_losses.append(val_loss)
-
-        # 输出交叉验证结果
-        print("\nCross-validation Results:")
-        for fold, loss in enumerate(fold_val_losses):
-            print(f"Fold {fold+1}: {loss:.4f}")
-        print(f"Average validation loss: {np.mean(fold_val_losses):.4f}")
-
-        # 在测试集上评估最佳模型
-        test_loss = trainer.test(test_loader)
-        print(f"\nFinal Test Loss: {test_loss:.4f}")
-        # 在训练结束时关闭wandb
-        if cfg.use_wandb:
-            wandb.finish()
+        trainer = DXFTrainer(cfg)
+        test_loss = trainer.train(train_loader, val_loader, test_loader)
+        print(f"\nTraining completed. Final test loss: {test_loss:.4f}")
 
     except Exception as e:
         print(f"An error occurred: {e}")
-        import traceback
         traceback.print_exc()
         if cfg.use_wandb:
             wandb.finish()
 
+
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Train DXF Transformer with contrastive loss')
-    parser.add_argument('--data_dir', type=str, default=None, help='Directory containing h5 files')
-    parser.add_argument('--batch_size', type=int, default=5, help='Batch size for training')
-    parser.add_argument('--learning_rate', type=float, default=0.0001, help='Learning rate')
-    parser.add_argument('--temperature', type=float, default=0.07, help='Temperature for contrastive loss')
-    parser.add_argument('--epochs', type=int, default=50, help='Number of epochs to train')
-    parser.add_argument('--loss_type', type=str, default='infonce', choices=['simclr', 'infonce'], help='Type of contrastive loss to use')
-    # 添加wandb相关参数
+    parser = argparse.ArgumentParser(description='Train DXF Transformer with InfoNCE loss')
+    parser.add_argument('--data_dir', type=str, default=r"/home/vllm/encode/data/DeepDXF/TRAIN_4096",  help='Directory containing h5 files')
+    parser.add_argument('--batch_size', type=int, default=32, help='Batch size for training')
+    parser.add_argument('--epochs', type=int, default=100, help='Number of epochs to train')
+    parser.add_argument('--gpu_id', type=int, default=1, help='GPU ID to use (default: 1)')
+
     parser.add_argument('--wandb_project', type=str, default="DeepDXF", help='Wandb project name')
     parser.add_argument('--wandb_entity', type=str, default=None, help='Wandb entity(username)')
     parser.add_argument('--wandb_name', type=str, default=None, help='Wandb run name')
-    parser.add_argument('--use_wandb', action='store_true', help='Whether to use wandb')
     args = parser.parse_args()
     main(args)
+
+

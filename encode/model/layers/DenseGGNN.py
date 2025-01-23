@@ -1,3 +1,4 @@
+# model/layers/DenseGGNN.py
 import torch
 import torch.nn as nn
 from typing import Optional, Tuple
@@ -11,13 +12,6 @@ class DenseGGNN(nn.Module):
     """
 
     def __init__(self, out_channels: int, num_layers: int = 1):
-        """
-        Initialize DenseGGNN layer.
-
-        Args:
-            out_channels (int): Number of output channels
-            num_layers (int): Number of GNN layers to apply
-        """
         super(DenseGGNN, self).__init__()
         self.out_channels = out_channels
         self.num_layers = num_layers
@@ -30,8 +24,8 @@ class DenseGGNN(nn.Module):
 
     def forward(
             self,
-            x: torch.Tensor,
-            adj: torch.Tensor,
+            x: torch.Tensor,    # [B, N, D]
+            adj: torch.Tensor,  # [B, N, N]
             mask: Optional[torch.Tensor] = None,
             **kwargs
     ) -> torch.Tensor:
@@ -48,27 +42,34 @@ class DenseGGNN(nn.Module):
         """
         batch_size, num_nodes, in_channels = x.size()
 
-        # Convert to sparse format for each graph in batch
+        # 1) 将每个图的 dense 邻接矩阵转换为 (edge_index, edge_weight) 稀疏格式
         edge_indices = []
         for i in range(batch_size):
-            # Get sparse indices for current graph
-            edge_index = dense_to_sparse(adj[i])[0]
-            # Offset node indices by batch index
-            edge_indices.append(edge_index + i * num_nodes)
+            # dense_to_sparse会返回 (edge_index, edge_weight)
+            e_idx, _ = dense_to_sparse(adj[i])   # e_idx: [2, E]
+            # 如果该图没有边， e_idx.shape[1] == 0
+            # 无需特殊处理，直接加偏移或不加偏移都可以
+            if e_idx.numel() > 0:  # 有边时再做批内偏移
+                e_idx = e_idx + i * num_nodes
+            edge_indices.append(e_idx)
 
-        # Concatenate all edge indices
-        edge_index = torch.cat(edge_indices, dim=1)
+        # 2) 将所有图的 edge_index 拼接到一起
+        if len(edge_indices) > 0:
+            edge_index = torch.cat(edge_indices, dim=1)  # 形状 [2, sum_of_E]
+        else:
+            # 理论上 edge_indices 不会为空，但如需更安全，可做如下处理
+            edge_index = torch.empty((2, 0), dtype=torch.long, device=x.device)
 
-        # Reshape node features for sparse format
-        x = x.reshape(-1, in_channels)
+        # 3) 将节点特征展平为 [B*N, D] 以适配 PYG 的 GatedGraphConv
+        x = x.reshape(batch_size * num_nodes, in_channels)
 
-        # Apply GNN
-        output = self.gnn(x, edge_index)
+        # 4) 进行 GNN 传播；对空图(无边)的情况，GatedGraphConv不会进行消息传递，但仍会保留原有特征
+        output = self.gnn(x, edge_index)  # [B*N, out_channels]
 
-        # Reshape back to dense format
+        # 5) Reshape 回原始批次形状 [B, N, out_channels]
         output = output.reshape(batch_size, num_nodes, self.out_channels)
 
-        # Apply mask if provided
+        # 6) 如果提供了 mask，就对无效节点做屏蔽
         if mask is not None:
             output = output * mask.unsqueeze(-1)
 
@@ -85,27 +86,24 @@ class DenseGGNN(nn.Module):
             num_nodes: int
     ) -> Tuple[torch.Tensor, torch.Tensor]:
         """
-        Convert batched dense adjacency matrices to sparse format.
-
-        Args:
-            adj (torch.Tensor): Dense adjacency tensor [B, N, N]
-            batch_size (int): Batch size
-            num_nodes (int): Number of nodes per graph
-
-        Returns:
-            Tuple[torch.Tensor, torch.Tensor]: Edge indices and edge weights
+        可选的辅助函数：将批量的 dense adjacency 转为稀疏 edge_index, edge_weight。
         """
         edge_indices = []
         edge_weights = []
 
         for i in range(batch_size):
-            # Get sparse representation
             edge_index, weight = dense_to_sparse(adj[i])
-            # Offset node indices
-            edge_indices.append(edge_index + i * num_nodes)
+            # 偏移 batch
+            if edge_index.size(1) > 0:
+                edge_index = edge_index + i * num_nodes
+            edge_indices.append(edge_index)
             edge_weights.append(weight)
 
-        edge_index = torch.cat(edge_indices, dim=1)
-        edge_weight = torch.cat(edge_weights, dim=0)
+        if len(edge_indices) > 0:
+            edge_index = torch.cat(edge_indices, dim=1)
+            edge_weight = torch.cat(edge_weights, dim=0)
+        else:
+            edge_index = torch.empty((2, 0), dtype=torch.long, device=adj.device)
+            edge_weight = torch.empty((0,), dtype=adj.dtype, device=adj.device)
 
         return edge_index, edge_weight

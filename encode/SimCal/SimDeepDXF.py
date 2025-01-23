@@ -1,145 +1,145 @@
+#!/usr/bin/env python3
+# SimDeepDXF.py
+"""
+计算两个h5文件之间的相似度，使用已训练好的DeepDXF Transformer权重。
+相似度采用余弦相似度，并归一化到 [0,1]。
+丢弃投影头与BN，仅使用 embedding->progressive_pool->encoder 提取表征。
+"""
+
+import argparse
+import os
 import torch
 import torch.nn.functional as F
-import h5py
-import argparse
+import numpy as np
+
+# ---- 你训练时的主干模型与数据集加载 ----
 from model.transformer_encoder import DXFTransformer
 from model.DeepDXF_dataset import DXFDataset
-from torch.utils.data import DataLoader
-from config.DeepDXF_config import DXFConfig
+import h5py
 
-class SimDeepDXF:
-    def __init__(self, model_path, cfg=None, device=None):
+# ========== 1. 定义一个子模型，只保留“embedding->progressive_pool->encoder” ==========
+
+class DXFBackbone(torch.nn.Module):
+    """
+    从 DXFTransformer 中只保留embedding, progressive_pool, encoder三部分，
+    丢弃 projection/mlp, BN, dropout。
+    """
+    def __init__(self, full_model: DXFTransformer):
+        super().__init__()
+        self.embedding = full_model.embedding
+        self.progressive_pool = full_model.progressive_pool
+        self.encoder = full_model.encoder
+        # 不再使用 projection, bn, dropout
+
+    @torch.no_grad()
+    def forward(self, entity_type, entity_params):
         """
-        初始化SimDeepDXF
-        Args:
-            model_path: 模型权重路径
-            cfg: 配置对象
-            device: 计算设备
+        返回: (batch_size, 64, 256) 的编码序列
+             或者也可以在这里做序列平均，得到 (batch_size, 256)
         """
-        if cfg is None:
-            # 创建默认配置
-            args = argparse.Namespace()
-            args.batch_size = 1
-            args.data_dir = None
-            args.learning_rate = 0.001
-            args.temperature = 0.07
-            args.epochs = 10
-            args.loss_type = 'infonce'
-            cfg = DXFConfig(args)
+        # 1) 嵌入 => (B, 4096, 256)
+        src = self.embedding(entity_type, entity_params)
 
-        self.cfg = cfg
+        # 2) progressive_pool => (B, 64, 256)
+        src = self.progressive_pool(src)
 
-        if device is None:
-            self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        else:
-            self.device = device
+        # 3) 变成 [seq_len=64, batch=B, d_model=256] 喂 transformer
+        src = src.permute(1, 0, 2)  # => (64, B, 256)
+        memory = self.encoder(src)  # => (64, B, 256)
+        memory = memory.permute(1, 0, 2)  # => (B, 64, 256)
 
-        print(f"Using device: {self.device}")
+        return memory
 
-        # 初始化模型
-        self.model = DXFTransformer(
-            d_model=cfg.d_model,
-            num_layers=cfg.num_layers,
-            dim_z=cfg.dim_z,
-            nhead=cfg.nhead,
-            dim_feedforward=cfg.dim_feedforward,
-            dropout=cfg.dropout,
-            latent_dropout=cfg.latent_dropout
-        ).to(self.device)
+# ========== 2. 从一个 h5 文件提取所有样本的平均表征 ==========
 
-        # 加载模型权重
-        checkpoint = torch.load(model_path, map_location=self.device)
-        if 'model_state_dict' in checkpoint:
-            self.model.load_state_dict(checkpoint['model_state_dict'])
-        else:
-            self.model.load_state_dict(checkpoint)
+@torch.no_grad()
+def extract_file_representation(h5_path, backbone, device="cpu"):
+    """
+    给定一个 .h5 文件(内含多条 dxf_vec)，
+    使用 backbone(embedding->pool->encoder) 提取其所有样本的表征，
+    最后做平均 => 得到 (256,) 的文件级向量。
+    """
+    # 读取 .h5
+    with h5py.File(h5_path, 'r') as f:
+        if 'dxf_vec' not in f:
+            raise ValueError(f"No dataset 'dxf_vec' found in {h5_path}.")
+        dset = f['dxf_vec']
+        n_samples = len(dset)
 
-        self.model.eval()
+    all_vecs = []
+    # 每次读一个样本，做 forward
+    for i in range(n_samples):
+        with h5py.File(h5_path, 'r') as f:
+            data_i = f['dxf_vec'][i]  # shape=(4096,44)
 
-    def load_single_h5(self, h5_path):
-        """加载并处理单个h5文件"""
-        dataset = DXFDataset(h5_path)
-        dataloader = DataLoader(
-            dataset,
-            batch_size=1,
-            shuffle=False,
-            pin_memory=True
-        )
+        # 拆分 entity_type, entity_params
+        entity_type = torch.tensor(data_i[:, 0], dtype=torch.long, device=device).unsqueeze(0)
+        entity_params = torch.tensor(data_i[:, 1:], dtype=torch.float, device=device).unsqueeze(0)
+        # => (1,4096), (1,4096,43)
 
-        all_representations = []
+        # 前向 => 得到 (1, 64, 256)
+        memory = backbone(entity_type, entity_params)  # shape=(1,64,256)
 
-        with torch.no_grad():
-            for entity_type, entity_params in dataloader:
-                entity_type = entity_type.to(self.device)
-                entity_params = entity_params.to(self.device)
+        # 可以对 seq_len=64 做平均，得到 (1,256)
+        # 也可以保留序列再处理，这里做简单平均
+        memory_mean = memory.mean(dim=1)  # => (1,256)
 
-                # 获取模型输出，使用representation作为特征向量
-                outputs = self.model(entity_type, entity_params)
-                representation = outputs["representation"]
-                all_representations.append(representation)
+        all_vecs.append(memory_mean.cpu().numpy())  # => 形如(1,256)
 
-        # 如果h5文件中有多个条目，取平均
-        final_representation = torch.mean(torch.stack(all_representations), dim=0)
-        return final_representation
+    # 拼起来 => (n_samples, 256)
+    all_vecs = np.concatenate(all_vecs, axis=0)  # shape=(n_samples,256)
+    # 对 n_samples 再做平均 => (256,)
+    file_vector = all_vecs.mean(axis=0)
+    return file_vector
 
-    def calculate_similarity(self, representation1, representation2, method='cosine'):
-        """计算两个特征向量之间的相似度，结果规范到[0, 1]"""
-        if method == 'cosine':
-            # 标准化向量并计算余弦相似度
-            representation1_norm = F.normalize(representation1, p=2, dim=1)
-            representation2_norm = F.normalize(representation2, p=2, dim=1)
-            similarity = F.cosine_similarity(representation1_norm, representation2_norm)
-            # 余弦相似度范围为[-1, 1]，规范到[0, 1]
-            similarity = (similarity + 1) / 2
-            return similarity.item()
-
-        elif method == 'euclidean':
-            # 计算欧氏距离并转换为相似度分数
-            distance = torch.cdist(representation1, representation2, p=2)
-            # 将距离转换为相似度，范围为[0, 1]
-            similarity = 1 / (1 + distance)
-            return similarity.item()
-
-        else:
-            raise ValueError(f"Unsupported similarity method: {method}")
-
-    def compare_h5_files(self, h5_path1, h5_path2, method='cosine'):
-        """比较两个h5文件并返回它们的相似度分数"""
-        try:
-            # 获取两个文件的特征向量
-            representation1 = self.load_single_h5(h5_path1)
-            representation2 = self.load_single_h5(h5_path2)
-
-            # 计算并返回相似度
-            similarity = self.calculate_similarity(representation1, representation2, method)
-            return similarity
-
-        except Exception as e:
-            print(f"Error comparing files: {e}")
-            return None
+# ========== 3. 主函数：加载 best_model, 构建 backbone，计算余弦相似度 ==========
 
 def main():
-    parser = argparse.ArgumentParser(description='Calculate similarity between DXF files')
-    parser.add_argument('--model_path', type=str, default=r"/home/vllm/encode/checkpoints/best_model.pth",
-                        help='Path to the trained model checkpoint')
-    parser.add_argument('--file1', type=str, default=r"/home/vllm/encode/data/DeepDXF/TEST_4096/QFN19LA(Cu) -502 Rev1_2.h5",
-                        help='Path to first h5 file')
-    parser.add_argument('--file2', type=str, default=r"/home/vllm/encode/data/DeepDXF/TEST_4096/QFN19LB(Cu) -503 Rev1_2.h5",
-                        help='Path to second h5 file')
-    parser.add_argument('--method', type=str, default='cosine',
-                        choices=['cosine', 'euclidean'],
-                        help='Similarity calculation method')
-
+    parser = argparse.ArgumentParser("SimDeepDXF: compute similarity of two .h5 files by DeepDXF.")
+    parser.add_argument("--h5_file1", type=str, default=r"/home/vllm/encode/data/DeepDXF/augu1/STD-90x270-22.5-1 REV 0.h5", help="Path to the first h5 file")
+    parser.add_argument("--h5_file2", type=str,default=r"/home/vllm/encode/data/DeepDXF/TRAIN_4096/TSSOP38(173mil)(10R)-E(118×202)_8GGP7.303.0108_A_1.h5", help="Path to the second h5 file")
+    parser.add_argument("--model_ckpt", type=str, default=r"/home/vllm/encode/checkpoints/DeepDXF.pth", help="Trained model checkpoint path")
+    parser.add_argument("--gpu_id", type=int, default=1, help="Which GPU to use if available.")
     args = parser.parse_args()
 
-    # 初始化SimDeepDXF
-    sim_dxf = SimDeepDXF(args.model_path)
+    # 1) 设备选择
+    device = torch.device(f"cuda:{args.gpu_id}" if torch.cuda.is_available() else "cpu")
 
-    # 计算相似度
-    similarity = sim_dxf.compare_h5_files(args.file1, args.file2, args.method)
+    # 2) 加载完整模型 + state_dict
+    full_model = DXFTransformer(
+        d_model=256,
+        num_layers=6,
+        dim_z=256,
+        nhead=8,
+        dim_feedforward=512,
+        dropout=0.2,
+        latent_dropout=0.3
+    )
+    checkpoint = torch.load(args.model_ckpt, map_location=device)
+    full_model.load_state_dict(checkpoint["model_state_dict"], strict=True)
 
-    if similarity is not None:
-        print(f"Similarity score: {similarity:.4f}")
+    # 3) 构建 backbone 只保留 embedding->progressive_pool->encoder
+    backbone = DXFBackbone(full_model).to(device)
+    backbone.eval()
+
+    # 4) 分别提取两个文件的表征向量
+    vecA = extract_file_representation(args.h5_file1, backbone, device=device)  # (256,)
+    vecB = extract_file_representation(args.h5_file2, backbone, device=device)  # (256,)
+
+    # 5) 余弦相似度 => [-1,1]，然后归一化到 [0,1]
+    #   cos_sim = cos(vecA, vecB) = (A·B)/(||A||*||B||)
+    #   norm_sim = (cos_sim + 1) / 2
+    a_t = torch.tensor(vecA, dtype=torch.float, device=device)
+    b_t = torch.tensor(vecB, dtype=torch.float, device=device)
+    # 先归一化
+    a_norm = F.normalize(a_t, dim=0)
+    b_norm = F.normalize(b_t, dim=0)
+    cos_sim = torch.dot(a_norm, b_norm).item()  # scalar in [-1,1]
+    sim_01 = (cos_sim + 1.0) / 2.0  # => [0,1]
+
+    # 6) 打印结果
+    print(f"Cosine similarity (raw)   = {cos_sim:.4f}")
+    print(f"Similarity in [0,1] range= {sim_01:.4f}")
 
 if __name__ == "__main__":
     main()
