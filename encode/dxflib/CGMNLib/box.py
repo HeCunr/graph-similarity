@@ -1,5 +1,4 @@
-# !/user/bin/env python3
-# -*- coding: utf-8 -*-
+#dxflib/CGMNLib/box.py
 import ezdxf
 import math
 from ezdxf.entities import BoundaryPathType, EdgeType
@@ -220,7 +219,18 @@ def compute_entity_bounding_box(entity, doc):
                 else:
                     # 未支持的边界路径类型
                     pass
-
+        # 新增 SOLID 实体处理
+        elif entity_type == 'SOLID':
+            # 提取四个顶点（注意：SOLID 可能包含四个顶点，但通常使用前三顶点）
+            points = [
+                (entity.dxf.vtx0.x, entity.dxf.vtx0.y),
+                (entity.dxf.vtx1.x, entity.dxf.vtx1.y),
+                (entity.dxf.vtx2.x, entity.dxf.vtx2.y)
+            ]
+        # 新增 SPLINE 实体处理
+        elif entity_type == 'SPLINE':
+                # 使用控制点（control_points）
+                points = [(p[0], p[1]) for p in entity.control_points]
         else:
             # 对于其他实体类型，尝试使用bbox方法
             bbox = entity.bbox()
@@ -253,10 +263,10 @@ def get_all_entities_bounding_boxes(dxf_file_path):
 
     for entity in msp:
         entity_type = entity.dxftype()
-        # 只处理指定的11种实体类型
-        if entity_type not in ['ARC', 'TEXT', 'MTEXT',
-                               'LWPOLYLINE', 'INSERT',
-                               'DIMENSION', 'LEADER', 'CIRCLE', 'HATCH', 'LINE']:
+        # 只处理指定的12种实体类型
+        if entity_type not in ['LINE', 'CIRCLE', 'ARC', 'LWPOLYLINE', 'TEXT',
+                                   'MTEXT', 'HATCH', 'DIMENSION', 'LEADER', 'INSERT',
+                                   'SPLINE', 'SOLID']:
             continue
 
         bbox = compute_entity_bounding_box(entity, doc)
@@ -274,8 +284,10 @@ def get_all_entities_bounding_boxes(dxf_file_path):
     return entity_bounding_boxes
 
 if __name__ == '__main__':
-    dxf_file_path = r'C:\Users\15653\dwg-cx\dataset\modified\valid_new\QFN22LD(Cu) -532 Rev1_1.dxf'  # 请替换为您的DXF文件路径
+    dxf_file_path = r'C:\srtp\FIRST PAPER\encode\data\DeepDXF\TEST\DFN6BU(NiPdAu)-437 Rev1_1.dxf'  # 请替换为您的DXF文件路径
     bounding_boxes = get_all_entities_bounding_boxes(dxf_file_path)
     for bbox in bounding_boxes:
-        # print(f"实体句柄: {bbox['handle']}, 类型: {bbox['entity_type']}, 外框坐标: (最小X: {bbox['min_x']}, 最小Y: {bbox['min_y']}) - (最大X: {bbox['max_x']}, 最大Y: {bbox['max_y']})")
-        print(f"实体句柄: {bbox['handle']}, 类型: {bbox['entity_type']}")
+        if bbox['entity_type'] == 'SOILD':
+            print(f"实体句柄: {bbox['handle']}, 类型: {bbox['entity_type']}, 外框坐标: (最小X: {bbox['min_x']}, 最小Y: {bbox['min_y']}) - (最大X: {bbox['max_x']}, 最大Y: {bbox['max_y']})")
+        #print(f"实体句柄: {bbox['handle']}, 类型: {bbox['entity_type']}, 外框坐标: (最小X: {bbox['min_x']}, 最小Y: {bbox['min_y']}) - (最大X: {bbox['max_x']}, 最大Y: {bbox['max_y']})")
+        #print(f"实体句柄: {bbox['handle']}, 类型: {bbox['entity_type']}")
