@@ -1,4 +1,4 @@
-#Seq_train.py
+# Seq_train.py
 import torch
 from torch.utils.data import DataLoader, random_split
 import os
@@ -8,59 +8,68 @@ import traceback
 from tqdm import tqdm
 import wandb
 
-# ====== 数据增强函数 ======
-# 如果你的数据增强函数在 Seq_augment.py 中，请保证可以正常导入
-from utils.Seq_augment import  augment_seq_sample
-
+from utils.Seq_augment import augment_seq_sample
 from dataset.Seq_dataset import load_h5_files
 from model.SeqLayers.seq_transformer_encoder import SeqTransformer
 from model.SeqLayers.Seq_loss import SeqContrastiveLoss
 from utils.Seq_early_stopping import EarlyStopping
 from config.Seq_config import SeqConfig
 
-def double_augment_batch(entity_type_t, entity_params_t, device):
-    entity_type_np = entity_type_t.cpu().numpy().astype(np.int32)    # (N, 4096)
-    entity_params_np = entity_params_t.cpu().numpy().astype(np.int32)  # (N, 4096, 43)
+# ========== 新增一个函数，用于对一个 batch 做两份增强并拆分 ==========
 
-    N = entity_type_np.shape[0]
-    aug_types_list = []
-    aug_params_list = []
+def two_augmentations_for_batch(entity_type_t, entity_params_t, device):
+    """
+    对同一个 batch (B,4096), (B,4096,43) 做两份增强：
+    返回:
+      aug1_type, aug1_param  => (B,4096), (B,4096,43)
+      aug2_type, aug2_param  => (B,4096), (B,4096,43)
+    """
+    B = entity_type_t.size(0)
 
-    for i in range(N):
+    # 先转回 CPU numpy，逐样本做 augment_seq_sample
+    entity_type_np = entity_type_t.cpu().numpy().astype(np.int32)      # (B,4096)
+    entity_params_np = entity_params_t.cpu().numpy().astype(np.int32)  # (B,4096,43)
+
+    aug1_types_list = []
+    aug1_params_list = []
+    aug2_types_list = []
+    aug2_params_list = []
+
+    for i in range(B):
         combined_arr = np.zeros((4096, 44), dtype=np.int32)
-        combined_arr[:, 0] = entity_type_np[i, :]  # 实体类型列
-        combined_arr[:, 1:] = entity_params_np[i, :, :43]  # 参数列填充到1~43
+        combined_arr[:, 0] = entity_type_np[i, :]
+        combined_arr[:, 1:] = entity_params_np[i, :, :]
 
-        # 数据增强并验证输出形状
+        # 分别做两份增强
         aug1_44 = augment_seq_sample(combined_arr)
         aug2_44 = augment_seq_sample(combined_arr)
-        assert aug1_44.shape == (4096, 44), "Augmented sample shape mismatch"
 
-        # 拆分时严格限制列范围
-        aug1_type = aug1_44[:, 0].astype(np.int32)
-        aug1_param = aug1_44[:, 1:].astype(np.int32)  # 使用 1: 取剩余所有列
-        aug2_type = aug2_44[:, 0].astype(np.int32)
-        aug2_param = aug2_44[:, 1:].astype(np.int32)
+        # 拆分 => type列+param列
+        aug1_type = aug1_44[:, 0]
+        aug1_param = aug1_44[:, 1:]
+        aug2_type = aug2_44[:, 0]
+        aug2_param = aug2_44[:, 1:]
 
-        aug_types_list.append(aug1_type)
-        aug_types_list.append(aug2_type)
-        aug_params_list.append(aug1_param)
-        aug_params_list.append(aug2_param)
+        aug1_types_list.append(aug1_type)
+        aug1_params_list.append(aug1_param)
+        aug2_types_list.append(aug2_type)
+        aug2_params_list.append(aug2_param)
 
-    # 堆叠并转换为 Tensor
-    aug_types_np = np.stack(aug_types_list, axis=0)   # (2N, 4096)
-    aug_params_np = np.stack(aug_params_list, axis=0) # (2N, 4096, 43)
+    # 拼回 (B,4096), (B,4096,43)
+    aug1_type_t = torch.from_numpy(np.stack(aug1_types_list, axis=0)).long().to(device)
+    aug1_param_t = torch.from_numpy(np.stack(aug1_params_list, axis=0)).long().to(device)
 
-    aug_types_t = torch.from_numpy(aug_types_np).long().to(device)
-    aug_params_t = torch.from_numpy(aug_params_np).long().to(device)
+    aug2_type_t = torch.from_numpy(np.stack(aug2_types_list, axis=0)).long().to(device)
+    aug2_param_t = torch.from_numpy(np.stack(aug2_params_list, axis=0)).long().to(device)
 
-    return aug_types_t, aug_params_t
+    return aug1_type_t, aug1_param_t, aug2_type_t, aug2_param_t
+
 
 class SeqTrainer:
     def __init__(self, cfg):
         self.cfg = cfg
 
-        # ----- 设备选择 -----
+        # 设备
         if torch.cuda.is_available():
             if hasattr(cfg, 'gpu_id'):
                 self.device = torch.device(f"cuda:{cfg.gpu_id}")
@@ -68,7 +77,7 @@ class SeqTrainer:
                 self.device = torch.device("cuda:1")
         else:
             self.device = torch.device("cpu")
-            print("Warning: CUDA is not available, using CPU instead")
+            print("Warning: CUDA not available, using CPU.")
 
         os.makedirs('checkpoints', exist_ok=True)
         self.early_stopping = EarlyStopping(patience=cfg.patience)
@@ -108,18 +117,15 @@ class SeqTrainer:
         )
 
         import math
-
         warmup_epochs = self.cfg.warmup_epochs
         total_epochs  = self.cfg.epochs
 
         def lr_lambda(current_epoch):
             if current_epoch < warmup_epochs:
-                # 线性预热
                 ratio = float(current_epoch) / float(warmup_epochs)
                 factor = 1.0 + (self.cfg.max_lr / self.cfg.initial_lr - 1.0)*ratio
                 return factor
             else:
-                # 余弦退火
                 progress = (current_epoch - warmup_epochs) / float(total_epochs - warmup_epochs)
                 cos_out  = 0.5*(1.0 + math.cos(math.pi * progress))
                 start_scale = self.cfg.max_lr / self.cfg.initial_lr
@@ -136,11 +142,8 @@ class SeqTrainer:
         best_val_loss = float('inf')
 
         for epoch in range(self.cfg.epochs):
-            # 1) 训练
             train_loss = self.train_epoch(train_loader, epoch)
-            # 2) 验证
             val_loss = self.validate(val_loader)
-            # 3) 学习率更新
             current_lr = self.scheduler.get_last_lr()[0]
             self.scheduler.step()
 
@@ -157,7 +160,7 @@ class SeqTrainer:
                     "epoch": epoch
                 })
 
-            # 保存best
+            # 保存 best
             if val_loss < best_val_loss:
                 best_val_loss = val_loss
                 torch.save({
@@ -170,13 +173,11 @@ class SeqTrainer:
                 if self.cfg.use_wandb:
                     wandb.save('checkpoints/best_model.pth')
 
-            # Early stopping
             self.early_stopping(val_loss, self.model, self.optimizer, epoch)
             if self.early_stopping.early_stop:
                 print("Early stopping triggered")
                 break
 
-        # 4) 测试
         test_loss = self.test(test_loader)
         print(f"\nFinal Test Loss: {test_loss:.4f}")
 
@@ -187,9 +188,6 @@ class SeqTrainer:
         return test_loss
 
     def train_epoch(self, dataloader, epoch):
-        """
-        训练阶段: 对每条样本做两次增强 =>(2N,...)。
-        """
         self.model.train()
         total_loss = 0.0
         num_batches = 0
@@ -197,13 +195,18 @@ class SeqTrainer:
         pbar = tqdm(dataloader, desc=f'Epoch {epoch+1}/{self.cfg.epochs}')
         for batch_idx, (entity_type, entity_params) in enumerate(pbar):
             try:
-                entity_type = entity_type.to(self.device)
-                entity_params = entity_params.to(self.device)
+                entity_type = entity_type.to(self.device)       # (B,4096)
+                entity_params = entity_params.to(self.device)   # (B,4096,43)
 
-                # 两次增广 => (2N,...)
-                cat_type, cat_params = double_augment_batch(entity_type, entity_params, self.device)
+                # -- 做两份增强 --
+                aug1_type, aug1_param, aug2_type, aug2_param = two_augmentations_for_batch(
+                    entity_type, entity_params, self.device
+                )
+                # 分别前向
+                proj_z1 = self.model(aug1_type, aug1_param)  # => (B,64,256)
+                proj_z2 = self.model(aug2_type, aug2_param)  # => (B,64,256)
 
-                outputs = self.model(cat_type, cat_params)
+                outputs = {"proj_z1": proj_z1, "proj_z2": proj_z2}
                 losses = self.contrastive_loss(outputs)
                 loss = losses["loss_contrastive"]
 
@@ -229,12 +232,9 @@ class SeqTrainer:
                 print(f"Error in batch {batch_idx}: {str(e)}")
                 continue
 
-        return total_loss / max(num_batches, 1) if num_batches > 0 else float('inf')
+        return total_loss / max(num_batches, 1)
 
     def validate(self, val_loader):
-        """
-        验证阶段 同样两次增广 => (2N,...).
-        """
         self.model.eval()
         total_loss = 0.0
         num_batches = 0
@@ -245,9 +245,13 @@ class SeqTrainer:
                     entity_type = entity_type.to(self.device)
                     entity_params = entity_params.to(self.device)
 
-                    cat_type, cat_params = double_augment_batch(entity_type, entity_params, self.device)
+                    aug1_type, aug1_param, aug2_type, aug2_param = two_augmentations_for_batch(
+                        entity_type, entity_params, self.device
+                    )
+                    proj_z1 = self.model(aug1_type, aug1_param)
+                    proj_z2 = self.model(aug2_type, aug2_param)
 
-                    outputs = self.model(cat_type, cat_params)
+                    outputs = {"proj_z1": proj_z1, "proj_z2": proj_z2}
                     losses = self.contrastive_loss(outputs)
                     loss = losses["loss_contrastive"]
 
@@ -259,13 +263,9 @@ class SeqTrainer:
                     print(f"Error in validation batch {batch_idx}: {str(e)}")
                     continue
 
-        return total_loss / max(num_batches, 1) if num_batches > 0 else float('inf')
+        return total_loss / max(num_batches, 1)
 
     def test(self, test_loader):
-        """
-        测试阶段 同样两次增广 => (2N,...).
-        加载best_model, 计算loss
-        """
         checkpoint = torch.load('checkpoints/best_model.pth', map_location=self.device)
         self.model.load_state_dict(checkpoint['model_state_dict'])
 
@@ -279,9 +279,13 @@ class SeqTrainer:
                     entity_type = entity_type.to(self.device)
                     entity_params = entity_params.to(self.device)
 
-                    cat_type, cat_params = double_augment_batch(entity_type, entity_params, self.device)
+                    aug1_type, aug1_param, aug2_type, aug2_param = two_augmentations_for_batch(
+                        entity_type, entity_params, self.device
+                    )
+                    proj_z1 = self.model(aug1_type, aug1_param)
+                    proj_z2 = self.model(aug2_type, aug2_param)
 
-                    outputs = self.model(cat_type, cat_params)
+                    outputs = {"proj_z1": proj_z1, "proj_z2": proj_z2}
                     losses = self.contrastive_loss(outputs)
                     loss = losses["loss_contrastive"]
 
@@ -293,7 +297,7 @@ class SeqTrainer:
                     print(f"Error in test batch {batch_idx}: {str(e)}")
                     continue
 
-        avg_test_loss = total_loss / max(num_batches, 1) if num_batches > 0 else float('inf')
+        avg_test_loss = total_loss / max(num_batches, 1)
         print(f"Test Loss: {avg_test_loss:.4f}")
         return avg_test_loss
 
@@ -349,18 +353,15 @@ def main(args):
         if cfg.use_wandb:
             wandb.finish()
 
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Train SeqTransformer with InfoNCE loss')
-    parser.add_argument('--data_dir', type=str, default=r"/home/vllm/encode/data/Seq/TRAIN_4096",  help='Directory containing h5 files')
-    parser.add_argument('--batch_size', type=int, default=32, help='Batch size for training')
-    parser.add_argument('--epochs', type=int, default=100, help='Number of epochs to train')
-    parser.add_argument('--gpu_id', type=int, default=1, help='GPU ID to use (default: 1)')
+    parser.add_argument('--data_dir', type=str, default=r"/home/vllm/encode/data/Seq/TRAIN_4096", help='Directory containing h5 files')
+    parser.add_argument('--batch_size', type=int, default=32, help='Batch size')
+    parser.add_argument('--epochs', type=int, default=100, help='Number of epochs')
+    parser.add_argument('--gpu_id', type=int, default=1, help='GPU ID to use')
 
     parser.add_argument('--wandb_project', type=str, default="Seq", help='Wandb project name')
     parser.add_argument('--wandb_entity', type=str, default=None, help='Wandb entity(username)')
     parser.add_argument('--wandb_name', type=str, default=None, help='Wandb run name')
     args = parser.parse_args()
     main(args)
-
-

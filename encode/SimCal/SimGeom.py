@@ -22,7 +22,7 @@ def parse_args():
                         help="Path to the first JSON file (graph).")
     parser.add_argument('--json2', type=str, default="/home/vllm/encode/data/Geom/TEST_4096/QFN28LK(Cu)-90-450 Rev1_5.json",
                         help="Path to the second JSON file (graph).")
-    parser.add_argument('--checkpoint', type=str, default="/home/vllm/encode/pretrained/Geom/best_checkpoint.pt",
+    parser.add_argument('--checkpoint', type=str, default="/home/vllm/encode/logs/Geom/PROTEINS_20250126_101652/checkpoints/batch_size16_epochs50.pt",
                         help="Path to the trained checkpoint file.")
     parser.add_argument('--graph_init_dim', type=int, default=44,
                         help="Node init dim (must match training).")

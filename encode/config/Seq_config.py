@@ -2,7 +2,7 @@
 class SeqConfig:
     def __init__(self, args):
         # 默认数据目录
-        self.data_dir = args.data_dir or r'/home/vllm/encode/data/Seq/TRAIN_4096'
+        self.data_dir = r'/home/vllm/encode/data/Seq/TRAIN_4096'
 
         # 模型参数
         self.d_model = 256
@@ -40,7 +40,7 @@ class SeqConfig:
         self.weight_decay = 1e-4
 
         # wandb配置
-        self.wandb_project = args.wandb_project or "Seq"
-        self.wandb_entity = args.wandb_entity or "102201525-fuzhou-university"
-        self.wandb_name = args.wandb_name or "Seq"
+        self.wandb_project = "Seq"
+        self.wandb_entity =  "102201525-fuzhou-university"
+        self.wandb_name =  "Seq"
         self.use_wandb = True
