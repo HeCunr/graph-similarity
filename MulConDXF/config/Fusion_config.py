@@ -22,10 +22,10 @@ def load_fusion_args():
     # 数据集路径
     # ----------------------
     # Geom 原始数据目录
-    parser.add_argument('--geom_data_dir', type=str, default='/home/vllm/encode/data/Geom/TRAIN_4096',
+    parser.add_argument('--geom_data_dir', type=str, default='/home/vllm/MulConDXF/data/Geom/TRAIN_4096',
                         help='root directory for the geometric graph dataset (.json)')
     # Seq 原始数据目录
-    parser.add_argument('--seq_data_dir', type=str, default='/home/vllm/encode/data/Seq/TRAIN_4096',
+    parser.add_argument('--seq_data_dir', type=str, default='/home/vllm/MulConDXF/data/Seq/TRAIN_4096',
                         help='root directory for the sequence dataset (.h5)')
 
     # ----------------------
@@ -47,7 +47,7 @@ def load_fusion_args():
     parser.add_argument('--drop_edge1', type=float, default=0.2)
     parser.add_argument('--drop_edge2', type=float, default=0.3)
     parser.add_argument("--tau_geom", type=float, default=0.7, help="Temperature for Geom-Geom CL")
-
+    parser.add_argument("--dropout_geom", type=float, default=0.1)
     # ----------------------
     # 序列侧模型相关
     # ----------------------
@@ -58,7 +58,6 @@ def load_fusion_args():
     parser.add_argument("--dim_feedforward", type=int, default=512)
     parser.add_argument("--dropout_seq", type=float, default=0.1)
     parser.add_argument("--tau_seq", type=float, default=0.7, help="Temperature for Seq-Seq CL")
-
     # ----------------------
     # 学习率调度 & 优化器
     # ----------------------
@@ -67,21 +66,27 @@ def load_fusion_args():
     parser.add_argument("--min_lr", type=float, default=1e-5, help="final minimal LR in cos decay")
     parser.add_argument("--warmup_ratio", type=float, default=0.1,
                         help="fraction of epochs for linear warmup to lr_peak, then cos decay back to min_lr")
-
     # ----------------------
     # 融合对比学习部分
     # ----------------------
+    # 在 load_fusion_args() 里，和其他 parser.add_argument 同级位置，添加：
+    parser.add_argument('--train_split', type=float, default=0.7,
+                        help='proportion of data for training')
+    parser.add_argument('--val_split', type=float, default=0.15,
+                        help='proportion of data for validation')
+    parser.add_argument('--test_split', type=float, default=0.15,
+                        help='proportion of data for testing')
+
     parser.add_argument("--temperature_fusion", type=float, default=0.07,
-                        help="Temperature for Geom-Seq CL (CLIP style)")
+                            help="Temperature for Geom-Seq CL (CLIP style)")
     parser.add_argument("--lambda1", type=float, default=1.0, help="Weight for L_GG")
     parser.add_argument("--lambda2", type=float, default=1.0, help="Weight for L_SS")
     parser.add_argument("--lambda3", type=float, default=1.0, help="Weight for L_GS")
-
     # ----------------------
     # 其余如 wandb/logging ...
     # ----------------------
     parser.add_argument("--disable_wandb", action='store_true', help="Disable W&B logging")
-    parser.add_argument("--log_path", type=str, default="/home/vllm/encode/logs/Fusion")
+    parser.add_argument("--log_path", type=str, default="/home/vllm/MulConDXF/logs/Fusion")
 
     args = parser.parse_args()
     return args

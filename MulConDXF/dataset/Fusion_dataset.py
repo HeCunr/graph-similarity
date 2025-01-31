@@ -65,17 +65,16 @@ class FusionDataset(Dataset):
 
         # ---- 读取 seq h5 (未增强) ----
         with h5py.File(h5_path, 'r') as hf:
-            seq_data = hf['data'][:]   # [4096,44] 假设已固定
-        # 如果需要 mask 之类，也可自己构造
+            seq_data = hf['dxf_vec'][:]   # 确保读出的是[4096,44]
+            seq_data = seq_data.reshape(self.max_nodes, 44)  # 显式指定形状
 
         return {
             "geom_feat": geom_feat,   # [4096,44]
             "geom_adj":  geom_adj,    # [4096,4096]
             "geom_mask": geom_mask,   # [4096]
-            "seq_data":  seq_data,    # [4096,44] (示例)
+            "seq_data":  seq_data,    # [4096,44]
             "filename":  base
         }
-
 
 def fusion_collate_fn(batch):
     geom_feats = []

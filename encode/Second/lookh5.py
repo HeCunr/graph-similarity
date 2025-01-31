@@ -43,7 +43,7 @@ def view_h5_contents(file_path):
 
 if __name__ == "__main__":
     # 根据需要修改文件路径
-    file_path1 = r'/home/vllm/encode/data/DeepDXF/augu1/STD-90x270-22.5-1 REV 0.h5'
-    file_path2 =  r'/home/vllm/encode/data/DeepDXF/augu2/STD-90x270-22.5-1 REV 0.h5'
+    file_path1 = r'/home/vllm/encode/data/Seq/TRAIN_4096/STD-83x269.6-15-2 REV A.h5'
+    #file_path2 =  r'/home/vllm/encode/data/DeepDXF/augu2/STD-90x270-22.5-1 REV 0.h5'
     view_h5_contents(file_path1)
-    view_h5_contents(file_path2)
+    #view_h5_contents(file_path2)

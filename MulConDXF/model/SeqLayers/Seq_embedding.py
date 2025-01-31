@@ -31,7 +31,6 @@ class SeqEmbedding(nn.Module):
 
     def forward(self, entity_type, entity_params):
         batch_size, sequence_length = entity_type.shape
-
         entity_type_embed = self.entity_embed(entity_type)
 
         entity_params_embed = self.param_embed1(entity_params.long() + 1)  # Shift by 1 to handle -1
@@ -40,7 +39,6 @@ class SeqEmbedding(nn.Module):
 
         entity_embed = entity_type_embed + entity_params_embed
         entity_embed = self.pos_encoding(entity_embed)
-        #print(f"Embedding shape: {entity_embed.shape}")
-        # print(f"Embedding: {entity_embed}")
+
         return entity_embed
 

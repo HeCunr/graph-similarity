@@ -1,4 +1,4 @@
-# utils/Gemo_utils.py
+# utils/Geom_utils.py
 import os
 import random
 import logging
@@ -148,14 +148,13 @@ def prepare_batch_data(pairs: List[Tuple[GraphData, GraphData]], device: torch.d
         feat1, adj_mat1, mask1 = g1.matrices
         feat2, adj_mat2, mask2 = g2.matrices
 
-        # Convert to double precision
-        features1.append(torch.tensor(feat1, dtype=torch.float64))
-        adj1.append(torch.tensor(adj_mat1, dtype=torch.float64))
-        masks1.append(torch.tensor(mask1, dtype=torch.float64))
+        features1.append(torch.tensor(feat1, dtype=torch.float32))
+        adj1.append(torch.tensor(adj_mat1, dtype=torch.float32))
+        masks1.append(torch.tensor(mask1, dtype=torch.float32))
 
-        features2.append(torch.tensor(feat2, dtype=torch.float64))
-        adj2.append(torch.tensor(adj_mat2, dtype=torch.float64))
-        masks2.append(torch.tensor(mask2, dtype=torch.float64))
+        features2.append(torch.tensor(feat2, dtype=torch.float32))
+        adj2.append(torch.tensor(adj_mat2, dtype=torch.float32))
+        masks2.append(torch.tensor(mask2, dtype=torch.float32))
 
     # 堆叠成 batch 维度
     features1 = torch.stack(features1).to(device)  # [B, N, F]
