@@ -6,7 +6,7 @@ parser = argparse.ArgumentParser(description="Geom model for graph matching")
 # Data parameters
 parser.add_argument('--data_dir', type=str, default='/home/vllm/encode/data/Geom/TRAIN_4096',
                     help='root directory for the graph dataset')
-parser.add_argument('--dataset', type=str, default="PROTEINS",
+parser.add_argument('--dataset', type=str, default="Geom",
                     help='name of the dataset')
 parser.add_argument('--graph_size_max', type=int, default=4096,
                     help='maximum number of nodes in a graph')
@@ -14,46 +14,48 @@ parser.add_argument('--graph_init_dim', type=int, default=44,
                     help='initial feature dimension for graph nodes')
 
 # Model architecture parameters
-parser.add_argument("--filters", type=str, default='100_100_100',
+parser.add_argument("--filters", type=str, default='128_128_128',
                     help="Filter dimensions for graph convolution network")
 parser.add_argument("--conv", type=str, default='ggnn',
                     help="Type of GNN layer (gcn/graphsage/gin/ggnn)")
-parser.add_argument("--match", type=str, default='concat',
-                    help="Node matching method (concat/bilinear)")
-parser.add_argument("--perspectives", type=int, default=100,
+parser.add_argument("--alignment", type=str, default='concat',
+                    help="Node alignment method (concat/bilinear)")
+parser.add_argument("--perspectives", type=int, default=128,
                     help='number of perspectives for matching')
 
 # Data augmentation parameters
-parser.add_argument('--drop_feature1', type=float, default=0.4,
+parser.add_argument('--drop_feature1', type=float, default=0.3,
                     help='feature dropout rate for first view')
-parser.add_argument('--drop_feature2', type=float, default=0.1,
+parser.add_argument('--drop_feature2', type=float, default=0.4,
                     help='feature dropout rate for second view')
-parser.add_argument('--drop_edge1', type=float, default=0.2,
+parser.add_argument('--drop_edge1', type=float, default=0.4,
                     help='edge dropout rate for first view')
-parser.add_argument('--drop_edge2', type=float, default=0.3,
+parser.add_argument('--drop_edge2', type=float, default=0.1,
                     help='edge dropout rate for second view')
+parser.add_argument('--drop_pos1', type=float, default=0.3,
+                    help='pos2d dropout rate for first view ')
+parser.add_argument('--drop_pos2', type=float, default=0.4,
+                    help='pos2d dropout rate for second view')
 
 # Training parameters
 parser.add_argument('--epochs', type=int, default=50,
                     help='number of training epochs')
-parser.add_argument('--batch_size', type=int, default=16,
+parser.add_argument('--batch_size', type=int, default=32,
                     help='number of graphs per batch')
 
-# 数据划分
 parser.add_argument('--train_split', type=float, default=0.7,
                     help='proportion of data for training')
 parser.add_argument('--val_split', type=float, default=0.15,
                     help='proportion of data for validation')
 parser.add_argument('--test_split', type=float, default=0.15,
                     help='proportion of data for testing')
-
 parser.add_argument('--patience', type=int, default=30,
                     help='patience for early stopping')
-parser.add_argument("--lr", type=float, default=1e-5,
+parser.add_argument("--lr", type=float, default=1e-3,
                     help="Learning rate")
 parser.add_argument("--dropout", type=float, default=0.1,
                     help="Dropout probability")
-parser.add_argument("--tau", type=float, default=0.7,
+parser.add_argument("--tau", type=float, default=1.0,
                     help="Temperature parameter for contrastive loss")
 
 # System parameters
@@ -76,5 +78,4 @@ parser.add_argument('--wandb_log_freq', type=int, default=100,
 parser.add_argument('--disable_wandb', action='store_true',
                     help='Disable Weights & Biases logging')
 
-# 解析参数
 geom_args = parser.parse_args()

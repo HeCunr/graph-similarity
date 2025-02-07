@@ -10,8 +10,9 @@ dataset/Geom_process.py
    - 若实体有该参数，则进行归一化与量化后赋值；
 4. 计算邻接表 succs；
 5. 将处理结果以 JSON 字典的形式写入到 "文件名.json" 文件（单行）。
+   - 不再包含 "fname" 字段；
+   - 新增 "2D-index" 字段，记录每个实体外包盒中心点的归一化量化坐标。
 """
-#dataset/Geom_process.py
 import os
 import json
 import math
@@ -19,7 +20,7 @@ import ezdxf
 import numpy as np
 
 # 请根据实际项目的文件结构修改以下导入路径
-from dxflib.CGMNLib.box import compute_entity_bounding_box
+from dxflib.GeomLib.box import compute_entity_bounding_box
 from dataset.Seq_process import (
     get_bounding_box,    # 用于计算整个 DXF 文件的全局边界框
     normalize_coordinate,
@@ -29,7 +30,6 @@ from dataset.Seq_process import (
 ###############################################################################
 # 1. 实体类型映射以及特征列下标定义
 ###############################################################################
-# 题目指定的 12 种实体类型及其编码：
 ENTITY_TYPE_ORDER = [
     'LINE', 'CIRCLE', 'ARC', 'LWPOLYLINE', 'TEXT',
     'MTEXT', 'HATCH', 'DIMENSION', 'LEADER', 'INSERT',
@@ -84,7 +84,7 @@ ENTITY_TYPE_MAP = {etype: idx for idx, etype in enumerate(ENTITY_TYPE_ORDER)}
 # 43: solid_points_y
 
 ###############################################################################
-# 2. 量化函数：将已经归一化到 [-1, 1] 或经过特殊处理的角度值映射到 [0, 255]
+# 2. 量化函数：将已经归一化到 [-1, 1] 或经过特殊处理的角度值映射到 [0, 255] 的整数
 ###############################################################################
 def quantize_value(value: float, is_angle: bool = False) -> int:
     """
@@ -316,10 +316,14 @@ def extract_features(entity, doc,
         elif etype == 'SOLID':
             # vtx0, vtx1, vtx2, vtx3 (一般前三个)
             vtxs = []
-            if hasattr(entity.dxf, 'vtx0'): vtxs.append((entity.dxf.vtx0.x, entity.dxf.vtx0.y))
-            if hasattr(entity.dxf, 'vtx1'): vtxs.append((entity.dxf.vtx1.x, entity.dxf.vtx1.y))
-            if hasattr(entity.dxf, 'vtx2'): vtxs.append((entity.dxf.vtx2.x, entity.dxf.vtx2.y))
-            if hasattr(entity.dxf, 'vtx3'): vtxs.append((entity.dxf.vtx3.x, entity.dxf.vtx3.y))
+            if hasattr(entity.dxf, 'vtx0'):
+                vtxs.append((entity.dxf.vtx0.x, entity.dxf.vtx0.y))
+            if hasattr(entity.dxf, 'vtx1'):
+                vtxs.append((entity.dxf.vtx1.x, entity.dxf.vtx1.y))
+            if hasattr(entity.dxf, 'vtx2'):
+                vtxs.append((entity.dxf.vtx2.x, entity.dxf.vtx2.y))
+            if hasattr(entity.dxf, 'vtx3'):
+                vtxs.append((entity.dxf.vtx3.x, entity.dxf.vtx3.y))
             if len(vtxs) > 0:
                 x_sum = sum(p[0] for p in vtxs)
                 y_sum = sum(p[1] for p in vtxs)
@@ -347,6 +351,8 @@ def process_single_dxf(dxf_path: str, output_dir: str = None):
        - 对于某字段若实体没有 => 该位置 -1；
     4) 计算邻接表；
     5) 写出到 "xxx.json"（单行 JSON）。
+       - 新增 "2D-index" 字段，每个实体的外包盒中心点(x,y)均归一化+量化到[0,255]。
+       - 去掉 "fname"。
     """
     if not os.path.isfile(dxf_path):
         print(f"文件不存在：{dxf_path}")
@@ -374,7 +380,7 @@ def process_single_dxf(dxf_path: str, output_dir: str = None):
     # 按照句柄升序排序
     valid_entities.sort(key=lambda ent: int(ent.dxf.handle, 16))
 
-    # 整个文件的边界框，用于归一化(在 dataset/dxf_process_DeepDXF 里)
+    # 整个文件的边界框，用于归一化(在 dataset/Seq_process.py 里)
     min_x, min_y, max_x, max_y = get_bounding_box(doc)
     width = max_x - min_x
     height = max_y - min_y
@@ -387,11 +393,14 @@ def process_single_dxf(dxf_path: str, output_dir: str = None):
         row = extract_features(ent, doc, min_x, min_y, max_x, max_y, max_dim)
         features[i, :] = row
 
-    # 计算实体边界框 => 用于判断邻接
+    # 计算实体边界框 => 用于判断邻接 & 2D-index
     bounding_boxes = []
     for ent in valid_entities:
         box = compute_entity_bounding_box(ent, doc)
-        bounding_boxes.append(box if box else (0, 0, 0, 0))
+        if box is None:
+            bounding_boxes.append((0, 0, 0, 0))  # 如果无法获取外包盒
+        else:
+            bounding_boxes.append(box)
 
     # 构建邻接表
     succs = [[] for _ in range(n)]
@@ -403,14 +412,28 @@ def process_single_dxf(dxf_path: str, output_dir: str = None):
                 succs[i].append(j)
                 succs[j].append(i)
 
+    # 计算 "2D-index"：取外包盒中心点 (cx, cy)，归一化并量化到 [0,255]
+    def normX(x):
+        return quantize_value(normalize_coordinate(x, min_x, max_x))
+
+    def normY(y):
+        return quantize_value(normalize_coordinate(y, min_y, max_y))
+
+    two_d_index = []
+    for (bx_min, by_min, bx_max, by_max) in bounding_boxes:
+        cx = (bx_min + bx_max) / 2.0
+        cy = (by_min + by_max) / 2.0
+        two_d_index.append([normX(cx), normY(cy)])
+
     # 组装输出
     dxf_name = os.path.basename(dxf_path)
     result_dict = {
         "src": dxf_name,
         "n_num": n,
         "succs": succs,
-        "features": features.tolist(),  # 可 JSON 序列化
-        "fname": dxf_name
+        "features": features.tolist(),
+        # 去掉 "fname", 增加 "2D-index"
+        "2D-index": two_d_index
     }
 
     if not output_dir:
@@ -432,8 +455,8 @@ def process_single_dxf(dxf_path: str, output_dir: str = None):
 if __name__ == "__main__":
     import glob
 
-    input_dir = r"/home/vllm/encode/data/TEST"  # TODO: 修改为实际 DXF 目录
-    output_dir = r"/home/vllm/encode/data/GF/TEST_4096"          # TODO: 修改为输出 json 目录
+    input_dir = r"/home/vllm/encode/data/TRAIN"  # TODO: 修改为实际 DXF 目录
+    output_dir = r"/home/vllm/encode/data/Geom/TRAIN_4096"  # TODO: 修改为输出 json 目录
 
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -441,5 +464,3 @@ if __name__ == "__main__":
     dxf_files = glob.glob(os.path.join(input_dir, "*.dxf"))
     for dxf_file in dxf_files:
         process_single_dxf(dxf_file, output_dir)
-
-

@@ -2,11 +2,15 @@
 
 import numpy as np
 import torch
-from typing import Optional
 import os
+from typing import Optional
 
 class EarlyStopping:
-    """Early stops the training if contrastive loss doesn't improve after a given patience"""
+    """
+    简化版 EarlyStopping:
+    仅根据 val_loss (越低越好) 进行保存和判停。
+    不再保存/加载任何 pooling_module, 只保存当前 model/optimizer 状态。
+    """
     def __init__(
             self,
             patience: int = 30,
@@ -16,14 +20,12 @@ class EarlyStopping:
             trace_func: Optional[callable] = print
     ):
         """
-        Initialize early stopping
-
         Args:
-            patience (int): How long to wait after last improvement
-            verbose (bool): If True, prints a message for each improvement
-            delta (float): Minimum change in monitored quantity to qualify as an improvement
-            path (str): Path for the checkpoint to be saved to
-            trace_func (callable): Function for logging
+            patience: 允许多少次 val_loss 未提升
+            verbose: 是否打印提示
+            delta: 最小提升阈值
+            path: 保存的 checkpoint 路径
+            trace_func: 打印函数
         """
         self.patience = patience
         self.verbose = verbose
@@ -33,118 +35,68 @@ class EarlyStopping:
         self.val_loss_min = np.Inf
         self.delta = delta
         self.path = path
-        self.trace_func = trace_func or print
+        self.trace_func = trace_func
 
-        # Create directory for checkpoint if it doesn't exist
-        os.makedirs(os.path.dirname(self.path), exist_ok=True)
+        # 若需要可在此创建目录
+        save_dir = os.path.dirname(self.path)
+        if save_dir and not os.path.exists(save_dir):
+            os.makedirs(save_dir)
 
-    def __call__(
-            self,
-            val_loss: float,
-            model: torch.nn.Module,
-            pooling_module: torch.nn.Module,
-            epoch: int,
-            optimizer: torch.optim.Optimizer
-    ) -> bool:
+    def __call__(self, val_loss: float, model: torch.nn.Module, epoch: int, optimizer: torch.optim.Optimizer) -> bool:
         """
-        Call early stopping check
-
-        Args:
-            val_loss: Validation loss value
-            model: Model to save
-            pooling_module: The aggregator/pooling module to save
-            epoch: Current epoch number
-            optimizer: Optimizer state to save
-
-        Returns:
-            bool: True if training should stop
+        如果 val_loss 没有改善 -> 计数+1
+        如果 val_loss 改善 -> 保存 & 重置计数
+        超过 patience -> 早停
         """
-        score = -val_loss  # We want to maximize -loss
+        score = -val_loss  # 越小越好 => -val_loss 越大越好
 
         if self.best_score is None:
             self.best_score = score
-            self.save_checkpoint(val_loss, model, pooling_module, epoch, optimizer)
+            self._save_checkpoint(val_loss, model, epoch, optimizer)
         elif score < self.best_score + self.delta:
             self.counter += 1
-            self.trace_func(f'EarlyStopping counter: {self.counter} out of {self.patience}')
+            if self.trace_func:
+                self.trace_func(f"EarlyStopping counter: {self.counter} of {self.patience}")
             if self.counter >= self.patience:
                 self.early_stop = True
         else:
             self.best_score = score
-            self.save_checkpoint(val_loss, model, pooling_module, epoch, optimizer)
+            self._save_checkpoint(val_loss, model, epoch, optimizer)
             self.counter = 0
 
         return self.early_stop
 
-    def save_checkpoint(
-            self,
-            val_loss: float,
-            model: torch.nn.Module,
-            pooling_module: torch.nn.Module,
-            epoch: int,
-            optimizer: torch.optim.Optimizer
-    ):
+    def _save_checkpoint(self, val_loss: float, model: torch.nn.Module, epoch: int, optimizer: torch.optim.Optimizer):
         """
-        Save model + pooling module checkpoint
-
-        Args:
-            val_loss: Validation loss value
-            model: Model to save
-            pooling_module: The aggregator/pooling module to save
-            epoch: Current epoch number
-            optimizer: Optimizer state to save
+        仅保存 model/optimizer 的状态
         """
-        if self.verbose:
-            self.trace_func(
-                f'Validation loss decreased ({self.val_loss_min:.6f} --> {val_loss:.6f}). '
-                'Saving model ...'
-            )
+        if self.verbose and self.trace_func:
+            self.trace_func(f"Validation loss decreased ({self.val_loss_min:.6f} --> {val_loss:.6f}). Saving model...")
 
-        # Save state
         state = {
             'epoch': epoch,
             'model_state_dict': model.state_dict(),
-            'pooling_module_state_dict': pooling_module.state_dict(),  # 注意这里！
             'optimizer_state_dict': optimizer.state_dict(),
             'loss': val_loss
         }
         torch.save(state, self.path)
         self.val_loss_min = val_loss
 
-    def load_checkpoint(
-            self,
-            model: torch.nn.Module,
-            pooling_module: torch.nn.Module,
-            optimizer: Optional[torch.optim.Optimizer] = None
-    ) -> tuple:
+    def load_checkpoint(self, model: torch.nn.Module, optimizer: Optional[torch.optim.Optimizer] = None):
         """
-        Load best checkpoint
-
-        Args:
-            model: Model to load weights into
-            pooling_module: The aggregator/pooling module to load weights into
-            optimizer: Optimizer to load state into (if provided)
-
-        Returns:
-            tuple: (epoch, loss) from checkpoint
+        加载最佳模型
         """
         if not os.path.exists(self.path):
             raise FileNotFoundError(f"No checkpoint found at {self.path}")
 
-        checkpoint = torch.load(self.path)
-
+        checkpoint = torch.load(self.path, map_location=model.device if hasattr(model, 'device') else 'cpu')
         model.load_state_dict(checkpoint['model_state_dict'])
-        # 同时加载 pooling_module 的权重
-        if 'pooling_module_state_dict' in checkpoint:
-            pooling_module.load_state_dict(checkpoint['pooling_module_state_dict'])
-
         if optimizer is not None:
             optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
-
         return checkpoint['epoch'], checkpoint['loss']
 
     def reset(self):
-        """Reset early stopping state"""
+        """手动重置计数等状态"""
         self.counter = 0
         self.best_score = None
         self.early_stop = False
