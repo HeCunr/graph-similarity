@@ -129,10 +129,6 @@ def main():
     # 1) 解析命令行参数
     args_cli = parse_args()
 
-    # 2) 可以根据需要修改 geom_args 的一些默认值，例如:
-    # geom_args.gpu_index = '0'
-    # ...
-
     # 固定随机种子 & 设备
     set_seed(geom_args.seed)
     device = get_device(geom_args)
@@ -154,12 +150,12 @@ def main():
 
     # 6) 加载已训练好的 GeomModel
     model = GeomModel(
-        init_dim=feature_dim,
-        d_model=32
+        args=geom_args,
+        d_model=256
     ).to(device)
 
     # 你的权重文件
-    ckpt_path = "/home/vllm/encode/checkpoints/best_model.pt"
+    ckpt_path = "/home/vllm/encode/checkpoints/Geom/N3_Layer1_GGNN.pt"
     checkpoint = torch.load(ckpt_path, map_location=device)
     model.load_state_dict(checkpoint['model_state_dict'])
     model.eval()

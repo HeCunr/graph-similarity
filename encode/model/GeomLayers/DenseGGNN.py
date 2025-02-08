@@ -11,7 +11,7 @@ class DenseGGNN(nn.Module):
     Dense implementation of Gated Graph Neural Networks.
     Handles batched dense adjacency matrices by converting to sparse format internally.
     """
-    def __init__(self, out_channels: int, num_layers: int = 3):
+    def __init__(self, out_channels: int, num_layers: int = 1):
         super(DenseGGNN, self).__init__()
         self.out_channels = out_channels
         self.num_layers = num_layers

@@ -134,7 +134,7 @@ def main():
                         help="Path to ground truth JSON")
     parser.add_argument("--folder_path", default=r"/home/vllm/encode/data/Seq/TEST_4096",
                         help="Folder containing .h5 files")
-    parser.add_argument("--model_path", default=r"/home/vllm/encode/pretrained/Seq/batch_size100_epochs100.pth",
+    parser.add_argument("--model_path", default=r"/home/vllm/encode/checkpoints/Seq/Seq_align.pth",
                         help="Trained model checkpoint path")
     parser.add_argument("--top_n", type=int, default=10,
                         help="Number of top similar files to retrieve")

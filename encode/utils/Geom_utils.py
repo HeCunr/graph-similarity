@@ -47,6 +47,19 @@ def aug_random_edge(adj: torch.Tensor, drop_percent: float) -> torch.Tensor:
     new_adj = torch.stack(new_adj_list, dim=0).to(adj.device)
     return new_adj
 
+def drop_pos2d(pos2d: torch.Tensor, drop_prob: float):
+    """
+    对 pos2d 做简单的“dropout”，随机将部分坐标置为 0。
+    pos2d: [B, N, 2]
+    drop_prob: 0 ~ 1
+    """
+    B, N, _ = pos2d.shape
+    # 这里的做法类似特征dropout: 每个sample中的若干坐标被置0
+    for i in range(B):
+        drop_mask = torch.empty((N,), device=pos2d.device).uniform_(0,1) < drop_prob
+        pos2d[i, drop_mask, :] = 0.0
+    return pos2d
+
 def collate_graphs(batch: List[GraphData]):
     """
     输出:

@@ -15,11 +15,10 @@ import numpy as np
 from config.Geom_config import geom_args
 from dataset.Geom_dataset import GeomDataset
 # 引入新的 collate_graphs
-from utils.Geom_utils import get_device, set_seed, collate_graphs, drop_feature, aug_random_edge
+from utils.Geom_utils import get_device, set_seed, collate_graphs, drop_feature, aug_random_edge,drop_pos2d
 from utils.Geom_early_stopping import EarlyStopping, os
 from model.GeomLayers.GeomModel import GeomModel
 from model.GeomLayers.GeomAlignment import NodeAlignmentHead
-from utils.Geom_position import drop_pos2d
 
 class GeomTrainer:
     def __init__(self, args):
@@ -45,13 +44,13 @@ class GeomTrainer:
 
         # 核心模型
         self.model = GeomModel(
-            init_dim=args.graph_init_dim,
-            d_model=32
+            args=args,
+            d_model=256
         ).to(self.device)
 
         # 对齐 + 节点级对比损失
         self.alignment_head = NodeAlignmentHead(
-            d_model=32,
+            d_model=256,
             alignment=args.alignment,
             perspectives=args.perspectives,
             tau=args.tau
@@ -81,7 +80,7 @@ class GeomTrainer:
         os.makedirs("checkpoints", exist_ok=True)
         self.early_stopping = EarlyStopping(
             patience=args.patience,
-            path="checkpoints/Geom/N3_Layer3.pt"
+            path="checkpoints/Geom/N3_Layer1_GGNN.pt"
         )
 
     def _lr_scale(self, epoch):

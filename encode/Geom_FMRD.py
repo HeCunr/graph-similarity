@@ -217,11 +217,11 @@ def main():
     # ============ 加载已训练好的 GeomModel ============
     device = torch.device("cuda" if torch.cuda.is_available() and int(geom_args.gpu_index) >= 0 else "cpu")
     model = GeomModel(
-        init_dim=geom_args.graph_init_dim,  # 44
-        d_model=32
+        args=geom_args,
+        d_model=256
     ).to(device)
 
-    ckpt_path = "/home/vllm/encode/checkpoints/best_model.pt"
+    ckpt_path = "/home/vllm/encode/checkpoints/Geom/N3_Layer1_GGNN.pt"
     checkpoint = torch.load(ckpt_path, map_location=device)
     model.load_state_dict(checkpoint["model_state_dict"])
     model.eval()

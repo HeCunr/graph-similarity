@@ -40,7 +40,5 @@ class SeqEmbedding(nn.Module):
 
         entity_embed = entity_type_embed + entity_params_embed
         entity_embed = self.pos_encoding(entity_embed)
-        #print(f"Embedding shape: {entity_embed.shape}")
-        # print(f"Embedding: {entity_embed}")
         return entity_embed
 

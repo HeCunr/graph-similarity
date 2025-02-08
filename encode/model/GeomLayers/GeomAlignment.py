@@ -8,7 +8,7 @@ class NodeAlignmentHead(nn.Module):
     用于跨视图的节点对齐 + 节点级 InfoNCE。
     假设输入均为 [B, N, d_model]。
     """
-    def __init__(self, d_model: int, alignment='concat', perspectives=128, tau=1.0):
+    def __init__(self, d_model: int, alignment='concat', perspectives=256, tau=1.0):
         super().__init__()
         self.d_model = d_model
         self.alignment = alignment

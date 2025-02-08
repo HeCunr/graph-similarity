@@ -14,13 +14,13 @@ parser.add_argument('--graph_init_dim', type=int, default=44,
                     help='initial feature dimension for graph nodes')
 
 # Model architecture parameters
-parser.add_argument("--filters", type=str, default='128_128_128',
+parser.add_argument("--filters", type=str, default='256_256_256',
                     help="Filter dimensions for graph convolution network")
 parser.add_argument("--conv", type=str, default='ggnn',
                     help="Type of GNN layer (gcn/graphsage/gin/ggnn)")
 parser.add_argument("--alignment", type=str, default='concat',
                     help="Node alignment method (concat/bilinear)")
-parser.add_argument("--perspectives", type=int, default=128,
+parser.add_argument("--perspectives", type=int, default=256,
                     help='number of perspectives for matching')
 
 # Data augmentation parameters

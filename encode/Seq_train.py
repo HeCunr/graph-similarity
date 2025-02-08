@@ -1,4 +1,4 @@
-# Seq_train.py
+#Seq_train.py
 import torch
 from torch.utils.data import DataLoader, random_split
 import os
@@ -11,11 +11,11 @@ import wandb
 from utils.Seq_augment import augment_seq_sample
 from dataset.Seq_dataset import load_h5_files
 from model.SeqLayers.seq_transformer_encoder import SeqTransformer
+from model.SeqLayers.SeqAlignment import NodeAlignmentHead
 from model.SeqLayers.Seq_loss import SeqContrastiveLoss
 from utils.Seq_early_stopping import EarlyStopping
 from config.Seq_config import SeqConfig
-
-# ========== 新增一个函数，用于对一个 batch 做两份增强并拆分 ==========
+import math
 
 def two_augmentations_for_batch(entity_type_t, entity_params_t, device):
     """
@@ -27,8 +27,8 @@ def two_augmentations_for_batch(entity_type_t, entity_params_t, device):
     B = entity_type_t.size(0)
 
     # 先转回 CPU numpy，逐样本做 augment_seq_sample
-    entity_type_np = entity_type_t.cpu().numpy().astype(np.int32)      # (B,4096)
-    entity_params_np = entity_params_t.cpu().numpy().astype(np.int32)  # (B,4096,43)
+    entity_type_np = entity_type_t.cpu().numpy().astype(np.int32)
+    entity_params_np = entity_params_t.cpu().numpy().astype(np.int32)
 
     aug1_types_list = []
     aug1_params_list = []
@@ -55,15 +55,12 @@ def two_augmentations_for_batch(entity_type_t, entity_params_t, device):
         aug2_types_list.append(aug2_type)
         aug2_params_list.append(aug2_param)
 
-    # 拼回 (B,4096), (B,4096,43)
     aug1_type_t = torch.from_numpy(np.stack(aug1_types_list, axis=0)).long().to(device)
     aug1_param_t = torch.from_numpy(np.stack(aug1_params_list, axis=0)).long().to(device)
-
     aug2_type_t = torch.from_numpy(np.stack(aug2_types_list, axis=0)).long().to(device)
     aug2_param_t = torch.from_numpy(np.stack(aug2_params_list, axis=0)).long().to(device)
 
     return aug1_type_t, aug1_param_t, aug2_type_t, aug2_param_t
-
 
 class SeqTrainer:
     def __init__(self, cfg):
@@ -96,11 +93,9 @@ class SeqTrainer:
         self.model = SeqTransformer(
             d_model=self.cfg.d_model,
             num_layers=self.cfg.num_layers,
-            dim_z=self.cfg.dim_z,
             nhead=self.cfg.nhead,
             dim_feedforward=self.cfg.dim_feedforward,
-            dropout=self.cfg.dropout,
-            latent_dropout=self.cfg.latent_dropout
+            dropout=self.cfg.dropout
         ).to(self.device)
 
         self.contrastive_loss = SeqContrastiveLoss(
@@ -110,28 +105,34 @@ class SeqTrainer:
             temperature=self.cfg.temperature
         ).to(self.device)
 
+        # 节点对齐模块
+        self.alignment_head = NodeAlignmentHead(
+            d_model=self.cfg.d_model,
+            alignment='concat',
+            latent_dropout=self.cfg.latent_dropout
+        ).to(self.device)
+
+        warmup_epochs = self.cfg.warmup_epochs
+        total_epochs = self.cfg.epochs
+
+        def lr_lambda(current_epoch):
+            if current_epoch < warmup_epochs:
+                ratio = float(current_epoch) / float(warmup_epochs)
+                factor = 1.0 + (self.cfg.max_lr / self.cfg.initial_lr - 1.0) * ratio
+                return factor
+            else:
+                progress = (current_epoch - warmup_epochs) / float(total_epochs - warmup_epochs)
+                cos_out  = 0.5 * (1.0 + math.cos(math.pi * progress))
+                start_scale = self.cfg.max_lr / self.cfg.initial_lr
+                end_scale   = self.cfg.final_lr / self.cfg.initial_lr
+                factor = end_scale + (start_scale - end_scale)*cos_out
+                return factor
+
         self.optimizer = torch.optim.Adam(
             self.model.parameters(),
             lr=self.cfg.initial_lr,
             weight_decay=self.cfg.weight_decay
         )
-
-        import math
-        warmup_epochs = self.cfg.warmup_epochs
-        total_epochs  = self.cfg.epochs
-
-        def lr_lambda(current_epoch):
-            if current_epoch < warmup_epochs:
-                ratio = float(current_epoch) / float(warmup_epochs)
-                factor = 1.0 + (self.cfg.max_lr / self.cfg.initial_lr - 1.0)*ratio
-                return factor
-            else:
-                progress = (current_epoch - warmup_epochs) / float(total_epochs - warmup_epochs)
-                cos_out  = 0.5*(1.0 + math.cos(math.pi * progress))
-                start_scale = self.cfg.max_lr / self.cfg.initial_lr
-                end_scale   = self.cfg.final_lr / self.cfg.initial_lr
-                factor = end_scale + (start_scale - end_scale)*cos_out
-                return factor
 
         self.scheduler = torch.optim.lr_scheduler.LambdaLR(
             self.optimizer,
@@ -168,10 +169,10 @@ class SeqTrainer:
                     'model_state_dict': self.model.state_dict(),
                     'optimizer_state_dict': self.optimizer.state_dict(),
                     'loss': best_val_loss,
-                }, 'checkpoints/best_model.pth')
+                }, 'checkpoints/Seq/Seq_align.pth')
 
                 if self.cfg.use_wandb:
-                    wandb.save('checkpoints/best_model.pth')
+                    wandb.save('checkpoints/Seq/Seq_align.pth')
 
             self.early_stopping(val_loss, self.model, self.optimizer, epoch)
             if self.early_stopping.early_stop:
@@ -198,15 +199,16 @@ class SeqTrainer:
                 entity_type = entity_type.to(self.device)       # (B,4096)
                 entity_params = entity_params.to(self.device)   # (B,4096,43)
 
-                # -- 做两份增强 --
+                # 两份增强
                 aug1_type, aug1_param, aug2_type, aug2_param = two_augmentations_for_batch(
                     entity_type, entity_params, self.device
                 )
-                # 分别前向
                 proj_z1 = self.model(aug1_type, aug1_param)  # => (B,64,256)
                 proj_z2 = self.model(aug2_type, aug2_param)  # => (B,64,256)
 
-                outputs = {"proj_z1": proj_z1, "proj_z2": proj_z2}
+                aligned_z1, aligned_z2 = self.alignment_head.perform_alignment(proj_z1, proj_z2)
+
+                outputs = {"proj_z1": aligned_z1, "proj_z2": aligned_z2}
                 losses = self.contrastive_loss(outputs)
                 loss = losses["loss_contrastive"]
 
@@ -230,6 +232,7 @@ class SeqTrainer:
 
             except Exception as e:
                 print(f"Error in batch {batch_idx}: {str(e)}")
+                traceback.print_exc()
                 continue
 
         return total_loss / max(num_batches, 1)
@@ -251,7 +254,8 @@ class SeqTrainer:
                     proj_z1 = self.model(aug1_type, aug1_param)
                     proj_z2 = self.model(aug2_type, aug2_param)
 
-                    outputs = {"proj_z1": proj_z1, "proj_z2": proj_z2}
+                    aligned_z1, aligned_z2 = self.alignment_head.perform_alignment(proj_z1, proj_z2)
+                    outputs = {"proj_z1": aligned_z1, "proj_z2": aligned_z2}
                     losses = self.contrastive_loss(outputs)
                     loss = losses["loss_contrastive"]
 
@@ -261,12 +265,13 @@ class SeqTrainer:
 
                 except Exception as e:
                     print(f"Error in validation batch {batch_idx}: {str(e)}")
+                    traceback.print_exc()
                     continue
 
         return total_loss / max(num_batches, 1)
 
     def test(self, test_loader):
-        checkpoint = torch.load('checkpoints/best_model.pth', map_location=self.device)
+        checkpoint = torch.load('checkpoints/Seq/Seq_align.pth', map_location=self.device)
         self.model.load_state_dict(checkpoint['model_state_dict'])
 
         self.model.eval()
@@ -285,7 +290,8 @@ class SeqTrainer:
                     proj_z1 = self.model(aug1_type, aug1_param)
                     proj_z2 = self.model(aug2_type, aug2_param)
 
-                    outputs = {"proj_z1": proj_z1, "proj_z2": proj_z2}
+                    aligned_z1, aligned_z2 = self.alignment_head.perform_alignment(proj_z1, proj_z2)
+                    outputs = {"proj_z1": aligned_z1, "proj_z2": aligned_z2}
                     losses = self.contrastive_loss(outputs)
                     loss = losses["loss_contrastive"]
 
@@ -295,12 +301,12 @@ class SeqTrainer:
 
                 except Exception as e:
                     print(f"Error in test batch {batch_idx}: {str(e)}")
+                    traceback.print_exc()
                     continue
 
         avg_test_loss = total_loss / max(num_batches, 1)
         print(f"Test Loss: {avg_test_loss:.4f}")
         return avg_test_loss
-
 
 def main(args):
     cfg = SeqConfig(args)

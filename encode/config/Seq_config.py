@@ -7,7 +7,6 @@ class SeqConfig:
         # 模型参数
         self.d_model = 256
         self.num_layers = 6
-        self.dim_z = 256
         self.nhead = 8
         self.dim_feedforward = 512
         self.dropout = 0.2

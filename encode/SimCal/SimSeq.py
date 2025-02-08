@@ -149,7 +149,7 @@ def main():
     如无需此脚本式功能，可删除或保留。
     """
     parser = argparse.ArgumentParser(description="Compute similarity between two H5 samples.")
-    parser.add_argument("--model_path", type=str, default="pretrained/Seq/batch_size100_epochs100.pth",
+    parser.add_argument("--model_path", type=str, default="/home/vllm/encode/checkpoints/Seq/Seq_align.pth",
                         help="Path to the trained model checkpoint (e.g. best_model.pth)")
     parser.add_argument("--h5_file1", type=str, default="/home/vllm/encode/data/Seq/TEST_4096/QFN28LK(Cu)-90-450 Rev1_3.h5",
                         help="Path to the first h5 file (each contains 1 sample).")

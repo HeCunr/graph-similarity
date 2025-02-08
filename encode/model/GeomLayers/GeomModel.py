@@ -1,22 +1,25 @@
-# model/GeomLayers/GeomModel.py
-
+#model/GeomLayers/GeomModel.py
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
-
 from model.GeomLayers.GeomEncoderStack import GeomEncoderStack
-from utils.Geom_position import Sin2DPositionalEncoding
+from model.GeomLayers.Geom_embedding import GeomEmbedding
+
 
 class GeomModel(nn.Module):
-    def __init__(self, init_dim=44, d_model=32):
+    def __init__(self, args,  d_model=256):
+        """
+        init_dim = 44 (feature的列数),
+        d_model  = 256 (最终的嵌入维度, 与 GGNN/MPNN 对应)
+        """
         super().__init__()
         self.d_model = d_model
-        # 把初始44维特征投影到32维
-        self.linear_proj = nn.Linear(init_dim, d_model)
-        # 2D正弦位置编码
-        self.pos_encoder = Sin2DPositionalEncoding(d_pos=d_model, max_val=256.0)
-        # 堆叠多层: MPNN + aggregator
-        self.encoder_stack = GeomEncoderStack(d_model)
+
+        # 1) 用 GeomEmbedding 将输入的 (features, pos2d) => [B, N, d_model=256]
+        self.embedding = GeomEmbedding(d_model=self.d_model)
+
+        # 2) GeomEncoderStack: 先三层 (MPNN+聚合), 然后再加一个 GeomGGNNBlock
+        #   这里把 config 里的所有参数 (filters, conv, dropout 等) 一并传进去
+        self.encoder_stack = GeomEncoderStack(args=args, d_model=self.d_model)
 
     def forward(self, features, pos2d, adj, mask):
         """
@@ -24,14 +27,15 @@ class GeomModel(nn.Module):
         pos2d:    [B, N, 2]
         adj:      [B, N, N]
         mask:     [B, N]
-        return:   [B, 64, d_model]
+
+        return:
+          x_enc:   [B, 64, d_model=256]
+          adj_enc: [B, 64, 64]
+          mask_enc:[B, 64]
         """
-        # 1. 投影features到32
-        feat_32 = self.linear_proj(features)  # [B, N, 32]
-        # 2. pos2d -> sinusoidal => [B, N, 32]
-        pos_32 = self.pos_encoder(pos2d)      # [B, N, 32]
-        # 3. 融合 (简单相加)
-        x = feat_32 + pos_32  # [B, N, 32]
-        # 4. 送入EncoderStack
-        x_enc, adj_enc, mask_enc = self.encoder_stack(x, adj, mask)  # [B, 64, 32], [B,64,64], [B,64]
+        # 1) 先通过 embedding 得到 x: [B, N, 256]
+        x = self.embedding(features, pos2d)
+
+        # 2) 堆叠编码器
+        x_enc, adj_enc, mask_enc = self.encoder_stack(x, adj, mask)
         return x_enc, adj_enc, mask_enc

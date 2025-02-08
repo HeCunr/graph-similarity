@@ -85,11 +85,9 @@ class SeqTransformer(nn.Module):
     def __init__(self,
                  d_model=256,
                  num_layers=6,
-                 dim_z=256,
                  nhead=8,
                  dim_feedforward=512,
-                 dropout=0.1,
-                 latent_dropout=0.1):
+                 dropout=0.1):
         super().__init__()
         self.embedding = SeqEmbedding(d_model, max_len=4096)
         self.progressive_pool = ProgressivePooling(
@@ -98,10 +96,6 @@ class SeqTransformer(nn.Module):
             d_model=d_model
         )
         self.encoder = TransformerEncoder(d_model, num_layers, nhead, dim_feedforward, dropout)
-
-        self.projection = TwoLayerMLP(hidden_dim=d_model)
-        self.bn = nn.BatchNorm1d(d_model)
-        self.dropout = nn.Dropout(latent_dropout)
 
     def forward(self, entity_type, entity_params):
         """
@@ -122,12 +116,4 @@ class SeqTransformer(nn.Module):
         memory = self.encoder(src)                                # => (64, B, 256)
         memory = memory.permute(1, 0, 2)                          # => (B, 64, 256)
 
-        # 4) 2层MLP投影
-        B, S, C = memory.shape
-        x_flat = memory.reshape(B*S, C)                           # => (B*64, 256)
-        x_flat = self.projection(x_flat)                          # => (B*64, 256)
-        x_flat = self.bn(x_flat)                                  # => (B*64, 256)
-        x_flat = self.dropout(x_flat)                             # => (B*64, 256)
-        memory_proj = x_flat.reshape(B, S, C)                     # => (B, 64, 256)
-
-        return memory_proj
+        return memory
