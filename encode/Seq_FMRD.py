@@ -130,11 +130,11 @@ class FMRDEvaluator:
 
 def main():
     parser = argparse.ArgumentParser("Seq_FMRD Evaluation")
-    parser.add_argument("--ground_truth", default=r"/home/vllm/encode/data/Seq/Seq_truth.json",
+    parser.add_argument("--ground_truth", default=r"/home/vllm/encode/data/Seq/Seq_truth_2048.json",
                         help="Path to ground truth JSON")
-    parser.add_argument("--folder_path", default=r"/home/vllm/encode/data/Seq/TEST_4096",
+    parser.add_argument("--folder_path", default=r"/home/vllm/encode/data/Seq/TEST_2048",
                         help="Folder containing .h5 files")
-    parser.add_argument("--model_path", default=r"/home/vllm/encode/checkpoints/Seq/Seq_align.pth",
+    parser.add_argument("--model_path", default=r"/home/vllm/encode/checkpoints/Seq/Seq_batch_size64.pth",
                         help="Trained model checkpoint path")
     parser.add_argument("--top_n", type=int, default=10,
                         help="Number of top similar files to retrieve")

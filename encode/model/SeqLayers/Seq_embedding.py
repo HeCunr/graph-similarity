@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 
 class PositionalEncodingLUT(nn.Module):
-    def __init__(self, d_model, dropout=0.1, max_len=4096):
+    def __init__(self, d_model, dropout=0.1, max_len=2048):
         super().__init__()
         self.dropout = nn.Dropout(p=dropout)
         self.pos_embed = nn.Embedding(max_len, d_model)
@@ -19,7 +19,7 @@ class PositionalEncodingLUT(nn.Module):
         return self.dropout(x)
 
 class SeqEmbedding(nn.Module):
-    def __init__(self, d_model=256, max_len=4096):
+    def __init__(self, d_model=256, max_len=2048):
         super().__init__()
         self.d_model = d_model
         self.max_len = max_len

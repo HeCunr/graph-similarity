@@ -69,11 +69,9 @@ def build_model_and_load_weights(model_path, cfg):
     model = SeqTransformerNoProjection(
         d_model=cfg.d_model,
         num_layers=cfg.num_layers,
-        dim_z=cfg.dim_z,
         nhead=cfg.nhead,
         dim_feedforward=cfg.dim_feedforward,
-        dropout=cfg.dropout,
-        latent_dropout=cfg.latent_dropout
+        dropout=cfg.dropout
     )
 
     if not os.path.exists(model_path):
@@ -149,7 +147,7 @@ def main():
     如无需此脚本式功能，可删除或保留。
     """
     parser = argparse.ArgumentParser(description="Compute similarity between two H5 samples.")
-    parser.add_argument("--model_path", type=str, default="/home/vllm/encode/checkpoints/Seq/Seq_align.pth",
+    parser.add_argument("--model_path", type=str, default="/home/vllm/encode/checkpoints/Seq/Seq_batch_size64.pth",
                         help="Path to the trained model checkpoint (e.g. best_model.pth)")
     parser.add_argument("--h5_file1", type=str, default="/home/vllm/encode/data/Seq/TEST_4096/QFN28LK(Cu)-90-450 Rev1_3.h5",
                         help="Path to the first h5 file (each contains 1 sample).")

@@ -16,7 +16,7 @@ class EarlyStopping:
             patience: int = 30,
             verbose: bool = False,
             delta: float = 0,
-            path: str = 'checkpoint.pt',
+            path: str = 'checkpoints/Geom/Agg_GGNN_2048.pt',
             trace_func: Optional[callable] = print
     ):
         """

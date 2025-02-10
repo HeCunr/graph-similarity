@@ -4,11 +4,11 @@ import argparse
 parser = argparse.ArgumentParser(description="Geom model for graph matching")
 
 # Data parameters
-parser.add_argument('--data_dir', type=str, default='/home/vllm/encode/data/Geom/TRAIN_4096',
+parser.add_argument('--data_dir', type=str, default='/home/vllm/encode/data/Geom/TRAIN_2048',
                     help='root directory for the graph dataset')
 parser.add_argument('--dataset', type=str, default="Geom",
                     help='name of the dataset')
-parser.add_argument('--graph_size_max', type=int, default=4096,
+parser.add_argument('--graph_size_max', type=int, default=2048,
                     help='maximum number of nodes in a graph')
 parser.add_argument('--graph_init_dim', type=int, default=44,
                     help='initial feature dimension for graph nodes')
@@ -24,23 +24,23 @@ parser.add_argument("--perspectives", type=int, default=256,
                     help='number of perspectives for matching')
 
 # Data augmentation parameters
-parser.add_argument('--drop_feature1', type=float, default=0.3,
+parser.add_argument('--drop_feature1', type=float, default=0.1,
                     help='feature dropout rate for first view')
-parser.add_argument('--drop_feature2', type=float, default=0.4,
+parser.add_argument('--drop_feature2', type=float, default=0.1,
                     help='feature dropout rate for second view')
-parser.add_argument('--drop_edge1', type=float, default=0.4,
+parser.add_argument('--drop_edge1', type=float, default=0.1,
                     help='edge dropout rate for first view')
 parser.add_argument('--drop_edge2', type=float, default=0.1,
                     help='edge dropout rate for second view')
-parser.add_argument('--drop_pos1', type=float, default=0.3,
+parser.add_argument('--drop_pos1', type=float, default=0.1,
                     help='pos2d dropout rate for first view ')
-parser.add_argument('--drop_pos2', type=float, default=0.4,
+parser.add_argument('--drop_pos2', type=float, default=0.1,
                     help='pos2d dropout rate for second view')
 
 # Training parameters
 parser.add_argument('--epochs', type=int, default=50,
                     help='number of training epochs')
-parser.add_argument('--batch_size', type=int, default=32,
+parser.add_argument('--batch_size', type=int, default=64,
                     help='number of graphs per batch')
 
 parser.add_argument('--train_split', type=float, default=0.7,
@@ -55,11 +55,11 @@ parser.add_argument("--lr", type=float, default=1e-3,
                     help="Learning rate")
 parser.add_argument("--dropout", type=float, default=0.1,
                     help="Dropout probability")
-parser.add_argument("--tau", type=float, default=1.0,
+parser.add_argument("--tau", type=float, default=0.07,
                     help="Temperature parameter for contrastive loss")
 
 # System parameters
-parser.add_argument('--gpu_index', type=str, default='0',
+parser.add_argument('--gpu_index', type=str, default='2',
                     help="GPU index to use")
 parser.add_argument('--log_path', type=str, default='/home/vllm/encode/logs/Geom',
                     help='path for log files')

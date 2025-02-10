@@ -80,7 +80,7 @@ class GeomTrainer:
         os.makedirs("checkpoints", exist_ok=True)
         self.early_stopping = EarlyStopping(
             patience=args.patience,
-            path="checkpoints/Geom/N3_Layer1_GGNN.pt"
+            path="checkpoints/Geom/Agg_GGNN_2048.pt"
         )
 
     def _lr_scale(self, epoch):

@@ -346,7 +346,7 @@ def random_duplicate(entities, duplicate_ratio=0.05):
     augmented = np.concatenate([entities, np.array(duplicates)], axis=0)
     return augmented
 
-def fix_length_and_append_eos(entities, max_len=4096):
+def fix_length_and_append_eos(entities, max_len=2048):
     """
     将 entities (K,44) 填充或截断到 (max_len,44)，并在末尾加一行 EOS。
     若实际K>=max_len，则只保留前 (max_len-1) 行 + 1 行EOS。
@@ -379,16 +379,16 @@ def fix_length_and_append_eos(entities, max_len=4096):
     return out
 
 ############################################
-# 5. augment_seq_ample: 对单个样本(4096,44)做增强
+# 5. augment_seq_ample: 对单个样本(2048,44)做增强
 ############################################
 
 def augment_seq_sample(dxf_arr, do_shuffle=True, delete_ratio=0.05, duplicate_ratio=0.05):
     """
-    对单个样本 dxf_arr (shape=(4096,44)) 做数据增强。
-    返回相同形状的 numpy 数组 (4096,44)。
+    对单个样本 dxf_arr (shape=(2048,44)) 做数据增强。
+    返回相同形状的 numpy 数组 (2048,44)。
     """
     # 1. 找到前 N 行有效实体（直到遇到 entity_type=12 或到达末尾）
-    max_seq_len = dxf_arr.shape[0]  # 4096
+    max_seq_len = dxf_arr.shape[0]  # 2048
     i = 0
     while i < max_seq_len and dxf_arr[i, 0] != 12:
         i += 1
@@ -407,9 +407,9 @@ def augment_seq_sample(dxf_arr, do_shuffle=True, delete_ratio=0.05, duplicate_ra
     if duplicate_ratio > 0:
         valid_entities = random_duplicate(valid_entities, duplicate_ratio)
 
-    # 4. 最后补齐或截断到 4096, 并加 EOS 行
-    out = fix_length_and_append_eos(valid_entities, max_len=4096)
-    assert out.shape == (4096, 44), f"输出形状错误: {out.shape}"
+    # 4. 最后补齐或截断到 2048, 并加 EOS 行
+    out = fix_length_and_append_eos(valid_entities, max_len=2048)
+    assert out.shape == (2048, 44), f"输出形状错误: {out.shape}"
     return out.astype(np.int32)  # 转换为 int32 以兼容后续处理
 
 ############################################
@@ -420,7 +420,7 @@ def augment_h5_dataset(input_h5_path, output_h5_path,
                        shuffle=True, delete_ratio=0.05, duplicate_ratio=0.05):
     """
     对单个 H5 文件进行数据增强。
-    其中 'dxf_vec' 数据集形状为 (num_samples, 4096, 44)。
+    其中 'dxf_vec' 数据集形状为 (num_samples, 2048, 44)。
     增强后写入新的 output_h5_path。
     """
     with h5py.File(input_h5_path, 'r') as fin, \
@@ -436,12 +436,12 @@ def augment_h5_dataset(input_h5_path, output_h5_path,
         # 创建输出数据集
         dset_out = fout.create_dataset(
             'dxf_vec',
-            shape=(num_samples, 4096, 44),
+            shape=(num_samples, 2048, 44),
             dtype=np.int16
         )
 
         for i in range(num_samples):
-            original_sample = dset_in[i]  # shape=(4096,44)
+            original_sample = dset_in[i]  # shape=(2048,44)
             aug_sample = augment_seq_sample(
                 original_sample,
                 do_shuffle=shuffle,

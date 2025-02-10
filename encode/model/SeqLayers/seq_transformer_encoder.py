@@ -5,7 +5,7 @@ import torch.nn as nn
 from model.SeqLayers.Seq_embedding import SeqEmbedding
 
 class ProgressivePooling(nn.Module):
-    def __init__(self, input_length=4096, output_length=64, d_model=256):
+    def __init__(self, input_length=2048, output_length=64, d_model=256):
         super().__init__()
         self.stages = self._calculate_stages(input_length, output_length)
         self.pooling_layers = nn.ModuleList()
@@ -79,7 +79,7 @@ class TwoLayerMLP(nn.Module):
 class SeqTransformer(nn.Module):
     """
     修改后:
-      - forward仅处理一个批次(B,4096,44)
+      - forward仅处理一个批次(B,2048,44)
       - 返回 (B,64,256)，不再拆成proj_z1, proj_z2
     """
     def __init__(self,
@@ -89,9 +89,9 @@ class SeqTransformer(nn.Module):
                  dim_feedforward=512,
                  dropout=0.1):
         super().__init__()
-        self.embedding = SeqEmbedding(d_model, max_len=4096)
+        self.embedding = SeqEmbedding(d_model, max_len=2048)
         self.progressive_pool = ProgressivePooling(
-            input_length=4096,
+            input_length=2048,
             output_length=64,
             d_model=d_model
         )
@@ -100,13 +100,13 @@ class SeqTransformer(nn.Module):
     def forward(self, entity_type, entity_params):
         """
         输入:
-            entity_type   (B,4096)
-            entity_params (B,4096,43)
+            entity_type   (B,2048)
+            entity_params (B,2048,43)
         输出:
             memory_proj   (B,64,256)
         """
         # 1) 嵌入
-        src = self.embedding(entity_type, entity_params)          # => (B, 4096, 256)
+        src = self.embedding(entity_type, entity_params)          # => (B, 2048, 256)
 
         # 2) Progressive Pooling
         src = self.progressive_pool(src)                          # => (B, 64, 256)

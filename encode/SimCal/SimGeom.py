@@ -15,8 +15,8 @@ from utils.Geom_utils import get_device, set_seed
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Compute similarity between two JSON graphs.")
-    parser.add_argument('--json1', type=str, default="/home/vllm/encode/data/Geom/TEST_4096/QFN28LK(Cu)-90-450 Rev1_5.json", help='Path to the first JSON file')
-    parser.add_argument('--json2', type=str,default="/home/vllm/encode/data/Geom/TEST_4096/QFN22LD(Cu) -532 Rev1_4.json", help='Path to the second JSON file')
+    parser.add_argument('--json1', type=str, default="/home/vllm/encode/data/Geom/TEST_2048/QFN28LK(Cu)-90-450 Rev1_5.json", help='Path to the first JSON file')
+    parser.add_argument('--json2', type=str,default="/home/vllm/encode/data/Geom/TEST_2048/QFN22LD(Cu) -532 Rev1_4.json", help='Path to the second JSON file')
     return parser.parse_args()
 
 
@@ -138,7 +138,7 @@ def main():
     g2 = load_single_graph_from_json(args_cli.json2)
 
     # 4) 对单个图进行本地对齐处理(不调用 GeomDataset)
-    max_nodes = geom_args.graph_size_max      # 默认4096
+    max_nodes = geom_args.graph_size_max      # 默认2048
     feature_dim = geom_args.graph_init_dim    # 默认44
 
     process_single_graph_local(g1, max_nodes, feature_dim)
@@ -155,7 +155,7 @@ def main():
     ).to(device)
 
     # 你的权重文件
-    ckpt_path = "/home/vllm/encode/checkpoints/Geom/N3_Layer1_GGNN.pt"
+    ckpt_path = "/home/vllm/encode/checkpoints/Geom/Agg_GGNN_2048.pt"
     checkpoint = torch.load(ckpt_path, map_location=device)
     model.load_state_dict(checkpoint['model_state_dict'])
     model.eval()

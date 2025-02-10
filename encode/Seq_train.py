@@ -19,10 +19,10 @@ import math
 
 def two_augmentations_for_batch(entity_type_t, entity_params_t, device):
     """
-    对同一个 batch (B,4096), (B,4096,43) 做两份增强：
+    对同一个 batch (B,2048), (B,2048,43) 做两份增强：
     返回:
-      aug1_type, aug1_param  => (B,4096), (B,4096,43)
-      aug2_type, aug2_param  => (B,4096), (B,4096,43)
+      aug1_type, aug1_param  => (B,2048), (B,2048,43)
+      aug2_type, aug2_param  => (B,2048), (B,2048,43)
     """
     B = entity_type_t.size(0)
 
@@ -36,7 +36,7 @@ def two_augmentations_for_batch(entity_type_t, entity_params_t, device):
     aug2_params_list = []
 
     for i in range(B):
-        combined_arr = np.zeros((4096, 44), dtype=np.int32)
+        combined_arr = np.zeros((2048, 44), dtype=np.int32)
         combined_arr[:, 0] = entity_type_np[i, :]
         combined_arr[:, 1:] = entity_params_np[i, :, :]
 
@@ -169,10 +169,10 @@ class SeqTrainer:
                     'model_state_dict': self.model.state_dict(),
                     'optimizer_state_dict': self.optimizer.state_dict(),
                     'loss': best_val_loss,
-                }, 'checkpoints/Seq/Seq_align.pth')
+                }, 'checkpoints/Seq/Seq_batch_size64.pth')
 
                 if self.cfg.use_wandb:
-                    wandb.save('checkpoints/Seq/Seq_align.pth')
+                    wandb.save('checkpoints/Seq/Seq_batch_size64.pth')
 
             self.early_stopping(val_loss, self.model, self.optimizer, epoch)
             if self.early_stopping.early_stop:
@@ -196,8 +196,8 @@ class SeqTrainer:
         pbar = tqdm(dataloader, desc=f'Epoch {epoch+1}/{self.cfg.epochs}')
         for batch_idx, (entity_type, entity_params) in enumerate(pbar):
             try:
-                entity_type = entity_type.to(self.device)       # (B,4096)
-                entity_params = entity_params.to(self.device)   # (B,4096,43)
+                entity_type = entity_type.to(self.device)       # (B,2048)
+                entity_params = entity_params.to(self.device)   # (B,2048,43)
 
                 # 两份增强
                 aug1_type, aug1_param, aug2_type, aug2_param = two_augmentations_for_batch(
@@ -271,7 +271,7 @@ class SeqTrainer:
         return total_loss / max(num_batches, 1)
 
     def test(self, test_loader):
-        checkpoint = torch.load('checkpoints/Seq/Seq_align.pth', map_location=self.device)
+        checkpoint = torch.load('checkpoints/Seq/Seq_batch_size64.pth', map_location=self.device)
         self.model.load_state_dict(checkpoint['model_state_dict'])
 
         self.model.eval()
@@ -361,8 +361,8 @@ def main(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Train SeqTransformer with InfoNCE loss')
-    parser.add_argument('--data_dir', type=str, default=r"/home/vllm/encode/data/Seq/TRAIN_4096", help='Directory containing h5 files')
-    parser.add_argument('--batch_size', type=int, default=32, help='Batch size')
+    parser.add_argument('--data_dir', type=str, default=r"/home/vllm/encode/data/Seq/TRAIN_2048", help='Directory containing h5 files')
+    parser.add_argument('--batch_size', type=int, default=64, help='Batch size')
     parser.add_argument('--epochs', type=int, default=100, help='Number of epochs')
     parser.add_argument('--gpu_id', type=int, default=1, help='GPU ID to use')
 

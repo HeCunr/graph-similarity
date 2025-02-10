@@ -33,4 +33,4 @@ class EarlyStopping:
             'model_state_dict': model.state_dict(),
             'optimizer_state_dict': optimizer.state_dict(),
             'loss': val_loss,
-        }, os.path.join(self.checkpoint_path, 'Seq_align.pth'))
+        }, os.path.join(self.checkpoint_path, 'Seq_batch_size64.pth'))

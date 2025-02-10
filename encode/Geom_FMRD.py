@@ -190,12 +190,12 @@ def ndcg_k(recommended_list, ground_truth_set, k=None):
 # -------------------------------------------------------------------
 def main():
     # ============ 读取 ground truth ============
-    ground_truth_path = "/home/vllm/encode/data/Geom/Geom_truth.json"  # 请根据实际路径修改
+    ground_truth_path = "/home/vllm/encode/data/Geom/Geom_truth_2048.json"  # 请根据实际路径修改
     file2group = load_ground_truth(ground_truth_path)
 
     # ============ 收集需要处理的文件（测试集 / 全部 .json）============
-    #   举例：测试文件位于 "/home/vllm/encode/data/Geom/TEST_4096"
-    data_dir = "/home/vllm/encode/data/Geom/TEST_4096"
+    #   举例：测试文件位于 "/home/vllm/encode/data/Geom/TEST_2048"
+    data_dir = "/home/vllm/encode/data/Geom/TEST_2048"
     all_json_files = []
     for fn in os.listdir(data_dir):
         if fn.endswith(".json"):
@@ -221,7 +221,7 @@ def main():
         d_model=256
     ).to(device)
 
-    ckpt_path = "/home/vllm/encode/checkpoints/Geom/N3_Layer1_GGNN.pt"
+    ckpt_path = "/home/vllm/encode/checkpoints/Geom/Agg_GGNN_2048.pt"
     checkpoint = torch.load(ckpt_path, map_location=device)
     model.load_state_dict(checkpoint["model_state_dict"])
     model.eval()

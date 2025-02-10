@@ -4,7 +4,7 @@ dataset/Geom_process.py
 
 功能：
 1. 打开给定 DXF 文件，过滤只包含指定的 12 种实体；
-2. 若实体数目超过 4096，跳过该文件；
+2. 若实体数目超过 2048，跳过该文件；
 3. 句柄排序并提取特征；
    - 对于每行 (即实体) 的 44 个特征列，若实体 **没有对应的参数**，则保留值为 -1；
    - 若实体有该参数，则进行归一化与量化后赋值；
@@ -346,7 +346,7 @@ def process_single_dxf(dxf_path: str, output_dir: str = None):
     """
     处理单个 DXF 文件：
     1) 读取并过滤实体；
-    2) 若实体数超过 4096，跳过不处理；
+    2) 若实体数超过 2048，跳过不处理；
     3) 句柄排序并提取特征；
        - 对于某字段若实体没有 => 该位置 -1；
     4) 计算邻接表；
@@ -372,9 +372,9 @@ def process_single_dxf(dxf_path: str, output_dir: str = None):
         if e.dxftype() in ENTITY_TYPE_MAP:
             valid_entities.append(e)
 
-    # 若实体数超过 4096，跳过
-    if len(valid_entities) > 4096:
-        print(f"文件 {os.path.basename(dxf_path)} 实体数({len(valid_entities)}) > 4096，跳过。")
+    # 若实体数超过 2048，跳过
+    if len(valid_entities) > 2048:
+        print(f"文件 {os.path.basename(dxf_path)} 实体数({len(valid_entities)}) > 2048，跳过。")
         return
 
     # 按照句柄升序排序
@@ -455,8 +455,8 @@ def process_single_dxf(dxf_path: str, output_dir: str = None):
 if __name__ == "__main__":
     import glob
 
-    input_dir = r"/home/vllm/encode/data/TRAIN"  # TODO: 修改为实际 DXF 目录
-    output_dir = r"/home/vllm/encode/data/Geom/TRAIN_4096"  # TODO: 修改为输出 json 目录
+    input_dir = r"/home/vllm/encode/data/synData"  # TODO: 修改为实际 DXF 目录
+    output_dir = r"/home/vllm/encode/data/Geom/synData_TRAIN_2048"  # TODO: 修改为输出 json 目录
 
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)

@@ -782,7 +782,7 @@ class DXFSequence:
         vector[0] = ENTITY_TYPES.index('EOS')
         return vector
 
-    def to_vector(self, max_len=4096):
+    def to_vector(self, max_len=2048):
         vectors = []
         for entity in self.entities:
             vector = entity.to_vector()
@@ -830,7 +830,7 @@ def process_seq_files_batch(input_dir, output_h5_dir):
     if not os.path.exists(output_h5_dir):
         os.makedirs(output_h5_dir)
 
-    temp_dir = os.path.join(os.getcwd(), '../temp')
+    temp_dir = os.path.join(os.getcwd(), '../encode/temp')
     os.makedirs(temp_dir, exist_ok=True)
 
     raw_json_dir = os.path.join(temp_dir, 'raw_json')
@@ -879,7 +879,7 @@ def process_seq_files_batch(input_dir, output_h5_dir):
 
 if __name__ == '__main__':
     # 示例用法
-    input_dir = r'/home/vllm/encode/data/Seq/TEST'  # 修改为您的 Seq 文件目录
-    output_h5_dir =  r'/home/vllm/encode/data/Seq/TEST_4096'   # 修改为您希望保存 H5 文件的目录
+    input_dir = r'/home/vllm/encode/data/synData'  # 修改为您的 Seq 文件目录
+    output_h5_dir =  r'/home/vllm/encode/data/Seq/synData_TRAIN_2048'   # 修改为您希望保存 H5 文件的目录
     process_seq_files_batch(input_dir, output_h5_dir)
 

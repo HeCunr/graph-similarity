@@ -2,7 +2,7 @@
 class SeqConfig:
     def __init__(self, args):
         # 默认数据目录
-        self.data_dir = r'/home/vllm/encode/data/Seq/TRAIN_4096'
+        self.data_dir = r'/home/vllm/encode/data/Seq/TRAIN_2048'
 
         # 模型参数
         self.d_model = 256
@@ -13,7 +13,7 @@ class SeqConfig:
         self.latent_dropout = 0.3
 
         # 训练参数
-        self.batch_size = 32
+        self.batch_size = 64
         self.initial_lr = 1e-5  # 初始学习率
         self.max_lr = 1e-4       # 最大学习率
         self.final_lr = 1e-5     # 最终学习率
